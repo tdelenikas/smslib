@@ -40,7 +40,7 @@ public class Modem extends AbstractGateway
 
 	HashSet<String> readMessagesSet;
 
-	public Modem(String gatewayId, String address, int port, String simPin, String simPin2, MsIsdn smscNumber)
+	public Modem(String gatewayId, String address, int port, String simPin, String simPin2, MsIsdn smscNumber, String memoryLocations)
 	{
 		super(2, gatewayId, "GSM Modem");
 		Capabilities caps = new Capabilities();
@@ -55,6 +55,7 @@ public class Modem extends AbstractGateway
 		setCapabilities(caps);
 		if (isPortAnIpAddress(address)) this.modemDriver = new IPModemDriver(this, address, port);
 		else this.modemDriver = new SerialModemDriver(this, address, port);
+		if (!Common.isNullOrEmpty(memoryLocations)) this.modemDriver.setMemoryLocations(memoryLocations);
 		this.simPin = simPin;
 		this.simPin2 = simPin2;
 		this.smscNumber = (smscNumber == null ? new MsIsdn() : smscNumber);
@@ -63,7 +64,7 @@ public class Modem extends AbstractGateway
 
 	public Modem(String gatewayId, String... parms)
 	{
-		this(gatewayId, parms[0], Integer.valueOf(parms[1]), parms[2], parms[3], (Common.isNullOrEmpty(parms[4]) ? null : new MsIsdn(parms[4])));
+		this(gatewayId, parms[0], Integer.valueOf(parms[1]), parms[2], parms[3], (Common.isNullOrEmpty(parms[4]) ? null : new MsIsdn(parms[4])), (Common.isNullOrEmpty(parms[5]) ? null : parms[5]));
 	}
 
 	@Override

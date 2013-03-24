@@ -47,7 +47,7 @@ public class Test_IPModem extends TestCase
 			Service.getInstance().setInboundMessageCallback(new InboundMessageCallback());
 			Service.getInstance().setDeliveryReportCallback(new DeliveryReportCallback());
 			Service.getInstance().start();
-			Modem gateway = new Modem("modem1", "127.0.0.1", "10000", "0000", "0000", "306942190000");
+			Modem gateway = new Modem("modem1", "127.0.0.1", "10000", "0000", "0000", "306942190000", "AA");
 			Service.getInstance().registerGateway(gateway);
 			Thread.sleep(20000);
 			if (RECIPIENT.length() > 0)

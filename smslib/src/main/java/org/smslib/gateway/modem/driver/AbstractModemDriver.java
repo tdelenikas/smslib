@@ -369,42 +369,46 @@ public abstract class AbstractModemDriver
 
 	void retrieveMemoryLocations() throws IOException
 	{
-		this.memoryLocations = getModemSettings("memory_locations");
-		if (Common.isNullOrEmpty(this.memoryLocations)) this.memoryLocations = "";
 		if (Common.isNullOrEmpty(this.memoryLocations))
 		{
-			try
+			this.memoryLocations = getModemSettings("memory_locations");
+			if (Common.isNullOrEmpty(this.memoryLocations)) this.memoryLocations = "";
+			if (Common.isNullOrEmpty(this.memoryLocations))
 			{
-				String response = atGetMemoryLocations().getResponseData();
-				if (response.indexOf("+CPMS:") >= 0)
+				try
 				{
-					int i, j;
-					i = response.indexOf('(');
-					while (response.charAt(i) == '(')
-						i++;
-					j = i;
-					while (response.charAt(j) != ')')
-						j++;
-					response = response.substring(i, j);
-					StringTokenizer tokens = new StringTokenizer(response, ",");
-					while (tokens.hasMoreTokens())
+					String response = atGetMemoryLocations().getResponseData();
+					if (response.indexOf("+CPMS:") >= 0)
 					{
-						String loc = tokens.nextToken().replaceAll("\"", "");
-						if ((!loc.equalsIgnoreCase("MT")) && ((this.memoryLocations.indexOf(loc) < 0))) this.memoryLocations += loc;
+						int i, j;
+						i = response.indexOf('(');
+						while (response.charAt(i) == '(')
+							i++;
+						j = i;
+						while (response.charAt(j) != ')')
+							j++;
+						response = response.substring(i, j);
+						StringTokenizer tokens = new StringTokenizer(response, ",");
+						while (tokens.hasMoreTokens())
+						{
+							String loc = tokens.nextToken().replaceAll("\"", "");
+							if ((!loc.equalsIgnoreCase("MT")) && ((this.memoryLocations.indexOf(loc) < 0))) this.memoryLocations += loc;
+						}
+					}
+					else
+					{
+						this.memoryLocations = "SM";
+						Log.getInstance().getLog().warn("CPMS detection failed, proceeding with default memory 'SM'.");
 					}
 				}
-				else
+				catch (Exception e)
 				{
 					this.memoryLocations = "SM";
-					Log.getInstance().getLog().warn("CPMS detection failed, proceeding with default memory 'SM'.");
+					Log.getInstance().getLog().warn("CPMS detection failed, proceeding with default memory 'SM'.", e);
 				}
 			}
-			catch (Exception e)
-			{
-				this.memoryLocations = "SM";
-				Log.getInstance().getLog().warn("CPMS detection failed, proceeding with default memory 'SM'.", e);
-			}
 		}
+		else Log.getInstance().getLog().info("Using given memory locations: " + this.memoryLocations);
 	}
 
 	public String getSignature(boolean complete)

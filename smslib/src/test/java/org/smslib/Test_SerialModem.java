@@ -47,7 +47,7 @@ public class Test_SerialModem extends TestCase
 			Service.getInstance().setInboundMessageCallback(new InboundMessageCallback());
 			Service.getInstance().setDeliveryReportCallback(new DeliveryReportCallback());
 			Service.getInstance().start();
-			Modem gateway = new Modem("modem1", "COM3", "19200", "0000", "0000", "306942190000");
+			Modem gateway = new Modem("modem1", "COM3", "19200", "0000", "0000", "306942190000", "");
 			Service.getInstance().registerGateway(gateway);
 			Thread.sleep(20000);
 			if (RECIPIENT.length() > 0)
