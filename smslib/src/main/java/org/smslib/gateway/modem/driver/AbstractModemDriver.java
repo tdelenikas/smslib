@@ -154,6 +154,7 @@ public abstract class AbstractModemDriver
 			}
 			if (line.indexOf("ERROR") == 0)
 			{
+				Log.getInstance().getLog().error(getPortInfo() + " ERR==> " + line);
 				this.responseOk = false;
 				break;
 			}
