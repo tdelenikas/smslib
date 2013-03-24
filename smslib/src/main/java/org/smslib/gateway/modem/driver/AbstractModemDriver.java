@@ -110,6 +110,7 @@ public abstract class AbstractModemDriver
 		while (true)
 		{
 			String line = getLineFromBuffer();
+			Log.getInstance().getLog().debug(getPortInfo() + " >>> " + line);
 			this.buffer.delete(0, line.length() + 2);
 			if (Common.isNullOrEmpty(line)) continue;
 			if (line.charAt(0) == '^') continue;
