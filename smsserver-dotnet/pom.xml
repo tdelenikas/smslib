@@ -10,9 +10,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<ikvm>ikvm-7.2.4630.5</ikvm>
 	</properties>
-	<artifactId>smslib-dotnet</artifactId>
+	<artifactId>smsserver-dotnet</artifactId>
 	<packaging>pom</packaging>
-	<name>SMSLib - .NET Framework Assembly</name>
+	<name>SMSLib - SMSServer.NET Framework Executable</name>
 	<description>A universal API for sms messaging</description>
 	<url>http://smslib.org</url>
 	<dependencies>
@@ -48,9 +48,10 @@
 									Building the .NET dll, please wait...
 								</echo>
 								<exec dir="./" executable="tools/${ikvm}/bin/ikvmc" failonerror="true">
-									<arg value="-target:library" />
-									<arg value="-out:../lib/smslib-${project.version}.dll" />
+									<arg value="-target:exe" />
+									<arg value="-out:../lib/smsserver-${project.version}.exe" />
 									<arg value="../lib/smslib-dep-${project.version}-all.jar" />
+									<arg value="-main:org.smslib.smsserver.SMSServer" />
 									<arg value="-fileversion:${project.version}" />
 								</exec>
 							</tasks>

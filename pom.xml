@@ -59,6 +59,7 @@
 		<module>smslib</module>
 		<module>smslib-dep</module>
 		<module>smslib-dotnet</module>
+		<module>smsserver-dotnet</module>
 	</modules>
 	<build>
 <!--
@@ -154,13 +155,14 @@
 		<repository>
 			<id>smslib-releases</id>
 			<name>SMSLib Release Repository</name>
-			<uniqueVersion>false</uniqueVersion>
 			<url>scp://${smslib-repo-url}/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>smslib-snapshots</id>
 			<name>SMSLib Snapshot Repository</name>
-			<uniqueVersion>false</uniqueVersion>
+<!--
+			<uniqueVersion>true</uniqueVersion>
+-->
 			<url>scp://${smslib-repo-url}/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
