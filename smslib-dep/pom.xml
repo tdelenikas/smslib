@@ -6,9 +6,6 @@
 		<version>dev-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
- 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 	<artifactId>smslib-dep</artifactId>
 	<packaging>pom</packaging>
 	<name>SMSLib - Fat (w/ dependencies) Distribution</name>

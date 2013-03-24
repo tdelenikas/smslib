@@ -6,10 +6,6 @@
 		<version>dev-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
- 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<ikvm>ikvm-7.2.4630.5</ikvm>
-	</properties>
 	<artifactId>smsserver-dotnet</artifactId>
 	<packaging>pom</packaging>
 	<name>SMSLib - SMSServer.NET Framework Executable</name>
@@ -49,7 +45,7 @@
 								</echo>
 								<exec dir="./" executable="tools/${ikvm}/bin/ikvmc" failonerror="true">
 									<arg value="-target:exe" />
-									<arg value="-out:../lib/smsserver-${project.version}.exe" />
+									<arg value="-out:../lib/smsserver-dotnet-${project.version}.exe" />
 									<arg value="../lib/smslib-dep-${project.version}-all.jar" />
 									<arg value="-main:org.smslib.smsserver.SMSServer" />
 									<arg value="-fileversion:${project.version}" />
@@ -84,7 +80,7 @@
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>../lib/smslib-dotnet-${project.version}.dll</file>
+									<file>../lib/smsserver-dotnet-${project.version}.exe</file>
 									<type>dll</type>
 									<classifier></classifier>
 								</artifact>

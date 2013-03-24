@@ -9,6 +9,7 @@
 		<simple.version>5.0.4</simple.version>
 		<mysql.version>5.1.20</mysql.version>
 		<mail.version>1.4</mail.version>
+		<ikvm>ikvm-7.2.4630.5</ikvm>
 	</properties>
 	<prerequisites>
 		<maven>2.2.1</maven>
@@ -160,9 +161,7 @@
 		<snapshotRepository>
 			<id>smslib-snapshots</id>
 			<name>SMSLib Snapshot Repository</name>
-<!--
-			<uniqueVersion>true</uniqueVersion>
--->
+			<uniqueVersion>false</uniqueVersion>
 			<url>scp://${smslib-repo-url}/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>

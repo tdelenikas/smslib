@@ -6,13 +6,9 @@
 		<version>dev-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
- 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<ikvm>ikvm-7.2.4630.5</ikvm>
-	</properties>
 	<artifactId>smslib-dotnet</artifactId>
 	<packaging>pom</packaging>
-	<name>SMSLib - .NET Framework Assembly</name>
+	<name>SMSLib - SMSLib .NET Framework Assembly</name>
 	<description>A universal API for sms messaging</description>
 	<url>http://smslib.org</url>
 	<dependencies>
@@ -49,7 +45,7 @@
 								</echo>
 								<exec dir="./" executable="tools/${ikvm}/bin/ikvmc" failonerror="true">
 									<arg value="-target:library" />
-									<arg value="-out:../lib/smslib-${project.version}.dll" />
+									<arg value="-out:../lib/smslib-dotnet-${project.version}.dll" />
 									<arg value="../lib/smslib-dep-${project.version}-all.jar" />
 									<arg value="-fileversion:${project.version}" />
 								</exec>
