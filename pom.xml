@@ -60,7 +60,6 @@
 		<module>smslib</module>
 		<module>smslib-dep</module>
 		<module>smslib-dotnet</module>
-		<module>smsserver-dotnet</module>
 	</modules>
 	<build>
 <!--
