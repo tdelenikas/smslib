@@ -389,7 +389,7 @@ public class MessageReader extends Thread
 		String messageSignature = message.getSignature();
 		if (!this.modem.getReadMessagesSet().contains(messageSignature))
 		{
-			modem.getStatistics().increaseTotalReceived();
+			this.modem.getStatistics().increaseTotalReceived();
 			if (message instanceof DeliveryReportMessage)Service.getInstance().getCallbackManager().registerDeliveryReportEvent((DeliveryReportMessage) message);
 			else Service.getInstance().getCallbackManager().registerInboundMessageEvent(message);
 			this.modem.getReadMessagesSet().add(messageSignature);
