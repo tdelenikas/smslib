@@ -366,9 +366,19 @@ public class MessageReader extends Thread
 			{
 				if (Common.getAgeInHours(msg.getSentDate()) > Settings.hoursToRetainOrphanedMessageParts)
 				{
+					try
+					{
+						this.modem.delete(msg);
+					}
+					catch (Exception e)
+					{
+						Log.getInstance().getLog().error("Could not delete orphaned message: " + msg.toString(), e);
+					}
+					//deleteMessage(msg);
 					//
 					//TODO: Add Orphaned notifications!
 					// if (Service.getInstance().getOrphanedMessageNotification() != null) if (Service.getInstance().getOrphanedMessageNotification().process(Service.getInstance().getGateway(msg.getGatewayId()), msg) == true) deleteMessage(msg);
+					//
 				}
 			}
 		}
