@@ -31,6 +31,8 @@ public class Settings
 
 	public static boolean deleteMessagesAfterCallback = false;
 
+	public static int modemPollingInterval = 15000;
+
 	public static void loadSettings()
 	{
 		if (System.getProperty("smslib.httpserver.port") != null) httpServerPort = Integer.parseInt(System.getProperty("smslib.httpserver.port"));

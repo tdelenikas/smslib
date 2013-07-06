@@ -28,8 +28,6 @@ import org.smslib.message.Payload;
 
 public class MessageReader extends Thread
 {
-	public static int READ_INTERVAL = 15000;
-
 	Modem modem;
 
 	boolean shouldCancel = false;
@@ -77,7 +75,7 @@ public class MessageReader extends Thread
 			}
 			if (!this.shouldCancel)
 			{
-				Common.countSheeps(READ_INTERVAL);
+				Common.countSheeps(Settings.modemPollingInterval);
 			}
 		}
 		Log.getInstance().getLog().debug("Stopped!");
