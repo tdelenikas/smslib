@@ -3,6 +3,14 @@ package org.smslib.core;
 
 public class Settings
 {
+	public static final String LIBRARY_INFO = "SMSLib - A universal API for sms messaging";
+
+	public static final String LIBRARY_LICENSE = "This software is distributed under the terms of the\nApache v2.0 License (http://www.apache.org/licenses/LICENSE-2.0.html).";
+
+	public static final String LIBRARY_COPYRIGHT = "Copyright (c) 2002-2013, smslib.org";
+
+	public static final String LIBRARY_VERSION = "dev-SNAPSHOT";
+
 	public static int httpServerPort = 8001;
 
 	public static String httpServerACLStatus = "127.0.0.1/32";

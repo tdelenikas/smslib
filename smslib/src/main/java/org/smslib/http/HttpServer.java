@@ -159,7 +159,7 @@ public class HttpServer implements Container
 	{
 		p.println("<hr>");
 		p.println("<p style='font-size:80%;'>");
-		p.println(Service.LIBRARY_COPYRIGHT.replaceAll("http://smslib.org", "<a href='http://smslib.org'>http://smslib.org</a>") + ", " + "Version <b>" + Service.LIBRARY_VERSION + "</b></br>");
+		p.println(Settings.LIBRARY_COPYRIGHT.replaceAll("http://smslib.org", "<a href='http://smslib.org'>http://smslib.org</a>") + ", " + "Version <b>" + Settings.LIBRARY_VERSION + "</b></br>");
 		p.println("Page generated @ " + new Date());
 		p.println("</p>");
 		p.println("</body>");

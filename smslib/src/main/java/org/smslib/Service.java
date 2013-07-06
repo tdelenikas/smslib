@@ -66,14 +66,6 @@ import org.smslib.threading.ServiceMessageDispatcher;
 
 public class Service
 {
-	public static final String LIBRARY_INFO = "SMSLib - A universal API for sms messaging";
-
-	public static final String LIBRARY_LICENSE = "This software is distributed under the terms of the\nApache v2.0 License (http://www.apache.org/licenses/LICENSE-2.0.html).";
-
-	public static final String LIBRARY_COPYRIGHT = "Copyright (c) 2002-2013, smslib.org";
-
-	public static final String LIBRARY_VERSION = "dev-SNAPSHOT";
-
 	private static final Service _instance = new Service();
 
 	KeyManager keyManager = new KeyManager();
@@ -650,10 +642,10 @@ public class Service
 	public static void main(String[] args)
 	{
 		System.out.println();
-		System.out.println(LIBRARY_INFO);
-		System.out.println(LIBRARY_COPYRIGHT);
-		System.out.println(LIBRARY_LICENSE);
-		System.out.println("SMSLib Version: " + LIBRARY_VERSION);
+		System.out.println(Settings.LIBRARY_INFO);
+		System.out.println(Settings.LIBRARY_COPYRIGHT);
+		System.out.println(Settings.LIBRARY_LICENSE);
+		System.out.println("SMSLib Version: " + Settings.LIBRARY_VERSION);
 		System.out.println("OS Version: " + System.getProperty("os.name") + " / " + System.getProperty("os.arch") + " / " + System.getProperty("os.version"));
 		System.out.println("JAVA Version: " + System.getProperty("java.version"));
 		System.out.println("JAVA Runtime Version: " + System.getProperty("java.runtime.version"));
