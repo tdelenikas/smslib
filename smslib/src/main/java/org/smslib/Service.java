@@ -136,8 +136,16 @@ public class Service
 		{
 			if (getStatus() == Status.Stopped)
 			{
-				setStatus(Status.Starting);
 				Log.getInstance().getLog().info("Service starting...");
+				setStatus(Status.Starting);
+				try
+				{
+					messageQueue.start();
+				}
+				catch (Exception e)
+				{
+					Log.getInstance().getLog().error("Unhandled exception!", e);
+				}
 				for (AbstractGateway gateway : this.gateways.values())
 				{
 					Log.getInstance().getLog().info("Starting gateway: " + gateway.getGatewayId());
@@ -201,6 +209,14 @@ public class Service
 						Common.countSheeps(5000);
 					}
 					getCallbackManager().stop();
+					try
+					{
+						messageQueue.stop();
+					}
+					catch (Exception e)
+					{
+						Log.getInstance().getLog().error("Unhandled exception!", e);
+					}
 					Log.getInstance().getLog().info("Service terminated.");
 				}
 			}
