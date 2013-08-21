@@ -174,7 +174,7 @@ public class Service
 				}
 				catch (InterruptedException e)
 				{
-					Log.getInstance().getLog().error(e.getMessage(), e);
+					Log.getInstance().getLog().error("Unhandled exception!", e);
 				}
 				setStatus(Status.Stopped);
 				if (allStopped) Log.getInstance().getLog().info("Service stopped.");
@@ -208,7 +208,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error(e.getMessage(), e);
+			Log.getInstance().getLog().error("Unhandled exception!", e);
 			return false;
 		}
 	}
