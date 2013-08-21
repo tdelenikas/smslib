@@ -3,7 +3,6 @@ package org.smslib.threading;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import org.smslib.Service;
 import org.smslib.core.Settings;
@@ -14,14 +13,15 @@ import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.FailureCause;
 import org.smslib.message.OutboundMessage.SentStatus;
+import org.smslib.queue.IOutboundQueue;
 
 public class ServiceMessageDispatcher extends Thread
 {
 	boolean shouldCancel = false;
 
-	PriorityBlockingQueue<OutboundMessage> messageQueue;
+	IOutboundQueue<OutboundMessage> messageQueue;
 
-	public ServiceMessageDispatcher(String name, PriorityBlockingQueue<OutboundMessage> messageQueue)
+	public ServiceMessageDispatcher(String name, IOutboundQueue<OutboundMessage> messageQueue)
 	{
 		setName(name);
 		setDaemon(false);
@@ -47,7 +47,7 @@ public class ServiceMessageDispatcher extends Thread
 				}
 				if (pollNow)
 				{
-					OutboundMessage message = this.messageQueue.poll(Settings.serviceDispatcherQueueTimeout, TimeUnit.MILLISECONDS);
+					OutboundMessage message = this.messageQueue.get(Settings.serviceDispatcherQueueTimeout, TimeUnit.MILLISECONDS);
 					if (message != null)
 					{
 						Collection<AbstractGateway> routes = Service.getInstance().routeMessage(message);

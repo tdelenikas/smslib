@@ -1,7 +1,6 @@
 
 package org.smslib.threading;
 
-import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import org.smslib.Service;
 import org.smslib.core.Settings;
@@ -11,16 +10,17 @@ import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.FailureCause;
 import org.smslib.message.OutboundMessage.SentStatus;
+import org.smslib.queue.IOutboundQueue;
 
 public class GatewayMessageDispatcher extends Thread
 {
 	boolean shouldCancel = false;
 
-	PriorityBlockingQueue<OutboundMessage> messageQueue;
+	IOutboundQueue<OutboundMessage> messageQueue;
 
 	AbstractGateway gateway;
 
-	public GatewayMessageDispatcher(String name, PriorityBlockingQueue<OutboundMessage> messageQueue, AbstractGateway gateway)
+	public GatewayMessageDispatcher(String name, IOutboundQueue<OutboundMessage> messageQueue, AbstractGateway gateway)
 	{
 		setName(name);
 		setDaemon(false);
@@ -36,7 +36,7 @@ public class GatewayMessageDispatcher extends Thread
 		{
 			try
 			{
-				OutboundMessage message = this.messageQueue.poll(Settings.gatewayDispatcherQueueTimeout, TimeUnit.MILLISECONDS);
+				OutboundMessage message = this.messageQueue.get(Settings.gatewayDispatcherQueueTimeout, TimeUnit.MILLISECONDS);
 				if (message != null)
 				{
 					boolean sendOk;
@@ -79,6 +79,10 @@ public class GatewayMessageDispatcher extends Thread
 			catch (InterruptedException e1)
 			{
 				if (!this.shouldCancel) Log.getInstance().getLog().error("Interrupted!", e1);
+			}
+			catch (Exception e1)
+			{
+				Log.getInstance().getLog().error("Unhandled exception!", e1);
 			}
 		}
 		Log.getInstance().getLog().debug("Stopped!");

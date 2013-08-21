@@ -26,8 +26,6 @@ import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import org.smslib.callback.IDeliveryReportCallback;
 import org.smslib.callback.IDequeueMessageCallback;
 import org.smslib.callback.IGatewayStatusCallback;
@@ -44,8 +42,8 @@ import org.smslib.crypto.KeyManager;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.groups.Group;
 import org.smslib.groups.GroupManager;
+import org.smslib.helper.Common;
 import org.smslib.helper.Log;
-import org.smslib.helper.MessagePriorityComparator;
 import org.smslib.hook.IPreQueueHook;
 import org.smslib.hook.IPreSendHook;
 import org.smslib.hook.IRouteHook;
@@ -57,6 +55,8 @@ import org.smslib.message.MsIsdn;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.FailureCause;
 import org.smslib.message.OutboundMessage.SentStatus;
+import org.smslib.queue.DefaultOutboundQueue;
+import org.smslib.queue.IOutboundQueue;
 import org.smslib.routing.AbstractBalancer;
 import org.smslib.routing.AbstractRouter;
 import org.smslib.routing.DefaultBalancer;
@@ -70,7 +70,7 @@ public class Service
 
 	KeyManager keyManager = new KeyManager();
 
-	PriorityBlockingQueue<OutboundMessage> messageQueue = new PriorityBlockingQueue<OutboundMessage>(128, new MessagePriorityComparator());
+	IOutboundQueue<OutboundMessage> messageQueue = new DefaultOutboundQueue();
 
 	HashMap<String, AbstractGateway> gateways = new HashMap<String, AbstractGateway>();
 
@@ -143,7 +143,7 @@ public class Service
 					Log.getInstance().getLog().info("Starting gateway: " + gateway.getGatewayId());
 					allStarted &= gateway.start();
 				}
-				this.serviceMessageDispatcher = new ServiceMessageDispatcher("Main Dispatcher", getMessageQueue());
+				this.serviceMessageDispatcher = new ServiceMessageDispatcher("Main Dispatcher", this.messageQueue);
 				this.serviceMessageDispatcher.start();
 				setStatus(Status.Started);
 				if (allStarted) Log.getInstance().getLog().info("Service started.");
@@ -198,7 +198,7 @@ public class Service
 					while (getCallbackManager().getQueueLoad() > 0)
 					{
 						Log.getInstance().getLog().info("Callback queue not empty, waiting...");
-						Thread.sleep(5000);
+						Common.countSheeps(5000);
 					}
 					getCallbackManager().stop();
 					Log.getInstance().getLog().info("Service terminated.");
@@ -217,14 +217,15 @@ public class Service
 	{
 		while (true)
 		{
-			OutboundMessage message;
+			OutboundMessage message = null;
 			try
 			{
-				message = getMessageQueue().poll(1, TimeUnit.SECONDS);
+				message = this.messageQueue.get();
 			}
-			catch (InterruptedException e)
+			catch (Exception e)
 			{
-				message = null;
+				Log.getInstance().getLog().error("Unhandled exception!", e);
+				Common.countSheeps(1000);
 			}
 			if (message == null) break;
 			getCallbackManager().registerDequeueMessageEvent(message);
@@ -324,7 +325,7 @@ public class Service
 		return true;
 	}
 
-	public int queue(OutboundMessage message)
+	public int queue(OutboundMessage message) throws Exception
 	{
 		int messageCount = 0;
 		if ((getPreQueueHook() != null) && !getPreQueueHook().process(message)) return 0;
@@ -332,22 +333,22 @@ public class Service
 		for (OutboundMessage m : messageList)
 		{
 			Log.getInstance().getLog().debug("Queued: " + message.toShortString());
-			if (getMessageQueue().add(m)) messageCount++;
+			if (this.messageQueue.add(m)) messageCount++;
 		}
 		return messageCount;
 	}
 
-	public int getMasterQueueLoad()
+	public int getMasterQueueLoad() throws Exception
 	{
-		return getMessageQueue().size();
+		return this.messageQueue.size();
 	}
 
-	public int getGatewayQueueLoad(AbstractGateway gateway)
+	public int getGatewayQueueLoad(AbstractGateway gateway) throws Exception
 	{
 		return (gateway.getQueueLoad());
 	}
 
-	public int getAllQueueLoad()
+	public int getAllQueueLoad() throws Exception
 	{
 		int total = 0;
 		for (AbstractGateway g : getGateways().values())
@@ -383,7 +384,7 @@ public class Service
 						}
 						catch (Exception e)
 						{
-							Log.getInstance().getLog().error(e.getMessage(), e);
+							Log.getInstance().getLog().error("Unhandled Exception!", e);
 						}
 					}
 					if (message.getSentStatus() != SentStatus.Sent) message.setSentStatus(SentStatus.Failed);
@@ -417,7 +418,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error(e.getMessage(), e);
+			Log.getInstance().getLog().error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -432,7 +433,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error(e.getMessage(), e);
+			Log.getInstance().getLog().error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -445,7 +446,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error(e.getMessage(), e);
+			Log.getInstance().getLog().error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -458,7 +459,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error(e.getMessage(), e);
+			Log.getInstance().getLog().error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -471,7 +472,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error(e.getMessage(), e);
+			Log.getInstance().getLog().error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -484,7 +485,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error(e.getMessage(), e);
+			Log.getInstance().getLog().error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -627,11 +628,6 @@ public class Service
 		ArrayList<String> listOfGatewayIds = new ArrayList<String>(this.gateways.keySet());
 		Collections.sort(listOfGatewayIds);
 		return listOfGatewayIds;
-	}
-
-	private PriorityBlockingQueue<OutboundMessage> getMessageQueue()
-	{
-		return this.messageQueue;
 	}
 
 	public KeyManager getKeyManager()

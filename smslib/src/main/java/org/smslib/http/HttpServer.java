@@ -122,7 +122,7 @@ public class HttpServer implements Container
 		}
 	}
 
-	public void handleStatusRequest(PrintStream p)
+	public void handleStatusRequest(PrintStream p) throws Exception
 	{
 		p.println("<h2>SMSLib status</h2>");
 		p.println("<h3>Service information</h3>");

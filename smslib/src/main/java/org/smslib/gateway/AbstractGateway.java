@@ -3,9 +3,7 @@ package org.smslib.gateway;
 
 import java.io.IOException;
 import java.util.Random;
-import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.smslib.Service;
@@ -14,11 +12,12 @@ import org.smslib.core.Coverage;
 import org.smslib.core.CreditBalance;
 import org.smslib.core.Statistics;
 import org.smslib.helper.Log;
-import org.smslib.helper.MessagePriorityComparator;
 import org.smslib.message.DeliveryReportMessage.DeliveryStatus;
 import org.smslib.message.InboundMessage;
 import org.smslib.message.MsIsdn;
 import org.smslib.message.OutboundMessage;
+import org.smslib.queue.DefaultOutboundQueue;
+import org.smslib.queue.IOutboundQueue;
 import org.smslib.threading.GatewayMessageDispatcher;
 import org.xml.sax.SAXException;
 
@@ -55,7 +54,7 @@ public abstract class AbstractGateway
 
 	Semaphore concurrency = null;
 
-	PriorityBlockingQueue<OutboundMessage> messageQueue = new PriorityBlockingQueue<OutboundMessage>(1024, new MessagePriorityComparator());
+	IOutboundQueue<OutboundMessage> messageQueue = new DefaultOutboundQueue();
 
 	GatewayMessageDispatcher[] gatewayMessageDispatchers;
 
@@ -172,6 +171,7 @@ public abstract class AbstractGateway
 				{
 					setStatus(Status.Starting);
 					Log.getInstance().getLog().info(String.format("Starting gateway: %s", toShortString()));
+					getMessageQueue().start();
 					_start();
 					for (int i = 0; i < this.gatewayMessageDispatchers.length; i++)
 					{
@@ -182,14 +182,14 @@ public abstract class AbstractGateway
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error(e.getMessage(), e);
+					Log.getInstance().getLog().error("Unhandled Exception!", e);
 					try
 					{
 						stop();
 					}
 					catch (Exception e1)
 					{
-						Log.getInstance().getLog().error(e1.getMessage(), e1);
+						Log.getInstance().getLog().error("Unhandled Exception!", e1);
 					}
 					setStatus(Status.Error);
 				}
@@ -218,24 +218,17 @@ public abstract class AbstractGateway
 					}
 					while (true)
 					{
-						OutboundMessage message;
-						try
-						{
-							message = getMessageQueue().poll(1, TimeUnit.SECONDS);
-						}
-						catch (InterruptedException e)
-						{
-							message = null;
-						}
+						OutboundMessage message = getMessageQueue().get();
 						if (message == null) break;
 						Service.getInstance().queue(message);
 					}
 					setStatus(Status.Stopped);
+					getMessageQueue().stop();
 					_stop();
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error(e.getMessage(), e);
+					Log.getInstance().getLog().error("Unhandled Exception!", e);
 					setStatus(Status.Error);
 				}
 			}
@@ -384,13 +377,13 @@ public abstract class AbstractGateway
 		}
 	}
 
-	public boolean queue(OutboundMessage message)
+	public boolean queue(OutboundMessage message) throws Exception
 	{
 		Log.getInstance().getLog().debug("Queue: " + message.toShortString());
 		return getMessageQueue().add(message);
 	}
 
-	public int getQueueLoad()
+	public int getQueueLoad() throws Exception
 	{
 		return getMessageQueue().size();
 	}
@@ -417,9 +410,9 @@ public abstract class AbstractGateway
 		Service.getInstance().getCallbackManager().registerGatewayStatusEvent(this, oldStatus, newStatus);
 	}
 
-	protected PriorityBlockingQueue<OutboundMessage> getMessageQueue()
+	protected IOutboundQueue<OutboundMessage> getMessageQueue()
 	{
-		return this.messageQueue;
+		return (IOutboundQueue<OutboundMessage>) this.messageQueue;
 	}
 
 	protected int GetNextMultipartReferenceNo()
