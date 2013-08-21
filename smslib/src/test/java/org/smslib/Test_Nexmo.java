@@ -10,10 +10,14 @@ import org.smslib.message.OutboundMessage;
 
 public class Test_Nexmo extends TestCase
 {
+	String API_ID = "api-id";
+	String SECRET = "secret";
+
 	public void test() throws Exception
 	{
+		if (API_ID.equalsIgnoreCase("api-id")) return;
 		Service.getInstance().start();
-		Nexmo gateway = new Nexmo("nexmo", "api-id", "secret");
+		Nexmo gateway = new Nexmo("nexmo", API_ID, SECRET);
 		Service.getInstance().registerGateway(gateway);
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via Nexmo!");
 		m.setOriginator(new MsIsdn("SMSLIB"));

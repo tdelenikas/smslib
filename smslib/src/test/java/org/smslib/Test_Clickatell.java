@@ -9,10 +9,15 @@ import org.smslib.message.OutboundMessage;
 
 public class Test_Clickatell extends TestCase
 {
+	String API_ID = "api-id";
+	String USERNAME = "username";
+	String PASSWORD = "password";
+
 	public void test() throws Exception
 	{
+		if (USERNAME.equalsIgnoreCase("username")) return;
 		Service.getInstance().start();
-		Clickatell gateway = new Clickatell("clickatell", "api-id", "username", "password");
+		Clickatell gateway = new Clickatell("clickatell", API_ID, USERNAME, PASSWORD);
 		Service.getInstance().registerGateway(gateway);
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via Clickatell!");
 		Service.getInstance().send(m);
