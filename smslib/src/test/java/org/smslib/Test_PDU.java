@@ -10,6 +10,8 @@ import org.smslib.message.OutboundMessage;
 
 public class Test_PDU extends TestCase
 {
+	private static String ALPHABET_7_VERY_VERY_SHORT = "ABCD";
+	@SuppressWarnings("unused")
 	private static String ALPHABET_7_VERY_SHORT = "ABCDE@$^";
 	@SuppressWarnings("unused")
 	private static String ALPHABET_7_SHORT = "ABCDEFGHI@$^{}\\\"";
@@ -20,7 +22,7 @@ public class Test_PDU extends TestCase
 
 	public void test() throws Exception
 	{
-		String alphabet = ALPHABET_7_VERY_SHORT;
+		String alphabet = ALPHABET_7_VERY_VERY_SHORT;
 		for (int i = 1; i <= alphabet.length(); i ++)
 		{
 			Log.getInstance().getLog().debug(String.format("Testing with %d-letter words...", i));
