@@ -47,7 +47,7 @@ public class Test_SerialModem extends TestCase
 			Service.getInstance().setInboundMessageCallback(new InboundMessageCallback());
 			Service.getInstance().setDeliveryReportCallback(new DeliveryReportCallback());
 			Service.getInstance().start();
-			Modem gateway = new Modem("modem1", "COM3", "19200", "0000", "0000", "306942190000", "");
+			Modem gateway = new Modem("modem1", "COM6", "19200", "0000", "0000", "306942190000", "");
 			Service.getInstance().registerGateway(gateway);
 			Thread.sleep(20000);
 			if (RECIPIENT.length() > 0)
@@ -55,10 +55,10 @@ public class Test_SerialModem extends TestCase
 				Log.getInstance().getLog().info("Sending a simple test message...");
 				Service.getInstance().send(new OutboundMessage(RECIPIENT, "Test"));
 				Thread.sleep(20000);
-				Log.getInstance().getLog().info("Sending an encrypted message...");
-				Service.getInstance().getKeyManager().registerKey(RECIPIENT, new AESKey(new SecretKeySpec("0011223344556677".getBytes(), "AES")));
-				Service.getInstance().send(new OutboundEncryptedMessage(RECIPIENT, "Test".getBytes()));
-				Thread.sleep(20000);
+				//Log.getInstance().getLog().info("Sending an encrypted message...");
+				//Service.getInstance().getKeyManager().registerKey(RECIPIENT, new AESKey(new SecretKeySpec("0011223344556677".getBytes(), "AES")));
+				//Service.getInstance().send(new OutboundEncryptedMessage(RECIPIENT, "Test".getBytes()));
+				//Thread.sleep(20000);
 			}
 			Service.getInstance().unregisterGateway(gateway);
 			try
