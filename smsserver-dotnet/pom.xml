@@ -6,9 +6,9 @@
 		<version>dev-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>smslib-dotnet</artifactId>
+	<artifactId>smsserver-dotnet</artifactId>
 	<packaging>pom</packaging>
-	<name>SMSLib - SMSLib .NET Framework Assembly</name>
+	<name>SMSLib - SMSServer .NET Framework Assembly</name>
 	<dependencies>
 	</dependencies>
 	<build>
@@ -39,12 +39,12 @@
 						<configuration>
 							<tasks>
 								<echo>
-									Building the .NET dll, please wait...
+									Building the .NET executable, please wait...
 								</echo>
 								<exec dir="./" executable="tools/${ikvm}/bin/ikvmc" failonerror="true">
-									<arg value="-target:library" />
-									<arg value="-out:../lib/smslib-dotnet-${project.version}.dll" />
-									<arg value="../lib/smslib-dep-${project.version}-all.jar" />
+									<arg value="-target:exe" />
+									<arg value="-out:../lib/smsserver-dotnet-${project.version}.exe" />
+									<arg value="../lib/smsserver-dep-${project.version}-all.jar" />
 									<arg value="-fileversion:${project.version}" />
 								</exec>
 							</tasks>
@@ -77,7 +77,7 @@
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>../lib/smslib-dotnet-${project.version}.dll</file>
+									<file>../lib/smsserver-dotnet-${project.version}.dll</file>
 									<type>dll</type>
 									<classifier></classifier>
 								</artifact>

@@ -9,8 +9,6 @@
 	<artifactId>smslib</artifactId>
 	<packaging>jar</packaging>
 	<name>SMSLib - SMSLib</name>
-	<description>A universal API for sms messaging</description>
-	<url>http://smslib.org</url>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

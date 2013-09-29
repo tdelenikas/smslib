@@ -6,13 +6,18 @@
 		<version>dev-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>smslib-dep</artifactId>
+	<artifactId>smsserver-dep</artifactId>
 	<packaging>pom</packaging>
-	<name>SMSLib - SMSLib Fat Distribution</name>
+	<name>SMSLib - SMSServer Fat Distribution</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.smslib</groupId>
 			<artifactId>smslib</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.smslib</groupId>
+			<artifactId>smsserver</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
@@ -51,7 +56,7 @@
 							</descriptors>
 							<archive>
 								<manifest>
-									<mainClass>org.smslib.Service</mainClass>
+									<mainClass>org.smslib.smsserver.SMSServer</mainClass>
 								</manifest>
 							</archive>
 						</configuration>

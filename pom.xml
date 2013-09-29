@@ -19,7 +19,7 @@
 	<packaging>pom</packaging>
 	<version>dev-SNAPSHOT</version>
 	<name>SMSLib</name>
-	<description>A universal API for sms messaging</description>
+	<description>A universal API for sms messaging.</description>
 	<url>http://smslib.org</url>
 	<licenses>
 		<license>
@@ -60,6 +60,9 @@
 		<module>smslib</module>
 		<module>smslib-dep</module>
 		<module>smslib-dotnet</module>
+		<module>smsserver</module>
+		<module>smsserver-dep</module>
+		<module>smsserver-dotnet</module>
 	</modules>
 	<build>
 <!--
