@@ -223,7 +223,6 @@ public class SMSServer
 
 	public static void main(String[] args)
 	{
-		logger.info("");
 		logger.info("SMSServer Application - a database driver application based on SMSLib.");
 		logger.info("SMSLib Version: " + Settings.LIBRARY_VERSION);
 		logger.info(Settings.LIBRARY_INFO);

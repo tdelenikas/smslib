@@ -656,16 +656,15 @@ public class Service
 
 	public static void main(String[] args)
 	{
-		System.out.println();
-		System.out.println(Settings.LIBRARY_INFO);
-		System.out.println(Settings.LIBRARY_COPYRIGHT);
-		System.out.println(Settings.LIBRARY_LICENSE);
-		System.out.println("SMSLib Version: " + Settings.LIBRARY_VERSION);
-		System.out.println("OS Version: " + System.getProperty("os.name") + " / " + System.getProperty("os.arch") + " / " + System.getProperty("os.version"));
-		System.out.println("JAVA Version: " + System.getProperty("java.version"));
-		System.out.println("JAVA Runtime Version: " + System.getProperty("java.runtime.version"));
-		System.out.println("JAVA Vendor: " + System.getProperty("java.vm.vendor"));
-		System.out.println("JAVA Class Path: " + System.getProperty("java.class.path"));
+		logger.info(Settings.LIBRARY_INFO);
+		logger.info(Settings.LIBRARY_COPYRIGHT);
+		logger.info(Settings.LIBRARY_LICENSE);
+		logger.info("SMSLib Version: " + Settings.LIBRARY_VERSION);
+		logger.info("OS Version: " + System.getProperty("os.name") + " / " + System.getProperty("os.arch") + " / " + System.getProperty("os.version"));
+		logger.info("JAVA Version: " + System.getProperty("java.version"));
+		logger.info("JAVA Runtime Version: " + System.getProperty("java.runtime.version"));
+		logger.info("JAVA Vendor: " + System.getProperty("java.vm.vendor"));
+		logger.info("JAVA Class Path: " + System.getProperty("java.class.path"));
 		try
 		{
 			getInstance().terminate();
