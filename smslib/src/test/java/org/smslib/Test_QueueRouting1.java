@@ -2,18 +2,21 @@
 package org.smslib;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.callback.IMessageSentCallback;
 import org.smslib.callback.IQueueThresholdCallback;
 import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.callback.events.QueueThresholdCallbackEvent;
 import org.smslib.core.Capabilities;
 import org.smslib.gateway.MockGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.SentStatus;
 
 public class Test_QueueRouting1 extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_QueueRouting1.class);
+
 	int failed;
 
 	int sent;
@@ -35,7 +38,7 @@ public class Test_QueueRouting1 extends TestCase
 		@Override
 		public boolean process(QueueThresholdCallbackEvent event)
 		{
-			Log.getInstance().getLog().info("=== Queue threshold reached : " + event.getQueueLoad() + " ===");
+			logger.info("=== Queue threshold reached : " + event.getQueueLoad() + " ===");
 			return true;
 		}
 	}
@@ -53,17 +56,17 @@ public class Test_QueueRouting1 extends TestCase
 		Service.getInstance().registerGateway(g1);
 		Service.getInstance().registerGateway(g2);
 		Service.getInstance().registerGateway(g3);
-		Log.getInstance().getLog().info("Queueing " + Limits.NO_OF_MESSAGES + " messages...");
+		logger.info("Queueing " + Limits.NO_OF_MESSAGES + " messages...");
 		for (int i = 0; i < Limits.NO_OF_MESSAGES; i++)
 			assert (Service.getInstance().queue(new OutboundMessage("306974000000", "Hello World! (queued)")) == 1);
 		while (Service.getInstance().getAllQueueLoad() != 0)
 			Thread.sleep(1000);
-		Log.getInstance().getLog().info("SENT TRAFFIC");
-		Log.getInstance().getLog().info("G1 = " + g1.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("G2 = " + g2.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("G3 = " + g3.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("(SEND)   = " + this.sent);
-		Log.getInstance().getLog().info("(FAILED) = " + this.failed);
+		logger.info("SENT TRAFFIC");
+		logger.info("G1 = " + g1.getStatistics().getTotalSent());
+		logger.info("G2 = " + g2.getStatistics().getTotalSent());
+		logger.info("G3 = " + g3.getStatistics().getTotalSent());
+		logger.info("(SEND)   = " + this.sent);
+		logger.info("(FAILED) = " + this.failed);
 		assert (g1.getStatistics().getTotalSent() + g2.getStatistics().getTotalSent() + g3.getStatistics().getTotalSent() + this.failed == Limits.NO_OF_MESSAGES);
 		assert (this.sent + this.failed == Limits.NO_OF_MESSAGES);
 		Service.getInstance().unregisterGateway(g1);

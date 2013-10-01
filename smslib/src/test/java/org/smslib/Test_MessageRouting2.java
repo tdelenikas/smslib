@@ -2,30 +2,33 @@
 package org.smslib;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.core.Capabilities;
 import org.smslib.gateway.MockGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.SentStatus;
 
 public class Test_MessageRouting2 extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_MessageRouting2.class);
+
 	public void test() throws Exception
 	{
 		Service.getInstance().setServiceStatusCallback(new ServiceStatusCallback());
 		Service.getInstance().setGatewayStatusCallback(new GatewayStatusCallback());
 		Service.getInstance().setMessageSentCallback(new MessageSentCallback());
 		{
-			Log.getInstance().getLog().info("============================");
-			Log.getInstance().getLog().info("============================");
+			logger.info("============================");
+			logger.info("============================");
 			Thread.sleep(5000);
 			Service.getInstance().start();
-			Log.getInstance().getLog().info("============================");
-			Log.getInstance().getLog().info("============================");
+			logger.info("============================");
+			logger.info("============================");
 			Thread.sleep(5000);
 			Service.getInstance().stop();
-			Log.getInstance().getLog().info("============================");
-			Log.getInstance().getLog().info("============================");
+			logger.info("============================");
+			logger.info("============================");
 			Thread.sleep(5000);
 		}
 		{
@@ -50,13 +53,13 @@ public class Test_MessageRouting2 extends TestCase
 				if (m.getSentStatus() == SentStatus.Sent) okCount++;
 				else failCount++;
 			}
-			Log.getInstance().getLog().info("G1 Traffic = " + g1.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G2 Traffic = " + g2.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G3 Traffic = " + g3.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G4 Traffic = " + g4.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G5 Traffic = " + g5.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("(SENT)     = " + okCount);
-			Log.getInstance().getLog().info("(FAILED)   = " + failCount);
+			logger.info("G1 Traffic = " + g1.getStatistics().getTotalSent());
+			logger.info("G2 Traffic = " + g2.getStatistics().getTotalSent());
+			logger.info("G3 Traffic = " + g3.getStatistics().getTotalSent());
+			logger.info("G4 Traffic = " + g4.getStatistics().getTotalSent());
+			logger.info("G5 Traffic = " + g5.getStatistics().getTotalSent());
+			logger.info("(SENT)     = " + okCount);
+			logger.info("(FAILED)   = " + failCount);
 			assert((okCount + failCount) == Limits.NO_OF_MESSAGES);
 			Service.getInstance().unregisterGateway(g1);
 			Service.getInstance().unregisterGateway(g2);

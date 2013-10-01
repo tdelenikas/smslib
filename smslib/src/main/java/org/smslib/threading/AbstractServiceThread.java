@@ -1,10 +1,13 @@
 
 package org.smslib.threading;
 
-import org.smslib.helper.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractServiceThread extends Thread
 {
+	static Logger logger = LoggerFactory.getLogger(AbstractServiceThread.class);
+
 	int delay;
 
 	int initialDelay;
@@ -50,13 +53,13 @@ public abstract class AbstractServiceThread extends Thread
 
 	public void enable()
 	{
-		Log.getInstance().getLog().debug("Enabling " + getName() + "...");
+		logger.debug("Enabling " + getName() + "...");
 		this.enabled = true;
 	}
 
 	public void disable()
 	{
-		Log.getInstance().getLog().debug("Disabling " + getName() + "...");
+		logger.debug("Disabling " + getName() + "...");
 		this.enabled = false;
 	}
 
@@ -90,7 +93,7 @@ public abstract class AbstractServiceThread extends Thread
 		}
 		catch (InterruptedException e)
 		{
-			if (!isCancelled()) Log.getInstance().getLog().error("Interrupted during initial delay!", e);
+			if (!isCancelled()) logger.error("Interrupted during initial delay!", e);
 		}
 		while (!isCancelled())
 		{
@@ -100,7 +103,7 @@ public abstract class AbstractServiceThread extends Thread
 			}
 			catch (InterruptedException e)
 			{
-				if (!isCancelled()) Log.getInstance().getLog().error("Interrupted during interval delay!", e);
+				if (!isCancelled()) logger.error("Interrupted during interval delay!", e);
 			}
 			try
 			{
@@ -110,14 +113,14 @@ public abstract class AbstractServiceThread extends Thread
 			{
 				if (isCancelled())
 				{
-					Log.getInstance().getLog().debug("Stopped.");
+					logger.debug("Stopped.");
 					break;
 				}
-				Log.getInstance().getLog().debug("Interrupted!");
+				logger.debug("Interrupted!");
 			}
 			catch (Exception e)
 			{
-				Log.getInstance().getLog().error("Unhandled exception!", e);
+				logger.error("Unhandled exception!", e);
 			}
 		}
 	}

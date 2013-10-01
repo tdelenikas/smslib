@@ -6,12 +6,13 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeoutException;
 import javax.xml.parsers.ParserConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Coverage;
 import org.smslib.core.CreditBalance;
 import org.smslib.core.Statistics;
-import org.smslib.helper.Log;
 import org.smslib.message.DeliveryReportMessage.DeliveryStatus;
 import org.smslib.message.InboundMessage;
 import org.smslib.message.MsIsdn;
@@ -23,6 +24,8 @@ import org.xml.sax.SAXException;
 
 public abstract class AbstractGateway
 {
+	static Logger logger = LoggerFactory.getLogger(AbstractGateway.class);
+
 	public enum Status
 	{
 		Starting, Started, Stopping, Stopped, Error
@@ -170,7 +173,7 @@ public abstract class AbstractGateway
 				try
 				{
 					setStatus(Status.Starting);
-					Log.getInstance().getLog().info(String.format("Starting gateway: %s", toShortString()));
+					logger.info(String.format("Starting gateway: %s", toShortString()));
 					getMessageQueue().start();
 					_start();
 					for (int i = 0; i < this.gatewayMessageDispatchers.length; i++)
@@ -182,14 +185,14 @@ public abstract class AbstractGateway
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error("Unhandled Exception!", e);
+					logger.error("Unhandled Exception!", e);
 					try
 					{
 						stop();
 					}
 					catch (Exception e1)
 					{
-						Log.getInstance().getLog().error("Unhandled Exception!", e1);
+						logger.error("Unhandled Exception!", e1);
 					}
 					setStatus(Status.Error);
 				}
@@ -207,7 +210,7 @@ public abstract class AbstractGateway
 				try
 				{
 					setStatus(Status.Stopping);
-					Log.getInstance().getLog().info(String.format("Stopping gateway: %s", toShortString()));
+					logger.info(String.format("Stopping gateway: %s", toShortString()));
 					for (int i = 0; i < this.gatewayMessageDispatchers.length; i++)
 					{
 						if (this.gatewayMessageDispatchers[i] != null)
@@ -228,7 +231,7 @@ public abstract class AbstractGateway
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error("Unhandled Exception!", e);
+					logger.error("Unhandled Exception!", e);
 					setStatus(Status.Error);
 				}
 			}
@@ -243,7 +246,7 @@ public abstract class AbstractGateway
 		{
 			if (getStatus() != Status.Started)
 			{
-				Log.getInstance().getLog().warn("Outbound message routed via non-started gateway: " + message.toShortString() + " (" + getStatus() + ")");
+				logger.warn("Outbound message routed via non-started gateway: " + message.toShortString() + " (" + getStatus() + ")");
 				return false;
 			}
 			this.concurrency.acquire();
@@ -304,7 +307,7 @@ public abstract class AbstractGateway
 		{
 			if (getStatus() != Status.Started)
 			{
-				Log.getInstance().getLog().warn("Delete message via non-started gateway: " + message.toShortString() + " (" + getStatus() + ")");
+				logger.warn("Delete message via non-started gateway: " + message.toShortString() + " (" + getStatus() + ")");
 				return false;
 			}
 			this.concurrency.acquire();
@@ -379,7 +382,7 @@ public abstract class AbstractGateway
 
 	public boolean queue(OutboundMessage message) throws Exception
 	{
-		Log.getInstance().getLog().debug("Queue: " + message.toShortString());
+		logger.debug("Queue: " + message.toShortString());
 		return getMessageQueue().add(message);
 	}
 

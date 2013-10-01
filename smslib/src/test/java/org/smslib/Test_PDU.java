@@ -4,12 +4,15 @@ import java.util.List;
 import junit.framework.TestCase;
 import org.ajwcc.pduUtils.gsm3040.Pdu;
 import org.ajwcc.pduUtils.gsm3040.PduParser;
-import org.smslib.helper.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.message.MsIsdn;
 import org.smslib.message.OutboundMessage;
 
 public class Test_PDU extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_PDU.class);
+
 	private static String ALPHABET_7_VERY_VERY_SHORT = "ABCD";
 	@SuppressWarnings("unused")
 	private static String ALPHABET_7_VERY_SHORT = "ABCDE@$^";
@@ -25,7 +28,7 @@ public class Test_PDU extends TestCase
 		String alphabet = ALPHABET_7_VERY_VERY_SHORT;
 		for (int i = 1; i <= alphabet.length(); i ++)
 		{
-			Log.getInstance().getLog().debug(String.format("Testing with %d-letter words...", i));
+			logger.debug(String.format("Testing with %d-letter words...", i));
 			testCombos(alphabet, i, "");
 		}
 	}

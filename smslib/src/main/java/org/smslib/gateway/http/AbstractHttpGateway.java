@@ -17,10 +17,11 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.core.Coverage;
 import org.smslib.core.CreditBalance;
 import org.smslib.gateway.AbstractGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.DeliveryReportMessage;
 import org.smslib.message.DeliveryReportMessage.DeliveryStatus;
 import org.smslib.message.InboundMessage;
@@ -34,6 +35,8 @@ import org.xml.sax.SAXException;
 
 public abstract class AbstractHttpGateway extends AbstractGateway
 {
+	static Logger logger = LoggerFactory.getLogger(AbstractHttpGateway.class);
+
 	public enum HttpMethod
 	{
 		Undefined, POST, GET;
@@ -278,14 +281,14 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 					req.append('=');
 					req.append(URLEncoder.encode(parameters.get(k), getHttpEncoding()));
 				}
-				Log.getInstance().getLog().debug("HTTP POST -> " + url + " := " + req.toString());
+				logger.debug("HTTP POST -> " + url + " := " + req.toString());
 				out.write(req.toString());
 				out.flush();
 				out.close();
 				in = new BufferedReader(new InputStreamReader((con.getInputStream())));
 				while ((line = in.readLine()) != null)
 				{
-					Log.getInstance().getLog().debug("HTTP POST / Response -> " + line);
+					logger.debug("HTTP POST / Response -> " + line);
 					responseList.add(line);
 				}
 				in.close();
@@ -295,11 +298,11 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 				con = u.openConnection();
 				con.setConnectTimeout(5000);
 				prepareUrlConnection(con);
-				Log.getInstance().getLog().debug("HTTP GET -> " + url);
+				logger.debug("HTTP GET -> " + url);
 				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 				while ((line = in.readLine()) != null)
 				{
-					Log.getInstance().getLog().debug("HTTP GET / Response -> " + line);
+					logger.debug("HTTP GET / Response -> " + line);
 					responseList.add(line);
 				}
 				in.close();

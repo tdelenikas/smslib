@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.gateway.MockGateway;
-import org.smslib.helper.Log;
 import org.smslib.hook.IRouteHook;
 import org.smslib.message.MsIsdn;
 import org.smslib.message.OutboundMessage;
@@ -20,6 +21,8 @@ import org.smslib.routing.NumberRouter;
 
 public class Test_MessageRouting1 extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_MessageRouting1.class);
+
 	class RouteMessageHook implements IRouteHook
 	{
 		@Override
@@ -41,7 +44,7 @@ public class Test_MessageRouting1 extends TestCase
 		Service.getInstance().setServiceStatusCallback(new ServiceStatusCallback());
 		Service.getInstance().setGatewayStatusCallback(new GatewayStatusCallback());
 		{
-			Log.getInstance().getLog().info("Step #1");
+			logger.info("Step #1");
 			Capabilities c = new Capabilities();
 			c.set(Capabilities.Caps.CanSendMessage);
 			MockGateway g = new MockGateway("G1", "Mock Gateway #1", c, 0, 0);
@@ -55,7 +58,7 @@ public class Test_MessageRouting1 extends TestCase
 			Service.getInstance().unregisterGateway(g);
 		}
 		{
-			Log.getInstance().getLog().info("Step #1.1");
+			logger.info("Step #1.1");
 			Capabilities c = new Capabilities();
 			c.set(Capabilities.Caps.CanSendMessage);
 			MockGateway g = new MockGateway("G1", "Mock Gateway #1", c, 100, 0);
@@ -72,7 +75,7 @@ public class Test_MessageRouting1 extends TestCase
 		Service.getInstance().start();
 		//
 		{
-			Log.getInstance().getLog().info("Step #2");
+			logger.info("Step #2");
 			Capabilities c = new Capabilities();
 			MockGateway g = new MockGateway("G1", "Mock Gateway #1", c, 0, 0);
 			Service.getInstance().registerGateway(g);
@@ -83,7 +86,7 @@ public class Test_MessageRouting1 extends TestCase
 			Service.getInstance().unregisterGateway(g);
 		}
 		{
-			Log.getInstance().getLog().info("Step #3");
+			logger.info("Step #3");
 			Capabilities c = new Capabilities();
 			c.set(Capabilities.Caps.CanSendMessage);
 			c.set(Capabilities.Caps.CanSplitMessages);
@@ -99,7 +102,7 @@ public class Test_MessageRouting1 extends TestCase
 			Service.getInstance().unregisterGateway(g);
 		}
 		{
-			Log.getInstance().getLog().info("Step #4");
+			logger.info("Step #4");
 			Capabilities c = new Capabilities();
 			c.set(Capabilities.Caps.CanSendMessage);
 			MockGateway g1 = new MockGateway("G1", "Mock Gateway #1", c, 0, 0);
@@ -113,15 +116,15 @@ public class Test_MessageRouting1 extends TestCase
 				assert (m.getSentStatus() == SentStatus.Sent);
 				assert (m.getGatewayId().equalsIgnoreCase("G1") || m.getGatewayId().equalsIgnoreCase("G2"));
 			}
-			Log.getInstance().getLog().info("G1 Traffic = " + g1.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G2 Traffic = " + g2.getStatistics().getTotalSent());
+			logger.info("G1 Traffic = " + g1.getStatistics().getTotalSent());
+			logger.info("G2 Traffic = " + g2.getStatistics().getTotalSent());
 			assert (g1.getStatistics().getTotalSent() == (Limits.NO_OF_MESSAGES / 2));
 			assert (g2.getStatistics().getTotalSent() == (Limits.NO_OF_MESSAGES / 2));
 			Service.getInstance().unregisterGateway(g1);
 			Service.getInstance().unregisterGateway(g2);
 		}
 		{
-			Log.getInstance().getLog().info("Step #5");
+			logger.info("Step #5");
 			Capabilities c = new Capabilities();
 			c.set(Capabilities.Caps.CanSendMessage);
 			MockGateway g1 = new MockGateway("G1", "Mock Gateway #1", c, 0, 0);
@@ -137,9 +140,9 @@ public class Test_MessageRouting1 extends TestCase
 				assert (m.getSentStatus() == SentStatus.Sent);
 				assert (m.getGatewayId().equalsIgnoreCase("G1") || m.getGatewayId().equalsIgnoreCase("G2"));
 			}
-			Log.getInstance().getLog().info("G1 Traffic = " + g1.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G2 Traffic = " + g2.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G3 Traffic = " + g3.getStatistics().getTotalSent());
+			logger.info("G1 Traffic = " + g1.getStatistics().getTotalSent());
+			logger.info("G2 Traffic = " + g2.getStatistics().getTotalSent());
+			logger.info("G3 Traffic = " + g3.getStatistics().getTotalSent());
 			assert (g1.getStatistics().getTotalSent() == (Limits.NO_OF_MESSAGES / 2));
 			assert (g2.getStatistics().getTotalSent() == (Limits.NO_OF_MESSAGES / 2));
 			assert (g3.getStatistics().getTotalSent() == 0);
@@ -148,7 +151,7 @@ public class Test_MessageRouting1 extends TestCase
 			Service.getInstance().unregisterGateway(g3);
 		}
 		{
-			Log.getInstance().getLog().info("Step #6");
+			logger.info("Step #6");
 			Capabilities c = new Capabilities();
 			c.set(Capabilities.Caps.CanSendMessage);
 			MockGateway g1 = new MockGateway("G1", "Mock Gateway #1", c, 0, 0);
@@ -192,7 +195,7 @@ public class Test_MessageRouting1 extends TestCase
 			Service.getInstance().unregisterGateway(g3);
 		}
 		{
-			Log.getInstance().getLog().info("Step #7");
+			logger.info("Step #7");
 			Capabilities c = new Capabilities();
 			c.set(Capabilities.Caps.CanSendMessage);
 			MockGateway g1 = new MockGateway("G1", "Mock Gateway #1", c, 0, 0);
@@ -212,7 +215,7 @@ public class Test_MessageRouting1 extends TestCase
 			Service.getInstance().unregisterGateway(fg1);
 		}
 		{
-			Log.getInstance().getLog().info("Step #8");
+			logger.info("Step #8");
 			Service.getInstance().setRouteHook(new RouteMessageHook());
 			Capabilities c = new Capabilities();
 			c.set(Caps.CanSendMessage);
@@ -229,9 +232,9 @@ public class Test_MessageRouting1 extends TestCase
 				assert (m.getSentStatus() == SentStatus.Sent);
 				assert (m.getGatewayId().equalsIgnoreCase("G2"));
 			}
-			Log.getInstance().getLog().info("G1 Traffic = " + g1.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G2 Traffic = " + g2.getStatistics().getTotalSent());
-			Log.getInstance().getLog().info("G3 Traffic = " + g3.getStatistics().getTotalSent());
+			logger.info("G1 Traffic = " + g1.getStatistics().getTotalSent());
+			logger.info("G2 Traffic = " + g2.getStatistics().getTotalSent());
+			logger.info("G3 Traffic = " + g3.getStatistics().getTotalSent());
 			assert (g1.getStatistics().getTotalSent() == 0);
 			assert (g2.getStatistics().getTotalSent() == Limits.NO_OF_MESSAGES);
 			assert (g3.getStatistics().getTotalSent() == 0);

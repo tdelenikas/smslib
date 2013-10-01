@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
-
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
@@ -21,14 +20,17 @@ import org.simpleframework.http.core.ContainerServer;
 import org.simpleframework.transport.Server;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Settings;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.helper.Common;
-import org.smslib.helper.Log;
 
 public class HttpServer implements Container
 {
+	static Logger logger = LoggerFactory.getLogger(HttpServer.class);
+
 	Container container;
 
 	Server server;
@@ -50,7 +52,7 @@ public class HttpServer implements Container
 			response.setDate("Date", time);
 			response.setDate("Last-Modified", time);
 			String path = request.getPath().toString();
-			Log.getInstance().getLog().debug(String.format("http, ip:%s, path:%s", visitorIp, path));
+			logger.debug(String.format("http, ip:%s, path:%s", visitorIp, path));
 			boolean processed = false;
 			boolean aclCheck = false;
 			for (int i = 0; i < URIs.length; i += 2)
@@ -60,7 +62,7 @@ public class HttpServer implements Container
 					if (URIs[i][3].equalsIgnoreCase("acl-status")) aclCheck = checkACL(InetAddress.getByName(visitorIp), Settings.httpServerACLStatus);
 					if (aclCheck)
 					{
-						Log.getInstance().getLog().debug("HTTP/Invoking system handler: " + URIs[i][0]);
+						logger.debug("HTTP/Invoking system handler: " + URIs[i][0]);
 						if (URIs[i][2].equalsIgnoreCase("1")) showHeader(output);
 						Method m = getClass().getMethod(URIs[i][1], PrintStream.class);
 						m.invoke(this, output);
@@ -76,7 +78,7 @@ public class HttpServer implements Container
 				{
 					if (p.equalsIgnoreCase(path))
 					{
-						Log.getInstance().getLog().debug("HTTP/Invoking registered handler: " + p);
+						logger.debug("HTTP/Invoking registered handler: " + p);
 						processed = true;
 						Status s = Service.getInstance().getHttpRequestHandlers().get(p).process(request, response);
 						response.setCode(s.getCode());
@@ -102,7 +104,7 @@ public class HttpServer implements Container
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled HTTP Exception #1!", e);
+			logger.error("Unhandled HTTP Exception #1!", e);
 		}
 		finally
 		{
@@ -117,7 +119,7 @@ public class HttpServer implements Container
 			}
 			catch (Exception e)
 			{
-				Log.getInstance().getLog().error("Unhandled HTTP Exception #2!", e);
+				logger.error("Unhandled HTTP Exception #2!", e);
 			}
 		}
 	}

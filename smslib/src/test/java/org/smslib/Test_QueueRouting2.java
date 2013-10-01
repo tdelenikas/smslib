@@ -2,16 +2,19 @@
 package org.smslib;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.callback.IMessageSentCallback;
 import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.core.Capabilities;
 import org.smslib.gateway.MockGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.SentStatus;
 
 public class Test_QueueRouting2 extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_QueueRouting2.class);
+
 	int failed;
 
 	int sent;
@@ -42,41 +45,41 @@ public class Test_QueueRouting2 extends TestCase
 		Service.getInstance().registerGateway(g1);
 		Service.getInstance().registerGateway(g2);
 		Service.getInstance().registerGateway(g3);
-		Log.getInstance().getLog().info("QUEUE TOTALS");
-		Log.getInstance().getLog().info("ALL = " + Service.getInstance().getMasterQueueLoad());
-		Log.getInstance().getLog().info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
-		Log.getInstance().getLog().info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
-		Log.getInstance().getLog().info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
-		Log.getInstance().getLog().info("Queueing " + Limits.NO_OF_MESSAGES + " messages...");
+		logger.info("QUEUE TOTALS");
+		logger.info("ALL = " + Service.getInstance().getMasterQueueLoad());
+		logger.info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
+		logger.info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
+		logger.info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
+		logger.info("Queueing " + Limits.NO_OF_MESSAGES + " messages...");
 		for (int i = 0; i < Limits.NO_OF_MESSAGES; i++)
 			assert (Service.getInstance().queue(new OutboundMessage("306974000000", "Hello World! (queued)")) == 1);
-		Log.getInstance().getLog().info("QUEUE TOTALS");
-		Log.getInstance().getLog().info("ALL = " + Service.getInstance().getMasterQueueLoad());
-		Log.getInstance().getLog().info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
-		Log.getInstance().getLog().info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
-		Log.getInstance().getLog().info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
+		logger.info("QUEUE TOTALS");
+		logger.info("ALL = " + Service.getInstance().getMasterQueueLoad());
+		logger.info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
+		logger.info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
+		logger.info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
 		Thread.sleep(1000);
-		Log.getInstance().getLog().info("QUEUE TOTALS");
-		Log.getInstance().getLog().info("ALL = " + Service.getInstance().getMasterQueueLoad());
-		Log.getInstance().getLog().info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
-		Log.getInstance().getLog().info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
-		Log.getInstance().getLog().info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
+		logger.info("QUEUE TOTALS");
+		logger.info("ALL = " + Service.getInstance().getMasterQueueLoad());
+		logger.info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
+		logger.info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
+		logger.info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
 		while (Service.getInstance().getAllQueueLoad() > 0)
 			Thread.sleep(1000);
 		while (Service.getInstance().getCallbackManager().getQueueLoad() > 0)
 			Thread.sleep(1000);
 		Thread.sleep(1000);
-		Log.getInstance().getLog().info("QUEUE TOTALS");
-		Log.getInstance().getLog().info("ALL = " + Service.getInstance().getMasterQueueLoad());
-		Log.getInstance().getLog().info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
-		Log.getInstance().getLog().info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
-		Log.getInstance().getLog().info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
-		Log.getInstance().getLog().info("SENT TRAFFIC");
-		Log.getInstance().getLog().info("G1 = " + g1.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("G2 = " + g2.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("G3 = " + g3.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("(SEND)   = " + this.sent);
-		Log.getInstance().getLog().info("(FAILED) = " + this.failed);
+		logger.info("QUEUE TOTALS");
+		logger.info("ALL = " + Service.getInstance().getMasterQueueLoad());
+		logger.info("G1 = " + Service.getInstance().getGatewayQueueLoad(g1));
+		logger.info("G2 = " + Service.getInstance().getGatewayQueueLoad(g2));
+		logger.info("G3 = " + Service.getInstance().getGatewayQueueLoad(g3));
+		logger.info("SENT TRAFFIC");
+		logger.info("G1 = " + g1.getStatistics().getTotalSent());
+		logger.info("G2 = " + g2.getStatistics().getTotalSent());
+		logger.info("G3 = " + g3.getStatistics().getTotalSent());
+		logger.info("(SEND)   = " + this.sent);
+		logger.info("(FAILED) = " + this.failed);
 		assert (g1.getStatistics().getTotalSent() + g2.getStatistics().getTotalSent() + g3.getStatistics().getTotalSent() + this.failed == Limits.NO_OF_MESSAGES);
 		assert (g1.getStatistics().getTotalSent() + g2.getStatistics().getTotalSent() + g3.getStatistics().getTotalSent() == this.sent);
 		assert (this.sent + this.failed == Limits.NO_OF_MESSAGES);

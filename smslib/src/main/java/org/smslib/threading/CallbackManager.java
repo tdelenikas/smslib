@@ -3,6 +3,8 @@ package org.smslib.threading;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.callback.IDeliveryReportCallback;
 import org.smslib.callback.IDequeueMessageCallback;
@@ -23,7 +25,6 @@ import org.smslib.callback.events.QueueThresholdCallbackEvent;
 import org.smslib.callback.events.ServiceStatusCallbackEvent;
 import org.smslib.core.Settings;
 import org.smslib.gateway.AbstractGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.DeliveryReportMessage;
 import org.smslib.message.InboundMessage;
 import org.smslib.message.MsIsdn;
@@ -31,6 +32,8 @@ import org.smslib.message.OutboundMessage;
 
 public class CallbackManager
 {
+	static Logger logger = LoggerFactory.getLogger(CallbackManager.class);
+
 	LinkedBlockingQueue<BaseCallbackEvent> eventQueue = new LinkedBlockingQueue<BaseCallbackEvent>();
 
 	IServiceStatusCallback serviceStatusCallback = null;
@@ -140,14 +143,14 @@ public class CallbackManager
 
 	public void start()
 	{
-		Log.getInstance().getLog().debug("Starting...");
+		logger.debug("Starting...");
 		this.dispatcher = new CallbackManagerDispatcher();
 		this.dispatcher.start();
 	}
 
 	public void stop()
 	{
-		Log.getInstance().getLog().debug("Cancelling!");
+		logger.debug("Cancelling!");
 		this.shouldCancel = true;
 		this.dispatcher.interrupt();
 		try
@@ -156,7 +159,7 @@ public class CallbackManager
 		}
 		catch (InterruptedException e)
 		{
-			Log.getInstance().getLog().warn("Interrupted!", e);
+			logger.warn("Interrupted!", e);
 		}
 		this.dispatcher = null;
 	}
@@ -172,7 +175,7 @@ public class CallbackManager
 		@Override
 		public void run()
 		{
-			Log.getInstance().getLog().debug("Started!");
+			logger.debug("Started!");
 			while (!CallbackManager.this.shouldCancel)
 			{
 				try
@@ -193,7 +196,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in ServiceStatusCallback!", e);
+									logger.error("Error in ServiceStatusCallback!", e);
 								}
 							}
 						}
@@ -208,7 +211,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in GatewayStatusCallback!", e);
+									logger.error("Error in GatewayStatusCallback!", e);
 								}
 							}
 						}
@@ -223,7 +226,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in MessageSentCallback!", e);
+									logger.error("Error in MessageSentCallback!", e);
 								}
 							}
 						}
@@ -239,7 +242,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in InboundMessageCallback!", e);
+									logger.error("Error in InboundMessageCallback!", e);
 								}
 							}
 						}
@@ -254,7 +257,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in InboundCallCallback!", e);
+									logger.error("Error in InboundCallCallback!", e);
 								}
 							}
 						}
@@ -270,7 +273,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in DeliveryReportCallback!", e);
+									logger.error("Error in DeliveryReportCallback!", e);
 								}
 							}
 						}
@@ -285,7 +288,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in DequeueMessageCallback!", e);
+									logger.error("Error in DequeueMessageCallback!", e);
 								}
 							}
 						}
@@ -300,7 +303,7 @@ public class CallbackManager
 								}
 								catch (Exception e)
 								{
-									Log.getInstance().getLog().error("Error in QueueThresholdCallback!", e);
+									logger.error("Error in QueueThresholdCallback!", e);
 								}
 							}
 						}
@@ -310,14 +313,14 @@ public class CallbackManager
 				}
 				catch (InterruptedException e1)
 				{
-					if (!CallbackManager.this.shouldCancel) Log.getInstance().getLog().error("Interrupted!", e1);
+					if (!CallbackManager.this.shouldCancel) logger.error("Interrupted!", e1);
 				}
 				catch (Exception e2)
 				{
-					Log.getInstance().getLog().error("Unhandled exception!", e2);
+					logger.error("Unhandled exception!", e2);
 				}
 			}
-			Log.getInstance().getLog().debug("Stopped!");
+			logger.debug("Stopped!");
 		}
 	}
 }

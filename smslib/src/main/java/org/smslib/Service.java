@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.callback.IDeliveryReportCallback;
 import org.smslib.callback.IDequeueMessageCallback;
 import org.smslib.callback.IGatewayStatusCallback;
@@ -43,7 +45,6 @@ import org.smslib.gateway.AbstractGateway;
 import org.smslib.groups.Group;
 import org.smslib.groups.GroupManager;
 import org.smslib.helper.Common;
-import org.smslib.helper.Log;
 import org.smslib.hook.IPreQueueHook;
 import org.smslib.hook.IPreSendHook;
 import org.smslib.hook.IRouteHook;
@@ -66,6 +67,8 @@ import org.smslib.threading.ServiceMessageDispatcher;
 
 public class Service
 {
+	static Logger logger = LoggerFactory.getLogger(Service.class);
+
 	private static final Service _instance = new Service();
 
 	KeyManager keyManager = new KeyManager();
@@ -136,7 +139,7 @@ public class Service
 		{
 			if (getStatus() == Status.Stopped)
 			{
-				Log.getInstance().getLog().info("Service starting...");
+				logger.info("Service starting...");
 				setStatus(Status.Starting);
 				try
 				{
@@ -144,18 +147,18 @@ public class Service
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error("Unhandled exception!", e);
+					logger.error("Unhandled exception!", e);
 				}
 				for (AbstractGateway gateway : this.gateways.values())
 				{
-					Log.getInstance().getLog().info("Starting gateway: " + gateway.getGatewayId());
+					logger.info("Starting gateway: " + gateway.getGatewayId());
 					allStarted &= gateway.start();
 				}
 				this.serviceMessageDispatcher = new ServiceMessageDispatcher("Main Dispatcher", this.messageQueue);
 				this.serviceMessageDispatcher.start();
 				setStatus(Status.Started);
-				if (allStarted) Log.getInstance().getLog().info("Service started.");
-				else Log.getInstance().getLog().warn("Service started, but some gateways did not start!");
+				if (allStarted) logger.info("Service started.");
+				else logger.warn("Service started, but some gateways did not start!");
 			}
 		}
 		return allStarted;
@@ -169,10 +172,10 @@ public class Service
 			if (getStatus() == Status.Started)
 			{
 				setStatus(Status.Stopping);
-				Log.getInstance().getLog().info("Service stopping...");
+				logger.info("Service stopping...");
 				for (AbstractGateway gateway : this.gateways.values())
 				{
-					Log.getInstance().getLog().info("Stopping gateway: " + gateway.getGatewayId());
+					logger.info("Stopping gateway: " + gateway.getGatewayId());
 					allStopped &= gateway.stop();
 				}
 				this.serviceMessageDispatcher.cancel();
@@ -182,11 +185,11 @@ public class Service
 				}
 				catch (InterruptedException e)
 				{
-					Log.getInstance().getLog().error("Unhandled exception!", e);
+					logger.error("Unhandled exception!", e);
 				}
 				setStatus(Status.Stopped);
-				if (allStopped) Log.getInstance().getLog().info("Service stopped.");
-				else Log.getInstance().getLog().warn("Service stopped, but some gateways did not stop!");
+				if (allStopped) logger.info("Service stopped.");
+				else logger.warn("Service stopped, but some gateways did not stop!");
 			}
 		}
 		return allStopped;
@@ -205,7 +208,7 @@ public class Service
 					DequeueMasterQueue();
 					while (getCallbackManager().getQueueLoad() > 0)
 					{
-						Log.getInstance().getLog().info("Callback queue not empty, waiting...");
+						logger.info("Callback queue not empty, waiting...");
 						Common.countSheeps(5000);
 					}
 					getCallbackManager().stop();
@@ -215,16 +218,16 @@ public class Service
 					}
 					catch (Exception e)
 					{
-						Log.getInstance().getLog().error("Unhandled exception!", e);
+						logger.error("Unhandled exception!", e);
 					}
-					Log.getInstance().getLog().info("Service terminated.");
+					logger.info("Service terminated.");
 				}
 			}
 			return true;
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled exception!", e);
+			logger.error("Unhandled exception!", e);
 			return false;
 		}
 	}
@@ -240,7 +243,7 @@ public class Service
 			}
 			catch (Exception e)
 			{
-				Log.getInstance().getLog().error("Unhandled exception!", e);
+				logger.error("Unhandled exception!", e);
 				Common.countSheeps(1000);
 			}
 			if (message == null) break;
@@ -336,7 +339,7 @@ public class Service
 	public boolean registerHttpRequestHandler(String path, IHttpRequestHandler handler)
 	{
 		if (this.httpRequestHandlers.get(path) != null) return false;
-		Log.getInstance().getLog().info("Registering HTTP Request Handler for '" + path + "'");
+		logger.info("Registering HTTP Request Handler for '" + path + "'");
 		this.httpRequestHandlers.put(path, handler);
 		return true;
 	}
@@ -348,7 +351,7 @@ public class Service
 		LinkedList<OutboundMessage> messageList = distributeToGroup(message);
 		for (OutboundMessage m : messageList)
 		{
-			Log.getInstance().getLog().debug("Queued: " + message.toShortString());
+			logger.debug("Queued: " + message.toShortString());
 			if (this.messageQueue.add(m)) messageCount++;
 		}
 		return messageCount;
@@ -375,7 +378,7 @@ public class Service
 
 	public boolean send(OutboundMessage message)
 	{
-		Log.getInstance().getLog().debug("Send: " + message.toShortString());
+		logger.debug("Send: " + message.toShortString());
 		if (getStatus() == Status.Started)
 		{
 			if ((getPreSendHook() != null) && !getPreSendHook().process(message))
@@ -393,14 +396,14 @@ public class Service
 					for (int i = 0; i < selectedGateways.size(); i++)
 					{
 						AbstractGateway gateway = selectedGateways.get(i);
-						Log.getInstance().getLog().debug("Trying message sending via: " + gateway.getGatewayId());
+						logger.debug("Trying message sending via: " + gateway.getGatewayId());
 						try
 						{
 							if (gateway.send(message)) break;
 						}
 						catch (Exception e)
 						{
-							Log.getInstance().getLog().error("Unhandled Exception!", e);
+							logger.error("Unhandled Exception!", e);
 						}
 					}
 					if (message.getSentStatus() != SentStatus.Sent) message.setSentStatus(SentStatus.Failed);
@@ -434,7 +437,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled Exception!", e);
+			logger.error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -449,7 +452,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled Exception!", e);
+			logger.error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -462,7 +465,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled Exception!", e);
+			logger.error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -475,7 +478,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled Exception!", e);
+			logger.error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -488,7 +491,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled Exception!", e);
+			logger.error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -501,7 +504,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled Exception!", e);
+			logger.error("Unhandled Exception!", e);
 			throw e;
 		}
 	}
@@ -510,15 +513,15 @@ public class Service
 	{
 		synchronized (this._LOCK_)
 		{
-			Log.getInstance().getLog().info("Registering Gateway: " + gateway.toShortString());
+			logger.info("Registering Gateway: " + gateway.toShortString());
 			getGateways().put(gateway.getGatewayId(), gateway);
 			if (getStatus() == Status.Started)
 			{
-				Log.getInstance().getLog().info("Starting gateway: " + gateway.getGatewayId());
+				logger.info("Starting gateway: " + gateway.getGatewayId());
 				boolean startStatus = gateway.start();
 				if (!startStatus)
 				{
-					Log.getInstance().getLog().warn(String.format("Gateway %s did not start!", gateway.getGatewayId()));
+					logger.warn(String.format("Gateway %s did not start!", gateway.getGatewayId()));
 					getGateways().remove(gateway.getGatewayId());
 				}
 				return startStatus;
@@ -531,13 +534,13 @@ public class Service
 	{
 		synchronized (this._LOCK_)
 		{
-			Log.getInstance().getLog().info("Unregistering Gateway: " + gateway.toShortString());
+			logger.info("Unregistering Gateway: " + gateway.toShortString());
 			getGateways().remove(gateway.getGatewayId());
 			if ((getStatus() == Status.Started) || (gateway.getStatus() == AbstractGateway.Status.Started))
 			{
-				Log.getInstance().getLog().info("Stopping gateway: " + gateway.getGatewayId());
+				logger.info("Stopping gateway: " + gateway.getGatewayId());
 				boolean startStatus = gateway.stop();
-				if (!startStatus) Log.getInstance().getLog().warn(String.format("Gateway %s did not stop!", gateway.getGatewayId()));
+				if (!startStatus) logger.warn(String.format("Gateway %s did not stop!", gateway.getGatewayId()));
 				return startStatus;
 			}
 			return true;
@@ -586,7 +589,7 @@ public class Service
 		}
 		catch (ConcurrentModificationException e)
 		{
-			Log.getInstance().getLog().warn("Gateway list modified, retrying routing...", e);
+			logger.warn("Gateway list modified, retrying routing...", e);
 			return routeMessage(message);
 		}
 	}
@@ -669,7 +672,7 @@ public class Service
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled exception!", e);
+			logger.error("Unhandled exception!", e);
 			e.printStackTrace();
 		}
 	}

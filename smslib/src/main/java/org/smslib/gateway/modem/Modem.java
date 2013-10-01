@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeoutException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
 import org.smslib.core.Coverage;
@@ -17,7 +19,6 @@ import org.smslib.gateway.modem.driver.AbstractModemDriver;
 import org.smslib.gateway.modem.driver.IPModemDriver;
 import org.smslib.gateway.modem.driver.SerialModemDriver;
 import org.smslib.helper.Common;
-import org.smslib.helper.Log;
 import org.smslib.message.DeliveryReportMessage.DeliveryStatus;
 import org.smslib.message.InboundMessage;
 import org.smslib.message.MsIsdn;
@@ -28,6 +29,8 @@ import org.smslib.message.OutboundMessage.SentStatus;
 
 public class Modem extends AbstractGateway
 {
+	static Logger logger = LoggerFactory.getLogger(Modem.class);
+
 	AbstractModemDriver modemDriver;
 
 	String simPin;
@@ -76,7 +79,7 @@ public class Modem extends AbstractGateway
 			this.modemDriver.initializeModem();
 			this.messageReader = new MessageReader(this);
 			this.messageReader.start();
-			Log.getInstance().getLog().info(String.format("Gateway: %s: %s, SL:%s, SIG: %s / %s", toShortString(), this.modemDriver.getDeviceInformation(), this.modemDriver.getMemoryLocations(), this.modemDriver.getSignature(true), this.modemDriver.getSignature(false)));
+			logger.info(String.format("Gateway: %s: %s, SL:%s, SIG: %s / %s", toShortString(), this.modemDriver.getDeviceInformation(), this.modemDriver.getMemoryLocations(), this.modemDriver.getSignature(true), this.modemDriver.getSignature(false)));
 		}
 	}
 

@@ -2,17 +2,20 @@
 package org.smslib;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.callback.IMessageSentCallback;
 import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.core.Capabilities;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.gateway.MockGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.SentStatus;
 
 public class Test_Performance1 extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_Performance1.class);
+
 	int failed;
 
 	int sent;
@@ -66,8 +69,8 @@ public class Test_Performance1 extends TestCase
 			Service.getInstance().queue(new OutboundMessage("1", "dummy"));
 		while (Service.getInstance().getAllQueueLoad() > 0 || Service.getInstance().getCallbackManager().getQueueLoad() > 0)
 		{
-			Log.getInstance().getLog().info("QUEUE LOAD: " + Service.getInstance().getAllQueueLoad());
-			Log.getInstance().getLog().info("CALLBACK LOAD: " + Service.getInstance().getCallbackManager().getQueueLoad());
+			logger.info("QUEUE LOAD: " + Service.getInstance().getAllQueueLoad());
+			logger.info("CALLBACK LOAD: " + Service.getInstance().getCallbackManager().getQueueLoad());
 			Thread.sleep(500);
 		}
 		long stopTime = System.currentTimeMillis();
@@ -76,7 +79,7 @@ public class Test_Performance1 extends TestCase
 			Service.getInstance().unregisterGateway(g[i]);
 			totalSent += g[i].getStatistics().getTotalSent();
 		}
-		Log.getInstance().getLog().info(String.format("#%2d / %d%% : %d, %d, %d [%d], < %d >", noOfGateways, failureRate, noOfMessages, this.failed, totalSent, this.sent, (stopTime - startTime)));
+		logger.info(String.format("#%2d / %d%% : %d, %d, %d [%d], < %d >", noOfGateways, failureRate, noOfMessages, this.failed, totalSent, this.sent, (stopTime - startTime)));
 		assert (this.sent == totalSent);
 		assert ((totalSent + this.failed) == noOfMessages);
 	}

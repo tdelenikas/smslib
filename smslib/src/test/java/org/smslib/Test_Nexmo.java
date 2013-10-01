@@ -2,14 +2,16 @@
 package org.smslib;
 
 import junit.framework.TestCase;
-import org.smslib.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.gateway.http.nexmo.Nexmo;
-import org.smslib.helper.Log;
 import org.smslib.message.MsIsdn;
 import org.smslib.message.OutboundMessage;
 
 public class Test_Nexmo extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_Nexmo.class);
+
 	String API_ID = "api-id";
 	String SECRET = "secret";
 
@@ -22,8 +24,8 @@ public class Test_Nexmo extends TestCase
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via Nexmo!");
 		m.setOriginator(new MsIsdn("SMSLIB"));
 		Service.getInstance().send(m);
-		Log.getInstance().getLog().info(m.toString());
-		Log.getInstance().getLog().info("Credit Balance: " + Service.getInstance().queryCreditBalance(gateway));
+		logger.info(m.toString());
+		logger.info("Credit Balance: " + Service.getInstance().queryCreditBalance(gateway));
 		Service.getInstance().unregisterGateway(gateway);
 		Service.getInstance().stop();
 		Service.getInstance().terminate();

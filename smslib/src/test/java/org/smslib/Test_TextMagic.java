@@ -2,13 +2,16 @@
 package org.smslib;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.gateway.http.textmagic.TextMagic;
-import org.smslib.helper.Log;
 import org.smslib.message.MsIsdn;
 import org.smslib.message.OutboundMessage;
 
 public class Test_TextMagic extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_TextMagic.class);
+
 	public void test() throws Exception
 	{
 		Service.getInstance().start();
@@ -17,9 +20,9 @@ public class Test_TextMagic extends TestCase
 		OutboundMessage m = new OutboundMessage("30697", "Hello from 'SMSLib' via TextMagic!");
 		m.setOriginator(new MsIsdn("SMSLIB"));
 		Service.getInstance().send(m);
-		Log.getInstance().getLog().info(m.toString());
-		Log.getInstance().getLog().info("Credit Balance: " + Service.getInstance().queryCreditBalance(gateway));
-		Log.getInstance().getLog().info("Delivery: " + Service.getInstance().queryDeliveryStatus(m));
+		logger.info(m.toString());
+		logger.info("Credit Balance: " + Service.getInstance().queryCreditBalance(gateway));
+		logger.info("Delivery: " + Service.getInstance().queryDeliveryStatus(m));
 		Service.getInstance().unregisterGateway(gateway);
 		Service.getInstance().stop();
 		Service.getInstance().terminate();

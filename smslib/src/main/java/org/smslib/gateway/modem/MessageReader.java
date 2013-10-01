@@ -14,12 +14,13 @@ import org.ajwcc.pduUtils.gsm3040.PduParser;
 import org.ajwcc.pduUtils.gsm3040.PduUtils;
 import org.ajwcc.pduUtils.gsm3040.SmsDeliveryPdu;
 import org.ajwcc.pduUtils.gsm3040.SmsStatusReportPdu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Settings;
 import org.smslib.gateway.AbstractGateway.Status;
 import org.smslib.gateway.modem.DeviceInformation.Modes;
 import org.smslib.helper.Common;
-import org.smslib.helper.Log;
 import org.smslib.message.DeliveryReportMessage;
 import org.smslib.message.InboundBinaryMessage;
 import org.smslib.message.InboundEncryptedMessage;
@@ -28,6 +29,8 @@ import org.smslib.message.Payload;
 
 public class MessageReader extends Thread
 {
+	static Logger logger = LoggerFactory.getLogger(MessageReader.class);
+
 	Modem modem;
 
 	boolean shouldCancel = false;
@@ -39,14 +42,14 @@ public class MessageReader extends Thread
 
 	public void cancel()
 	{
-		Log.getInstance().getLog().debug("Cancelling!");
+		logger.debug("Cancelling!");
 		this.shouldCancel = true;
 	}
 
 	@Override
 	public void run()
 	{
-		Log.getInstance().getLog().debug("Started!");
+		logger.debug("Started!");
 		while (!this.shouldCancel)
 		{
 			if (this.modem.getStatus() == Status.Started)
@@ -70,7 +73,7 @@ public class MessageReader extends Thread
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error("Unhandled exception!", e);
+					logger.error("Unhandled exception!", e);
 				}
 			}
 			if (!this.shouldCancel)
@@ -78,7 +81,7 @@ public class MessageReader extends Thread
 				Common.countSheeps(Settings.modemPollingInterval);
 			}
 		}
-		Log.getInstance().getLog().debug("Stopped!");
+		logger.debug("Stopped!");
 	}
 
 	private ArrayList<InboundMessage> parsePDU(String data, String memLocation) throws IOException
@@ -102,7 +105,7 @@ public class MessageReader extends Thread
 			Pdu pdu = parser.parsePdu(pduString);
 			if (pdu instanceof SmsDeliveryPdu)
 			{
-				Log.getInstance().getLog().debug("PDU = " + pdu.toString());
+				logger.debug("PDU = " + pdu.toString());
 				InboundMessage msg = null;
 				if (pdu.isBinary())
 				{
@@ -115,7 +118,7 @@ public class MessageReader extends Thread
 				}
 				msg.setGatewayId(this.modem.getGatewayId());
 				msg.setGatewayId(this.modem.getGatewayId());
-				Log.getInstance().getLog().debug("IN-DTLS: MI:" + msg.getMemIndex() + " REF:" + msg.getMpRefNo() + " MAX:" + msg.getMpMaxNo() + " SEQ:" + msg.getMpSeqNo());
+				logger.debug("IN-DTLS: MI:" + msg.getMemIndex() + " REF:" + msg.getMpRefNo() + " MAX:" + msg.getMpMaxNo() + " SEQ:" + msg.getMpSeqNo());
 				if (msg.getMpRefNo() == 0) messageList.add(msg);
 				else
 				{
@@ -188,7 +191,7 @@ public class MessageReader extends Thread
 		Calendar cal2 = Calendar.getInstance();
 		data = data.replaceAll("\\s+OK\\s+", "\nOK");
 		data = data.replaceAll("$", "\n");
-		Log.getInstance().getLog().debug(data);
+		logger.debug(data);
 		reader = new BufferedReader(new StringReader(data));
 		for (;;)
 		{
@@ -288,11 +291,11 @@ public class MessageReader extends Thread
 		InboundMessage listMsg, mpMsg;
 		boolean found;
 		mpMsg = null;
-		Log.getInstance().getLog().debug("CheckMpMsgList(): MAINLIST: " + mpMsgList.size());
+		logger.debug("CheckMpMsgList(): MAINLIST: " + mpMsgList.size());
 		for (k = 0; k < mpMsgList.size(); k++)
 		{
 			tmpList = mpMsgList.get(k);
-			Log.getInstance().getLog().debug("CheckMpMsgList(): SUBLIST[" + k + "]: " + tmpList.size());
+			logger.debug("CheckMpMsgList(): SUBLIST[" + k + "]: " + tmpList.size());
 			listMsg = tmpList.get(0);
 			found = false;
 			if (listMsg.getMpMaxNo() == tmpList.size())
@@ -329,7 +332,7 @@ public class MessageReader extends Thread
 										if (mpMsg.getEndsWithMultiChar())
 										{
 											// adjust first char of textToAdd
-											Log.getInstance().getLog().debug("Adjusting dangling multi-char: " + textToAdd.charAt(0) + " --> " + PduUtils.getMultiCharFor(textToAdd.charAt(0)));
+											logger.debug("Adjusting dangling multi-char: " + textToAdd.charAt(0) + " --> " + PduUtils.getMultiCharFor(textToAdd.charAt(0)));
 											textToAdd = PduUtils.getMultiCharFor(textToAdd.charAt(0)) + textToAdd.substring(1);
 										}
 										mpMsg.setEndsWithMultiChar(listMsg.getEndsWithMultiChar());
@@ -370,7 +373,7 @@ public class MessageReader extends Thread
 					}
 					catch (Exception e)
 					{
-						Log.getInstance().getLog().error("Could not delete orphaned message: " + msg.toString(), e);
+						logger.error("Could not delete orphaned message: " + msg.toString(), e);
 					}
 					//deleteMessage(msg);
 					//

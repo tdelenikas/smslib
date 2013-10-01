@@ -7,11 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.gateway.http.AbstractHttpGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.AbstractMessage.Encoding;
 import org.smslib.message.DeliveryReportMessage;
 import org.smslib.message.DeliveryReportMessage.DeliveryStatus;
@@ -21,6 +22,8 @@ import org.smslib.message.OutboundMessage.SentStatus;
 
 public class TextMagic extends AbstractHttpGateway
 {
+	static Logger logger = LoggerFactory.getLogger(TextMagic.class);
+
 	String userId;
 
 	String password;
@@ -165,7 +168,7 @@ public class TextMagic extends AbstractHttpGateway
 				}
 				catch (JSONException e)
 				{
-					Log.getInstance().getLog().error("Error parsing response!", e);
+					logger.error("Error parsing response!", e);
 					message.setSentStatus(SentStatus.Failed);
 					message.setFailureCause(FailureCause.UnknownFailure);
 				}
@@ -181,14 +184,14 @@ public class TextMagic extends AbstractHttpGateway
 					}
 					catch (JSONException e)
 					{
-						Log.getInstance().getLog().error("Error parsing response, wrong password?", e);
+						logger.error("Error parsing response, wrong password?", e);
 						balance = 0;
 					}
 					((AbstractGateway) o).getCreditBalance().setCredits(balance);
 				}
 				catch (JSONException e)
 				{
-					Log.getInstance().getLog().error("Error parsing response!", e);
+					logger.error("Error parsing response!", e);
 					((AbstractGateway) o).getCreditBalance().setCredits(0);
 				}
 				break;
@@ -221,12 +224,12 @@ public class TextMagic extends AbstractHttpGateway
 					}
 					catch (JSONException e)
 					{
-						Log.getInstance().getLog().error("Error parsing response, wrong password?", e);
+						logger.error("Error parsing response, wrong password?", e);
 					}
 				}
 				catch (JSONException e)
 				{
-					Log.getInstance().getLog().error("Error parsing response!", e);
+					logger.error("Error parsing response!", e);
 					((AbstractGateway) o).getCreditBalance().setCredits(0);
 				}
 				break;

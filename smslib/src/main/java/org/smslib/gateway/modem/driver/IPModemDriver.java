@@ -3,13 +3,15 @@ package org.smslib.gateway.modem.driver;
 
 import java.io.IOException;
 import java.net.Socket;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.gateway.modem.Modem;
 import org.smslib.helper.Common;
-import org.smslib.helper.Log;
 
 public class IPModemDriver extends AbstractModemDriver
 {
+	static Logger logger = LoggerFactory.getLogger(IPModemDriver.class);
+
 	String address;
 
 	int port;
@@ -26,7 +28,7 @@ public class IPModemDriver extends AbstractModemDriver
 	@Override
 	public void openPort() throws IOException, NumberFormatException
 	{
-		Log.getInstance().getLog().debug("Opening IP port: " + getPortInfo());
+		logger.debug("Opening IP port: " + getPortInfo());
 		this.socket = new Socket(this.address, this.port);
 		this.socket.setReceiveBufferSize(Integer.valueOf(getModemSettings("port_buffer")));
 		this.socket.setSendBufferSize(Integer.valueOf(getModemSettings("port_buffer")));
@@ -42,7 +44,7 @@ public class IPModemDriver extends AbstractModemDriver
 	@Override
 	public void closePort() throws IOException, InterruptedException
 	{
-		Log.getInstance().getLog().debug("Closing IP port: " + getPortInfo());
+		logger.debug("Closing IP port: " + getPortInfo());
 		this.pollReader.cancel();
 		this.pollReader.join();
 		this.in.close();

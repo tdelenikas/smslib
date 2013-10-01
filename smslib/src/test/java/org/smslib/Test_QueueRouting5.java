@@ -2,6 +2,8 @@
 package org.smslib;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.callback.IDequeueMessageCallback;
 import org.smslib.callback.IMessageSentCallback;
 import org.smslib.callback.events.DequeueMessageCallbackEvent;
@@ -9,13 +11,14 @@ import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Settings;
 import org.smslib.gateway.MockGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.FailureCause;
 import org.smslib.message.OutboundMessage.SentStatus;
 
 public class Test_QueueRouting5 extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_QueueRouting5.class);
+
 	int GATEWAY_COUNT = 10;
 
 	int failed = 0;
@@ -61,11 +64,11 @@ public class Test_QueueRouting5 extends TestCase
 		Service.getInstance().start();
 		Capabilities c = new Capabilities();
 		c.set(Capabilities.Caps.CanSendMessage);
-		Log.getInstance().getLog().info("Queueing " + Limits.NO_OF_MESSAGES + " messages...");
+		logger.info("Queueing " + Limits.NO_OF_MESSAGES + " messages...");
 		for (int i = 0; i < Limits.NO_OF_MESSAGES; i++)
 			assert (Service.getInstance().queue(new OutboundMessage("306974000000", "Hello World! (queued)")) == 1);
 		Thread.sleep(1000);
-		Log.getInstance().getLog().info("QUEUE LOAD (MASTER) = " + Service.getInstance().getMasterQueueLoad());
+		logger.info("QUEUE LOAD (MASTER) = " + Service.getInstance().getMasterQueueLoad());
 		if (Settings.keepOutboundMessagesInQueue) assert (Limits.NO_OF_MESSAGES == Service.getInstance().getMasterQueueLoad());
 		for (int i = 0; i < this.GATEWAY_COUNT; i++)
 		{
@@ -73,9 +76,9 @@ public class Test_QueueRouting5 extends TestCase
 			else g[i] = new MockGateway("G" + i, "Mock Gateway #" + i, c, 10, 100);
 			Service.getInstance().registerGateway(g[i]);
 		}
-		Log.getInstance().getLog().info("Sleeping for a while...");
+		logger.info("Sleeping for a while...");
 		Thread.sleep(10000);
-		Log.getInstance().getLog().info("Now shutdown all gateways!");
+		logger.info("Now shutdown all gateways!");
 		int grandTotal = 0;
 		for (int i = 0; i < this.GATEWAY_COUNT; i++)
 		{
@@ -83,21 +86,21 @@ public class Test_QueueRouting5 extends TestCase
 			grandTotal += g[i].getStatistics().getTotalSent();
 		}
 		Thread.sleep(1000);
-		Log.getInstance().getLog().info("SENT TRAFFIC");
-		Log.getInstance().getLog().info("G-TOTAL = " + grandTotal);
-		Log.getInstance().getLog().info("SENT = " + this.sent);
-		Log.getInstance().getLog().info("FAILED = " + this.failed);
-		Log.getInstance().getLog().info("QUEUE LOAD (ALL) = " + Service.getInstance().getAllQueueLoad());
-		Log.getInstance().getLog().info("QUEUE LOAD (MASTER) = " + Service.getInstance().getMasterQueueLoad());
-		Log.getInstance().getLog().info("GATEWAYS' LIST = " + Service.getInstance().getGatewayIDs().size());
-		Log.getInstance().getLog().info("DEQUEUE = " + this.dequeue);
-		Log.getInstance().getLog().info("(SEND)   = " + this.sent);
-		Log.getInstance().getLog().info("(FAILED) = " + this.failed);
+		logger.info("SENT TRAFFIC");
+		logger.info("G-TOTAL = " + grandTotal);
+		logger.info("SENT = " + this.sent);
+		logger.info("FAILED = " + this.failed);
+		logger.info("QUEUE LOAD (ALL) = " + Service.getInstance().getAllQueueLoad());
+		logger.info("QUEUE LOAD (MASTER) = " + Service.getInstance().getMasterQueueLoad());
+		logger.info("GATEWAYS' LIST = " + Service.getInstance().getGatewayIDs().size());
+		logger.info("DEQUEUE = " + this.dequeue);
+		logger.info("(SEND)   = " + this.sent);
+		logger.info("(FAILED) = " + this.failed);
 		assert (this.sent + this.failed + Service.getInstance().getMasterQueueLoad() == Limits.NO_OF_MESSAGES);
 		assert (this.failed == this.noRouteFailed);
 		Service.getInstance().stop();
 		Service.getInstance().terminate();
-		Log.getInstance().getLog().info("DEQUEUE = " + this.dequeue);
+		logger.info("DEQUEUE = " + this.dequeue);
 		assert (this.sent + this.failed + this.dequeue == Limits.NO_OF_MESSAGES);
 	}
 }

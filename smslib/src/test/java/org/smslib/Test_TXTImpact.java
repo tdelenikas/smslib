@@ -2,13 +2,15 @@
 package org.smslib;
 
 import junit.framework.TestCase;
-import org.smslib.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.gateway.http.txtimpact.TXTImpact;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 
 public class Test_TXTImpact extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_TXTImpact.class);
+
 	public void test() throws Exception
 	{
 		Service.getInstance().start();
@@ -16,8 +18,8 @@ public class Test_TXTImpact extends TestCase
 		Service.getInstance().registerGateway(gateway);
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via TXTImpact!");
 		Service.getInstance().send(m);
-		Log.getInstance().getLog().info(m.toString());
-		Log.getInstance().getLog().info("Credit Balance: " + Service.getInstance().queryCreditBalance(gateway));
+		logger.info(m.toString());
+		logger.info("Credit Balance: " + Service.getInstance().queryCreditBalance(gateway));
 		Service.getInstance().unregisterGateway(gateway);
 		Service.getInstance().stop();
 		Service.getInstance().terminate();

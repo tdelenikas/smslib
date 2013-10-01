@@ -3,11 +3,14 @@ package org.smslib.helper;
 
 import java.io.Serializable;
 import java.util.Comparator;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.gateway.AbstractGateway;
 
 public class GatewayOutboundTrafficComparator implements Comparator<AbstractGateway>, Serializable
 {
+	static Logger logger = LoggerFactory.getLogger(GatewayOutboundTrafficComparator.class);
+
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -19,7 +22,7 @@ public class GatewayOutboundTrafficComparator implements Comparator<AbstractGate
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Unhandled exception!", e);
+			logger.error("Unhandled exception!", e);
 			return 0;
 		}
 	}

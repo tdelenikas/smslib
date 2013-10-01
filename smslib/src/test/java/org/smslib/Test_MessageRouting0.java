@@ -1,13 +1,16 @@
 package org.smslib;
 
+import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.core.Capabilities;
 import org.smslib.gateway.MockGateway;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
-import junit.framework.TestCase;
 
 public class Test_MessageRouting0 extends TestCase
 {
+	static Logger logger = LoggerFactory.getLogger(Test_MessageRouting0.class);
+
 	public void test() throws Exception
 	{
 		Service.getInstance().start();
@@ -23,8 +26,8 @@ public class Test_MessageRouting0 extends TestCase
 			OutboundMessage m = new OutboundMessage("3069741234567", "Hello World!");
 			Service.getInstance().send(m);
 		}
-		Log.getInstance().getLog().info("G1 Traffic = " + g1.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("G2 Traffic = " + g2.getStatistics().getTotalSent());
+		logger.info("G1 Traffic = " + g1.getStatistics().getTotalSent());
+		logger.info("G2 Traffic = " + g2.getStatistics().getTotalSent());
 		//
 		for (int i = 0; i < Limits.NO_OF_MESSAGES; i++)
 		{
@@ -35,8 +38,8 @@ public class Test_MessageRouting0 extends TestCase
 		while (Service.getInstance().getAllQueueLoad() > 0)
 			Thread.sleep(5000);
 		//
-		Log.getInstance().getLog().info("G1 Traffic = " + g1.getStatistics().getTotalSent());
-		Log.getInstance().getLog().info("G2 Traffic = " + g2.getStatistics().getTotalSent());
+		logger.info("G1 Traffic = " + g1.getStatistics().getTotalSent());
+		logger.info("G2 Traffic = " + g2.getStatistics().getTotalSent());
 		//
 		Service.getInstance().stop();
 		Service.getInstance().terminate();

@@ -2,11 +2,12 @@
 package org.smslib.threading;
 
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Settings;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.gateway.AbstractGateway.Status;
-import org.smslib.helper.Log;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.FailureCause;
 import org.smslib.message.OutboundMessage.SentStatus;
@@ -14,6 +15,8 @@ import org.smslib.queue.IOutboundQueue;
 
 public class GatewayMessageDispatcher extends Thread
 {
+	static Logger logger = LoggerFactory.getLogger(GatewayMessageDispatcher.class);
+
 	boolean shouldCancel = false;
 
 	IOutboundQueue<OutboundMessage> messageQueue;
@@ -31,7 +34,7 @@ public class GatewayMessageDispatcher extends Thread
 	@Override
 	public void run()
 	{
-		Log.getInstance().getLog().debug("Started!");
+		logger.debug("Started!");
 		while (!this.shouldCancel)
 		{
 			try
@@ -46,7 +49,7 @@ public class GatewayMessageDispatcher extends Thread
 					}
 					catch (Exception e)
 					{
-						Log.getInstance().getLog().error("Send failed!", e);
+						logger.error("Send failed!", e);
 						sendOk = false;
 					}
 					if (sendOk)
@@ -58,10 +61,10 @@ public class GatewayMessageDispatcher extends Thread
 						message.getRoutingTable().removeFirst();
 						if (message.getRoutingTable().size() > 0)
 						{
-							Log.getInstance().getLog().debug("Re-routing message to : " + message.getRoutingTable().get(0).getGatewayId());
+							logger.debug("Re-routing message to : " + message.getRoutingTable().get(0).getGatewayId());
 							if (message.getRoutingTable().get(0).getStatus() != Status.Started)
 							{
-								Log.getInstance().getLog().debug("Routing path contains inactive gateway, re-routing to main queue...");
+								logger.debug("Routing path contains inactive gateway, re-routing to main queue...");
 								Service.getInstance().queue(message);
 							}
 							else message.getRoutingTable().get(0).queue(message);
@@ -78,19 +81,19 @@ public class GatewayMessageDispatcher extends Thread
 			}
 			catch (InterruptedException e1)
 			{
-				if (!this.shouldCancel) Log.getInstance().getLog().error("Interrupted!", e1);
+				if (!this.shouldCancel) logger.error("Interrupted!", e1);
 			}
 			catch (Exception e1)
 			{
-				Log.getInstance().getLog().error("Unhandled exception!", e1);
+				logger.error("Unhandled exception!", e1);
 			}
 		}
-		Log.getInstance().getLog().debug("Stopped!");
+		logger.debug("Stopped!");
 	}
 
 	public void cancel()
 	{
-		Log.getInstance().getLog().debug("Cancelling!");
+		logger.debug("Cancelling!");
 		this.shouldCancel = true;
 	}
 }

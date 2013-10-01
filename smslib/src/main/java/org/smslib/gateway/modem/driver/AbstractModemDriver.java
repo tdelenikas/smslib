@@ -11,6 +11,8 @@ import java.util.StringTokenizer;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
@@ -19,11 +21,12 @@ import org.smslib.gateway.modem.DeviceInformation.Modes;
 import org.smslib.gateway.modem.Modem;
 import org.smslib.gateway.modem.ModemResponse;
 import org.smslib.helper.Common;
-import org.smslib.helper.Log;
 import org.smslib.message.MsIsdn;
 
 public abstract class AbstractModemDriver
 {
+	static Logger logger = LoggerFactory.getLogger(AbstractModemDriver.class);
+
 	public Object _LOCK_ = new Object();
 
 	InputStream in = null;
@@ -66,7 +69,7 @@ public abstract class AbstractModemDriver
 	{
 		synchronized (this._LOCK_)
 		{
-			Log.getInstance().getLog().debug(getPortInfo() + " <== " + data);
+			logger.debug(getPortInfo() + " <== " + data);
 			write(data.getBytes());
 			Common.countSheeps(Integer.valueOf(getModemSettings("command_wait_unit")));
 			return (new ModemResponse((skipResponse ? "" : getResponse()), (skipResponse ? true : this.responseOk)));
@@ -110,7 +113,7 @@ public abstract class AbstractModemDriver
 		while (true)
 		{
 			String line = getLineFromBuffer();
-			Log.getInstance().getLog().debug(getPortInfo() + " >>> " + line);
+			logger.debug(getPortInfo() + " >>> " + line);
 			this.buffer.delete(0, line.length() + 2);
 			if (Common.isNullOrEmpty(line)) continue;
 			if (line.charAt(0) == '^') continue;
@@ -133,7 +136,7 @@ public abstract class AbstractModemDriver
 				write("+++", true);
 				Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")));
 				write("ATH\r", true);
-				Log.getInstance().getLog().debug("+++ INCREASE ATH");
+				logger.debug("+++ INCREASE ATH");
 				this.atATHCounter++;
 				String callerId = "";
 				Matcher m = this.rxCallerId.matcher(line);
@@ -146,7 +149,7 @@ public abstract class AbstractModemDriver
 			{
 				if (this.atATHCounter > 0)
 				{
-					Log.getInstance().getLog().debug("--- DECREASE ATH");
+					logger.debug("--- DECREASE ATH");
 					this.atATHCounter--;
 					continue;
 				}
@@ -155,7 +158,7 @@ public abstract class AbstractModemDriver
 			}
 			if (line.indexOf("ERROR") == 0)
 			{
-				Log.getInstance().getLog().error(getPortInfo() + " ERR==> " + line);
+				logger.error(getPortInfo() + " ERR==> " + line);
 				this.responseOk = false;
 				break;
 			}
@@ -164,7 +167,7 @@ public abstract class AbstractModemDriver
 			raw.append("$");
 			b.append(line);
 		}
-		Log.getInstance().getLog().debug(getPortInfo() + " ==> " + raw.toString());
+		logger.debug(getPortInfo() + " ==> " + raw.toString());
 		return b.toString();
 	}
 
@@ -216,7 +219,7 @@ public abstract class AbstractModemDriver
 			}
 			catch (Exception e)
 			{
-				Log.getInstance().getLog().error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -236,7 +239,7 @@ public abstract class AbstractModemDriver
 		@Override
 		public void run()
 		{
-			Log.getInstance().getLog().debug("Started!");
+			logger.debug("Started!");
 			while (!this.shouldCancel)
 			{
 				try
@@ -244,7 +247,7 @@ public abstract class AbstractModemDriver
 					while (hasData())
 					{
 						char c = (char) read();
-						//Log.getInstance().getLog().debug("> " + c);
+						//logger.debug("> " + c);
 						AbstractModemDriver.this.buffer.append(c);
 						if (AbstractModemDriver.this.buffer.indexOf("+CLIP") >= 0)
 						{
@@ -259,7 +262,7 @@ public abstract class AbstractModemDriver
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				}
 				try
 				{
@@ -267,10 +270,10 @@ public abstract class AbstractModemDriver
 				}
 				catch (Exception e)
 				{
-					Log.getInstance().getLog().error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				}
 			}
-			Log.getInstance().getLog().debug("Stopped!");
+			logger.debug("Stopped!");
 		}
 	}
 
@@ -316,9 +319,9 @@ public abstract class AbstractModemDriver
 				else if (simStatus.getResponseData().indexOf("OK") >= 0) break;
 				else if (simStatus.getResponseData().indexOf("ERROR") >= 0)
 				{
-					Log.getInstance().getLog().error("SIM PIN error!");
+					logger.error("SIM PIN error!");
 				}
-				Log.getInstance().getLog().info("SIM PIN Not ok, waiting for a while...");
+				logger.info("SIM PIN Not ok, waiting for a while...");
 				Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")) * Integer.valueOf(getModemSettings("delay_on_sim_error")));
 			}
 			atFromModemSettings("post_pin");
@@ -329,7 +332,7 @@ public abstract class AbstractModemDriver
 			if (atSetPDUMode().isResponseOk()) this.deviceInformation.setMode(Modes.PDU);
 			else
 			{
-				Log.getInstance().getLog().warn("Modem does not support PDU, trying to switch to TEXT...");
+				logger.warn("Modem does not support PDU, trying to switch to TEXT...");
 				if (atSetTEXTMode().isResponseOk())
 				{
 					Capabilities caps = new Capabilities();
@@ -398,17 +401,17 @@ public abstract class AbstractModemDriver
 					else
 					{
 						this.memoryLocations = "SM";
-						Log.getInstance().getLog().warn("CPMS detection failed, proceeding with default memory 'SM'.");
+						logger.warn("CPMS detection failed, proceeding with default memory 'SM'.");
 					}
 				}
 				catch (Exception e)
 				{
 					this.memoryLocations = "SM";
-					Log.getInstance().getLog().warn("CPMS detection failed, proceeding with default memory 'SM'.", e);
+					logger.warn("CPMS detection failed, proceeding with default memory 'SM'.", e);
 				}
 			}
 		}
-		else Log.getInstance().getLog().info("Using given memory locations: " + this.memoryLocations);
+		else logger.info("Using given memory locations: " + this.memoryLocations);
 	}
 
 	public String getSignature(boolean complete)

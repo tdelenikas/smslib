@@ -4,10 +4,13 @@ package org.smslib.message;
 import java.util.Date;
 import org.ajwcc.pduUtils.gsm3040.PduUtils;
 import org.ajwcc.pduUtils.gsm3040.SmsDeliveryPdu;
-import org.smslib.helper.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InboundMessage extends AbstractMessage
 {
+	static Logger logger = LoggerFactory.getLogger(InboundMessage.class);
+
 	private static final long serialVersionUID = 1L;
 
 	String operatorMessageId;
@@ -54,7 +57,7 @@ public class InboundMessage extends AbstractMessage
 				setEncoding(Encoding.EncUcs2);
 				break;
 			default:
-				Log.getInstance().getLog().error("Unknown DCS Encoding: " + dcsEncoding);
+				logger.error("Unknown DCS Encoding: " + dcsEncoding);
 		}
 		setOriginator(new MsIsdn(pdu.getAddress()));
 		setSentDate(pdu.getTimestamp());

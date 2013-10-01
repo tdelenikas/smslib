@@ -2,16 +2,18 @@
 package org.smslib.gateway.modem.driver;
 
 import java.io.IOException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.gateway.modem.Modem;
 import org.smslib.gateway.modem.driver.serial.CommPortIdentifier;
 import org.smslib.gateway.modem.driver.serial.SerialPort;
 import org.smslib.gateway.modem.driver.serial.SerialPortEvent;
 import org.smslib.gateway.modem.driver.serial.SerialPortEventListener;
-import org.smslib.helper.Log;
 
 public class SerialModemDriver extends AbstractModemDriver implements SerialPortEventListener
 {
+	static Logger logger = LoggerFactory.getLogger(SerialModemDriver.class);
+
 	String portName;
 
 	int baudRate;
@@ -31,7 +33,7 @@ public class SerialModemDriver extends AbstractModemDriver implements SerialPort
 	@Override
 	public void openPort() throws NumberFormatException, IOException
 	{
-		Log.getInstance().getLog().debug("Opening comm port: " + getPortInfo());
+		logger.debug("Opening comm port: " + getPortInfo());
 		CommPortIdentifier.getPortIdentifiers();
 		this.portId = CommPortIdentifier.getPortIdentifier(this.portName);
 		this.serialPort = this.portId.open("org.smslib", 1971);
@@ -52,7 +54,7 @@ public class SerialModemDriver extends AbstractModemDriver implements SerialPort
 	@Override
 	public void closePort() throws IOException, InterruptedException
 	{
-		Log.getInstance().getLog().debug("Closing comm port: " + getPortInfo());
+		logger.debug("Closing comm port: " + getPortInfo());
 		this.pollReader.cancel();
 		this.pollReader.join();
 		this.in.close();

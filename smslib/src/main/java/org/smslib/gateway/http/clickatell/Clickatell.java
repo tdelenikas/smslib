@@ -7,12 +7,13 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.gateway.http.AbstractHttpGateway;
 import org.smslib.helper.Common;
-import org.smslib.helper.Log;
 import org.smslib.message.DeliveryReportMessage;
 import org.smslib.message.DeliveryReportMessage.DeliveryStatus;
 import org.smslib.message.OutboundMessage;
@@ -21,6 +22,8 @@ import org.smslib.message.OutboundMessage.SentStatus;
 
 public class Clickatell extends AbstractHttpGateway
 {
+	static Logger logger = LoggerFactory.getLogger(Clickatell.class);
+
 	String apiId;
 
 	String username;
@@ -84,7 +87,7 @@ public class Clickatell extends AbstractHttpGateway
 		}
 		catch (Exception e)
 		{
-			Log.getInstance().getLog().error("Could not get Clickatell session!", e);
+			logger.error("Could not get Clickatell session!", e);
 			this.sessionId = "";
 		}
 		switch (operation)
