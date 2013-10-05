@@ -15,39 +15,40 @@ public class InboundCallCallback implements IInboundCallCallback
 {
 	static Logger logger = LoggerFactory.getLogger(InboundCallCallback.class);
 
-	Connection db = null;
-
 	@Override
 	public boolean process(InboundCallEvent event)
 	{
+		Connection db = null;
 		try
 		{
-			if (this.db == null) this.db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = this.db.prepareStatement("insert into smslib_calls (date, caller_id, gateway_id) values (?, ?, ?)");
+			db = SMSServer.getInstance().getDbConnection();
+			PreparedStatement s = db.prepareStatement("insert into smslib_calls (date, caller_id, gateway_id) values (?, ?, ?)");
 			s.setTimestamp(1, new Timestamp(event.getDate().getTime()));
 			s.setString(2, event.getMsisdn().getNumber());
 			s.setString(3, event.getGatewayId());
 			s.executeUpdate();
 			s.close();
-			this.db.commit();
+			db.commit();
 			return true;
 		}
 		catch (Exception e)
 		{
 			logger.error("Error!", e);
-			if (this.db != null)
+			return false;
+		}
+		finally
+		{
+			if (db != null)
 			{
 				try
 				{
-					this.db.close();
+					db.close();
 				}
-				catch (SQLException e1)
+				catch (SQLException e)
 				{
-					//Shallow exception on purpose...
+					logger.error("Error!", e);
 				}
 			}
-			this.db = null;
-			return false;
 		}
 	}
 }

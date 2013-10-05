@@ -16,15 +16,14 @@ public class InboundMessageCallback implements IInboundMessageCallback
 {
 	static Logger logger = LoggerFactory.getLogger(InboundMessageCallback.class);
 
-	Connection db = null;
-
 	@Override
 	public boolean process(InboundMessageEvent event)
 	{
+		Connection db = null;
 		try
 		{
-			if (this.db == null) this.db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = this.db.prepareStatement("insert into smslib_in (originator, encoding, text, message_date, receive_date, gateway_id) values (?, ?, ?, ?, ?, ?)");
+			db = SMSServer.getInstance().getDbConnection();
+			PreparedStatement s = db.prepareStatement("insert into smslib_in (originator, encoding, text, message_date, receive_date, gateway_id) values (?, ?, ?, ?, ?, ?)");
 			s.setString(1, event.getMessage().getOriginator().getNumber());
 			s.setString(2, event.getMessage().getEncoding().toShortString());
 			switch (event.getMessage().getEncoding())
@@ -42,25 +41,27 @@ public class InboundMessageCallback implements IInboundMessageCallback
 			s.setString(6, event.getMessage().getGatewayId());
 			s.executeUpdate();
 			s.close();
-			this.db.commit();
+			db.commit();
 			return true;
 		}
 		catch (Exception e)
 		{
 			logger.error("Error!", e);
-			if (this.db != null)
+			return false;
+		}
+		finally
+		{
+			if (db != null)
 			{
 				try
 				{
-					this.db.close();
+					db.close();
 				}
-				catch (SQLException e1)
+				catch (SQLException e)
 				{
-					//Shallow exception on purpose...
+					logger.error("Error!", e);
 				}
 			}
-			this.db = null;
-			return false;
 		}
 	}
 }

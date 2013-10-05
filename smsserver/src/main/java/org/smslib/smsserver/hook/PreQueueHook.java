@@ -14,38 +14,39 @@ public class PreQueueHook implements IPreQueueHook
 {
 	static Logger logger = LoggerFactory.getLogger(PreQueueHook.class);
 
-	Connection db = null;
-
 	@Override
 	public boolean process(OutboundMessage message)
 	{
+		Connection db = null;
 		try
 		{
-			if (this.db == null) this.db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = this.db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
+			db = SMSServer.getInstance().getDbConnection();
+			PreparedStatement s = db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
 			s.setString(1, OutboundMessage.SentStatus.Queued.toShortString());
 			s.setString(2, message.getId());
 			s.executeUpdate();
 			s.close();
-			this.db.commit();
+			db.commit();
 			return true;
 		}
 		catch (Exception e)
 		{
 			logger.error("Error!", e);
-			if (this.db != null)
+			return false;
+		}
+		finally
+		{
+			if (db != null)
 			{
 				try
 				{
-					this.db.close();
+					db.close();
 				}
-				catch (SQLException e1)
+				catch (SQLException e)
 				{
-					//Shallow exception on purpose...
+					logger.error("Error!", e);
 				}
 			}
-			this.db = null;
-			return false;
 		}
 	}
 }

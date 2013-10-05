@@ -15,15 +15,14 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 {
 	static Logger logger = LoggerFactory.getLogger(DeliveryReportCallback.class);
 
-	Connection db = null;
-
 	@Override
 	public boolean process(DeliveryReportCallbackEvent event)
 	{
+		Connection db = null;
 		try
 		{
-			if (this.db == null) this.db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = this.db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where recipient = ? and operator_message_id = ? and gateway_id = ?");
+			db = SMSServer.getInstance().getDbConnection();
+			PreparedStatement s = db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where recipient = ? and operator_message_id = ? and gateway_id = ?");
 			s.setString(1, event.getMessage().getDeliveryStatus().toShortString());
 			s.setTimestamp(2, new Timestamp(event.getMessage().getOriginalReceivedDate().getTime()));
 			s.setString(3, event.getMessage().getRecipient().getNumber());
@@ -31,25 +30,27 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 			s.setString(5, event.getMessage().getGatewayId());
 			s.executeUpdate();
 			s.close();
-			this.db.commit();
+			db.commit();
 			return true;
 		}
 		catch (Exception e)
 		{
 			logger.error("Error!", e);
-			if (this.db != null)
+			return false;
+		}
+		finally
+		{
+			if (db != null)
 			{
 				try
 				{
-					this.db.close();
+					db.close();
 				}
-				catch (SQLException e1)
+				catch (SQLException e)
 				{
-					//Shallow exception on purpose...
+					logger.error("Error!", e);
 				}
 			}
-			this.db = null;
-			return false;
 		}
 	}
 }

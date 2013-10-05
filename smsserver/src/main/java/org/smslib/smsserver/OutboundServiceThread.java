@@ -22,8 +22,6 @@ public class OutboundServiceThread extends Thread
 
 	Boolean waitingState = false;
 
-	Connection db = null;
-
 	public OutboundServiceThread()
 	{
 		setName("Outbound Service Thread");
@@ -72,10 +70,11 @@ public class OutboundServiceThread extends Thread
 
 	private void queueMessages() throws SQLException
 	{
+		Connection db = null;
 		try
 		{
-			if (this.db == null) this.db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = this.db.prepareStatement("select message_id, sender_id, recipient, text, encoding, priority, request_delivery_report, flash_sms from smslib_out where sent_status = ? order by priority desc limit 50");
+			db = SMSServer.getInstance().getDbConnection();
+			PreparedStatement s = db.prepareStatement("select message_id, sender_id, recipient, text, encoding, priority, request_delivery_report, flash_sms from smslib_out where sent_status = ? order by priority desc limit 50");
 			s.setString(1, OutboundMessage.SentStatus.Unsent.toShortString());
 			ResultSet rs = s.executeQuery();
 			while (rs.next())
@@ -121,8 +120,10 @@ public class OutboundServiceThread extends Thread
 		catch (Exception e)
 		{
 			logger.error("Error!", e);
-			if (this.db != null) this.db.close();
-			this.db = null;
+		}
+		finally
+		{
+			if (db != null) db.close();
 		}
 	}
 

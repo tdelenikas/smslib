@@ -14,37 +14,38 @@ public class DequeueMessageCallback implements IDequeueMessageCallback
 {
 	static Logger logger = LoggerFactory.getLogger(DequeueMessageCallback.class);
 
-	Connection db = null;
-
 	@Override
 	public boolean process(DequeueMessageCallbackEvent event)
 	{
+		Connection db = null;
 		try
 		{
-			if (this.db == null) this.db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = this.db.prepareStatement("update smslib_out set sent_status = 'U' where message_id = ?");
+			db = SMSServer.getInstance().getDbConnection();
+			PreparedStatement s = db.prepareStatement("update smslib_out set sent_status = 'U' where message_id = ?");
 			s.setString(1, event.getMessage().getId());
 			s.executeUpdate();
 			s.close();
-			this.db.commit();
+			db.commit();
 			return true;
 		}
 		catch (Exception e)
 		{
 			logger.error("Error!", e);
-			if (this.db != null)
+			return false;
+		}
+		finally
+		{
+			if (db != null)
 			{
 				try
 				{
-					this.db.close();
+					db.close();
 				}
-				catch (SQLException e1)
+				catch (SQLException e)
 				{
-					//Shallow exception on purpose...
+					logger.error("Error!", e);
 				}
 			}
-			this.db = null;
-			return false;
 		}
 	}
 }
