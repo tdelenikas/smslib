@@ -156,7 +156,7 @@ public abstract class AbstractModemDriver
 				this.responseOk = true;
 				break;
 			}
-			if (line.indexOf("ERROR") == 0)
+			if ((line.indexOf("ERROR") == 0) || (line.indexOf("+CMS ERROR") == 0) || (line.indexOf("+CME ERROR") == 0))
 			{
 				logger.error(getPortInfo() + " ERR==> " + line);
 				this.responseOk = false;
