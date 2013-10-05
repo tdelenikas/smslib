@@ -134,29 +134,32 @@ public class SMSServer
 	{
 		Connection db = getDbConnection();
 		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs = s.executeQuery("select class, gateway_id, p0, p1, p2, p3, p4, sender_id, priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
+		ResultSet rs = s.executeQuery("select class, gateway_id, p0, p1, p2, p3, p4, p5, sender_id, priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
 		while (rs.next())
 		{
-			String className = rs.getString(1);
-			String gatewayId = rs.getString(2);
-			String p0 = rs.getString(3);
-			String p1 = rs.getString(4);
-			String p2 = rs.getString(5);
-			String p3 = rs.getString(6);
-			String p4 = rs.getString(7);
-			String senderId = rs.getString(8);
-			int priority = rs.getInt(9);
-			int maxMessageParts = rs.getInt(10);
-			boolean requestDeliveryReport = (rs.getInt(11) == 1);
+			int fIndex = 0;
+			String className = rs.getString(++fIndex);
+			String gatewayId = rs.getString(++fIndex);
+			String p0 = rs.getString(++fIndex);
+			String p1 = rs.getString(++fIndex);
+			String p2 = rs.getString(++fIndex);
+			String p3 = rs.getString(++fIndex);
+			String p4 = rs.getString(++fIndex);
+			String p5 = rs.getString(++fIndex);
+			String senderId = rs.getString(++fIndex);
+			int priority = rs.getInt(++fIndex);
+			int maxMessageParts = rs.getInt(++fIndex);
+			boolean requestDeliveryReport = (rs.getInt(++fIndex) == 1);
 			logger.info("Registering gateway: " + gatewayId);
 			try
 			{
-				String[] parms = new String[5];
+				String[] parms = new String[6];
 				parms[0] = p0;
 				parms[1] = p1;
 				parms[2] = p2;
 				parms[3] = p3;
 				parms[4] = p4;
+				parms[5] = p5;
 				Object[] args = new Object[] { gatewayId, parms };
 				Class<?>[] argsClass = new Class[] { String.class, String[].class };
 				Class<?> c = Class.forName(className);
