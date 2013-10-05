@@ -77,8 +77,8 @@
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>../lib/smsserver-dotnet-${project.version}.dll</file>
-									<type>dll</type>
+									<file>../lib/smsserver-dotnet-${project.version}.exe</file>
+									<type>exe</type>
 									<classifier></classifier>
 								</artifact>
 							</artifacts>
