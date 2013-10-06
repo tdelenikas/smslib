@@ -1,15 +1,19 @@
+
 package org.smslib.examples;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smslib.callback.IMessageSentCallback;
 import org.smslib.callback.events.MessageSentCallbackEvent;
-import org.smslib.helper.Log;
 
 public class MessageSentCallback implements IMessageSentCallback
 {
+	final Logger logger = LoggerFactory.getLogger(MessageSentCallback.class);
+
 	@Override
 	public boolean process(MessageSentCallbackEvent event)
 	{
-		Log.getInstance().getLog().info("[MessageSentCallback] " + event.getMessage().toShortString());
+		logger.info("[MessageSentCallback] " + event.getMessage().toShortString());
 		return true;
 	}
 }
