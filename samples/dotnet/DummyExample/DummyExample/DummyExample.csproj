@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IKVM.OpenJDK.Core">
-      <HintPath>..\..\..\..\tools\ikvm-0.46.0.1\bin\IKVM.OpenJDK.Core.dll</HintPath>
+      <HintPath>..\..\..\..\tools\ikvm-7.2.4630.5\bin\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="smslib-dotnet-dev-SNAPSHOT">
       <HintPath>..\..\..\..\lib\smslib-dotnet-dev-SNAPSHOT.dll</HintPath>

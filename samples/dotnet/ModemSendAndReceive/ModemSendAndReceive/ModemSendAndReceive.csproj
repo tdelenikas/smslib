@@ -38,8 +38,9 @@
     <Reference Include="Comm2IP">
       <HintPath>..\..\..\..\..\comm2ip\Comm2IP\Comm2IP\bin\Debug\Comm2IP.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Core">
-      <HintPath>..\..\..\..\tools\ikvm-0.46.0.1\bin\IKVM.OpenJDK.Core.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.Core, Version=0.46.0.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\tools\ikvm-7.2.4630.5\bin\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="smslib-dotnet-dev-SNAPSHOT">
       <HintPath>..\..\..\..\lib\smslib-dotnet-dev-SNAPSHOT.dll</HintPath>

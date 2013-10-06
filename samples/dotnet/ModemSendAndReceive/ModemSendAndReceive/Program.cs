@@ -40,7 +40,7 @@ namespace ModemSendAndReceive
 		{
 			// Start the Comm2IP interface as a in-process thread.
 			// TODO: Check and adjust your modem port in the line below!
-			Comm2IP.Comm2IP comm2Ip = new Comm2IP.Comm2IP(new byte[] { 127, 0, 0, 1 }, 12000, "COM7", 115200);
+			Comm2IP.Comm2IP comm2Ip = new Comm2IP.Comm2IP(new byte[] { 127, 0, 0, 1 }, 12000, "COM8", 115200);
 			Thread tComm2Ip = new Thread(new ThreadStart(comm2Ip.Run));
 			tComm2Ip.Start();
 
@@ -50,7 +50,7 @@ namespace ModemSendAndReceive
 
 			// Define our modem.
 			// TODO: Check the PINs and the SMSC number in the line below!
-			org.smslib.gateway.modem.Modem modemGateway = new org.smslib.gateway.modem.Modem("modem", "127.0.0.1", 12000, "0000", "0000", new org.smslib.message.MsIsdn("306942190000"));
+			org.smslib.gateway.modem.Modem modemGateway = new org.smslib.gateway.modem.Modem("modem", "127.0.0.1", 12000, "0000", "0000", new org.smslib.message.MsIsdn("306942190000"), "");
 			// Register our modem.
 			org.smslib.Service.getInstance().registerGateway(modemGateway);
 			// Start the service.
