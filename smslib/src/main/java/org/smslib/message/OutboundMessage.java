@@ -235,9 +235,9 @@ public class OutboundMessage extends AbstractMessage
 	protected void initPduObject(SmsSubmitPdu pdu, MsIsdn smscNumber)
 	{
 		if ((getSourcePort() > -1) && (getDestinationPort() > -1)) pdu.addInformationElement(InformationElementFactory.generatePortInfo(getDestinationPort(), getSourcePort()));
-		String smscNumberForLengthCheck = smscNumber.getNumber();
+		String smscNumberForLengthCheck = smscNumber.getAddress();
 		pdu.setSmscInfoLength(1 + (smscNumberForLengthCheck.length() / 2) + ((smscNumberForLengthCheck.length() % 2 == 1) ? 1 : 0));
-		pdu.setSmscAddress(smscNumber.getNumber());
+		pdu.setSmscAddress(smscNumber.getAddress());
 		pdu.setSmscAddressType(PduUtils.getAddressTypeFor(smscNumber));
 		pdu.setMessageReference(0);
 		pdu.setAddress(getRecipient());

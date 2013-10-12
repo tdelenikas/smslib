@@ -1,12 +1,10 @@
 
 package org.smslib.gateway.http.nexmo;
 
-import java.io.IOException;
 import java.net.URLConnection;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
-import javax.xml.parsers.ParserConfigurationException;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
 import org.smslib.gateway.AbstractGateway;
@@ -17,7 +15,6 @@ import org.smslib.message.OutboundMessage.FailureCause;
 import org.smslib.message.OutboundMessage.SentStatus;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 public class Nexmo extends AbstractHttpGateway
 {
@@ -62,9 +59,9 @@ public class Nexmo extends AbstractHttpGateway
 				message = (OutboundMessage) o;
 				parameters.put("username", this.key);
 				parameters.put("password", this.secret);
-				if (!message.getOriginator().isVoid()) parameters.put("from", message.getOriginator().getNumber());
-				else if (!getSenderId().isVoid()) parameters.put("from", getSenderId().getNumber());
-				parameters.put("to", message.getRecipient().getNumber());
+				if (!message.getOriginator().isVoid()) parameters.put("from", message.getOriginator().getAddress());
+				else if (!getSenderId().isVoid()) parameters.put("from", getSenderId().getAddress());
+				parameters.put("to", message.getRecipient().getAddress());
 				parameters.put("text", translateText(message.getPayload().getText()));
 				parameters.put("client-ref", message.getId());
 				if (message.getEncoding() == Encoding.EncUcs2) parameters.put("type", "unicode");
@@ -84,7 +81,7 @@ public class Nexmo extends AbstractHttpGateway
 	}
 
 	@Override
-	protected void parseResponse(Operation operation, Object o, List<String> responseList) throws ParserConfigurationException, SAXException, IOException
+	protected void parseResponse(Operation operation, Object o, List<String> responseList) throws Exception
 	{
 		OutboundMessage message;
 		Document xml;

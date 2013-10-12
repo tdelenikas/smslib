@@ -67,11 +67,11 @@ public class TextMagic extends AbstractHttpGateway
 				parameters.put("username", this.userId);
 				parameters.put("password", this.password);
 				parameters.put("cmd", "send");
-				parameters.put("phone", message.getRecipient().getNumber());
+				parameters.put("phone", message.getRecipient().getAddress());
 				parameters.put("text", translateText(message.getPayload().getText()));
 				parameters.put("unicode", (message.getEncoding() == Encoding.EncUcs2 ? "1" : "0"));
-				if (!message.getOriginator().isVoid()) parameters.put("from", message.getOriginator().getNumber());
-				else if (!getSenderId().isVoid()) parameters.put("from", getSenderId().getNumber());
+				if (!message.getOriginator().isVoid()) parameters.put("from", message.getOriginator().getAddress());
+				else if (!getSenderId().isVoid()) parameters.put("from", getSenderId().getAddress());
 				parameters.put("max_length", new Integer(getMaxMessageParts()).toString());
 				break;
 			case QueryBalance:
@@ -91,7 +91,7 @@ public class TextMagic extends AbstractHttpGateway
 	}
 
 	@Override
-	protected void parseResponse(Operation operation, Object o, List<String> responseList)
+	protected void parseResponse(Operation operation, Object o, List<String> responseList) throws Exception
 	{
 		StringBuffer responseBuffer = new StringBuffer();
 		for (int i = 0; i < responseList.size(); i++)

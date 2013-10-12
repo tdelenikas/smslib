@@ -1,11 +1,8 @@
 
 package org.smslib.gateway;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeoutException;
-import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.Service;
@@ -20,7 +17,6 @@ import org.smslib.message.OutboundMessage;
 import org.smslib.queue.DefaultOutboundQueue;
 import org.smslib.queue.IOutboundQueue;
 import org.smslib.threading.GatewayMessageDispatcher;
-import org.xml.sax.SAXException;
 
 public abstract class AbstractGateway
 {
@@ -62,6 +58,8 @@ public abstract class AbstractGateway
 	GatewayMessageDispatcher[] gatewayMessageDispatchers;
 
 	int multipartReferenceNo = 0;
+
+	Random randomizer = new Random();
 
 	public AbstractGateway(int noOfDispatchers, int concurrencyLevel, String id, String description)
 	{
@@ -239,7 +237,7 @@ public abstract class AbstractGateway
 		return (getStatus() == Status.Stopped);
 	}
 
-	final public boolean send(OutboundMessage message) throws InterruptedException, IOException, ParserConfigurationException, SAXException, TimeoutException
+	final public boolean send(OutboundMessage message) throws Exception
 	{
 		boolean acquiredLock = false;
 		try
@@ -264,31 +262,7 @@ public abstract class AbstractGateway
 			}
 			return result;
 		}
-		catch (InterruptedException e)
-		{
-			getStatistics().increaseTotalFailures();
-			Service.getInstance().getStatistics().increaseTotalFailures();
-			throw e;
-		}
-		catch (IOException e)
-		{
-			getStatistics().increaseTotalFailures();
-			Service.getInstance().getStatistics().increaseTotalFailures();
-			throw e;
-		}
-		catch (ParserConfigurationException e)
-		{
-			getStatistics().increaseTotalFailures();
-			Service.getInstance().getStatistics().increaseTotalFailures();
-			throw e;
-		}
-		catch (SAXException e)
-		{
-			getStatistics().increaseTotalFailures();
-			Service.getInstance().getStatistics().increaseTotalFailures();
-			throw e;
-		}
-		catch (TimeoutException e)
+		catch (Exception e)
 		{
 			getStatistics().increaseTotalFailures();
 			Service.getInstance().getStatistics().increaseTotalFailures();
@@ -300,7 +274,7 @@ public abstract class AbstractGateway
 		}
 	}
 
-	final public boolean delete(InboundMessage message) throws InterruptedException, IOException, TimeoutException
+	final public boolean delete(InboundMessage message) throws Exception
 	{
 		boolean acquiredLock = false;
 		try
@@ -320,7 +294,7 @@ public abstract class AbstractGateway
 		}
 	}
 
-	final public DeliveryStatus queryDeliveryStatus(OutboundMessage message) throws InterruptedException, IOException, ParserConfigurationException, SAXException
+	final public DeliveryStatus queryDeliveryStatus(OutboundMessage message) throws Exception
 	{
 		boolean acquiredLock = false;
 		try
@@ -335,7 +309,7 @@ public abstract class AbstractGateway
 		}
 	}
 
-	final public DeliveryStatus queryDeliveryStatus(String operatorMessageId) throws InterruptedException, IOException, ParserConfigurationException, SAXException
+	final public DeliveryStatus queryDeliveryStatus(String operatorMessageId) throws Exception
 	{
 		boolean acquiredLock = false;
 		try
@@ -350,7 +324,7 @@ public abstract class AbstractGateway
 		}
 	}
 
-	final public CreditBalance queryCreditBalance() throws InterruptedException, IOException, ParserConfigurationException, SAXException
+	final public CreditBalance queryCreditBalance() throws Exception
 	{
 		boolean acquiredLock = false;
 		try
@@ -365,7 +339,7 @@ public abstract class AbstractGateway
 		}
 	}
 
-	final public Coverage queryCoverage(Coverage coverage) throws InterruptedException, IOException, ParserConfigurationException, SAXException
+	final public Coverage queryCoverage(Coverage coverage) throws Exception
 	{
 		boolean acquiredLock = false;
 		try
@@ -391,19 +365,19 @@ public abstract class AbstractGateway
 		return getMessageQueue().size();
 	}
 
-	abstract protected void _start() throws IOException, TimeoutException, InterruptedException;
+	abstract protected void _start() throws Exception;
 
-	abstract protected void _stop() throws IOException, TimeoutException, InterruptedException;
+	abstract protected void _stop() throws Exception;
 
-	abstract protected boolean _send(OutboundMessage message) throws IOException, ParserConfigurationException, SAXException, TimeoutException, NumberFormatException, InterruptedException;
+	abstract protected boolean _send(OutboundMessage message) throws Exception;
 
-	abstract protected boolean _delete(InboundMessage message) throws IOException, TimeoutException, NumberFormatException, InterruptedException;
+	abstract protected boolean _delete(InboundMessage message) throws Exception;
 
-	abstract protected DeliveryStatus _queryDeliveryStatus(String operatorMessageId) throws IOException, ParserConfigurationException, SAXException;
+	abstract protected DeliveryStatus _queryDeliveryStatus(String operatorMessageId) throws Exception;
 
-	abstract protected CreditBalance _queryCreditBalance() throws IOException, ParserConfigurationException, SAXException;
+	abstract protected CreditBalance _queryCreditBalance() throws Exception;
 
-	abstract protected Coverage _queryCoverage(Coverage coverage) throws IOException, ParserConfigurationException, SAXException;
+	abstract protected Coverage _queryCoverage(Coverage coverage) throws Exception;
 
 	private void setStatus(Status status)
 	{
@@ -418,11 +392,11 @@ public abstract class AbstractGateway
 		return (IOutboundQueue<OutboundMessage>) this.messageQueue;
 	}
 
-	protected int GetNextMultipartReferenceNo()
+	protected int getNextMultipartReferenceNo()
 	{
 		if (this.multipartReferenceNo == 0)
 		{
-			this.multipartReferenceNo = new Random().nextInt();
+			this.multipartReferenceNo = this.randomizer.nextInt();
 			if (this.multipartReferenceNo < 0) this.multipartReferenceNo *= -1;
 			this.multipartReferenceNo %= 65536;
 		}

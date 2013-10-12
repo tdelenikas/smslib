@@ -49,6 +49,11 @@
 			<version>${mail.version}</version> 
 		</dependency>
 		<dependency>
+			<groupId>com.cloudhopper</groupId> 
+			<artifactId>ch-smpp</artifactId> 
+			<version>${cloudhopper-smpp.version}</version> 
+		</dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>

@@ -10,7 +10,7 @@ public class MsIsdn
 		National, International, Text, Void
 	}
 
-	String number = null;
+	String address = null;
 
 	Type type = Type.International;
 
@@ -23,31 +23,31 @@ public class MsIsdn
 	{
 		if (number.length() > 0 && number.charAt(0) == '+')
 		{
-			this.number = number.substring(1);
+			this.address = number.substring(1);
 			this.type = Type.International;
 		}
 		else
 		{
-			this.number = number;
+			this.address = number;
 			this.type = typeOf(number);
 		}
 	}
 
-	public MsIsdn(String number, Type type)
+	public MsIsdn(String address, Type type)
 	{
-		this.number = number;
+		this.address = address;
 		this.type = type;
 	}
 
 	public MsIsdn(MsIsdn msisdn)
 	{
 		this.type = msisdn.getType();
-		this.number = msisdn.getNumber();
+		this.address = msisdn.getAddress();
 	}
 
-	public String getNumber()
+	public String getAddress()
 	{
-		return this.number;
+		return this.address;
 	}
 
 	public Type getType()
@@ -65,19 +65,19 @@ public class MsIsdn
 	{
 		if (this == o) return true;
 		if (!(o instanceof MsIsdn)) return false;
-		return (this.number.equalsIgnoreCase(((MsIsdn) o).getNumber()));
+		return (this.address.equalsIgnoreCase(((MsIsdn) o).getAddress()));
 	}
 
 	@Override
 	public String toString()
 	{
-		return String.format("[%s / %s]", getType(), getNumber());
+		return String.format("[%s / %s]", getType(), getAddress());
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return number.hashCode() + (15 * type.hashCode());
+		return address.hashCode() + (15 * type.hashCode());
 	}
 
 	private static Type typeOf(String number)

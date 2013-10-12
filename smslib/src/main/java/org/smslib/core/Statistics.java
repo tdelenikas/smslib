@@ -37,7 +37,7 @@ public class Statistics
 
 	public Date getStartTime()
 	{
-		return this.startTime;
+		return new Date(this.startTime.getTime());
 	}
 
 	public synchronized void increaseTotalSent()

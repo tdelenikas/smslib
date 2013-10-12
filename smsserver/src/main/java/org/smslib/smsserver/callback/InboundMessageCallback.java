@@ -20,11 +20,12 @@ public class InboundMessageCallback implements IInboundMessageCallback
 	public boolean process(InboundMessageEvent event)
 	{
 		Connection db = null;
+		PreparedStatement s = null;
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = db.prepareStatement("insert into smslib_in (originator, encoding, text, message_date, receive_date, gateway_id) values (?, ?, ?, ?, ?, ?)");
-			s.setString(1, event.getMessage().getOriginator().getNumber());
+			s = db.prepareStatement("insert into smslib_in (originator, encoding, text, message_date, receive_date, gateway_id) values (?, ?, ?, ?, ?, ?)");
+			s.setString(1, event.getMessage().getOriginator().getAddress());
 			s.setString(2, event.getMessage().getEncoding().toShortString());
 			switch (event.getMessage().getEncoding())
 			{
@@ -40,7 +41,6 @@ public class InboundMessageCallback implements IInboundMessageCallback
 			s.setTimestamp(5, new Timestamp(event.getMessage().getCreationDate().getTime()));
 			s.setString(6, event.getMessage().getGatewayId());
 			s.executeUpdate();
-			s.close();
 			db.commit();
 			return true;
 		}
@@ -51,6 +51,17 @@ public class InboundMessageCallback implements IInboundMessageCallback
 		}
 		finally
 		{
+			if (s != null)
+			{
+				try
+				{
+					s.close();
+				}
+				catch (SQLException e)
+				{
+					logger.error("Error!", e);
+				}
+			}
 			if (db != null)
 			{
 				try

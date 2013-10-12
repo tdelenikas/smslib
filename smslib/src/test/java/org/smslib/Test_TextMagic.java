@@ -17,7 +17,7 @@ public class Test_TextMagic extends TestCase
 		Service.getInstance().start();
 		TextMagic gateway = new TextMagic("textmagic", "username", "password");
 		Service.getInstance().registerGateway(gateway);
-		OutboundMessage m = new OutboundMessage("30697", "Hello from 'SMSLib' via TextMagic!");
+		OutboundMessage m = new OutboundMessage("30697...", "Hello from 'SMSLib' via TextMagic!");
 		m.setOriginator(new MsIsdn("SMSLIB"));
 		Service.getInstance().send(m);
 		logger.info(m.toString());

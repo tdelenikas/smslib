@@ -97,18 +97,18 @@ public class Clickatell extends AbstractHttpGateway
 				message = (OutboundMessage) o;
 				if (!message.getOriginator().isVoid())
 				{
-					parameters.put("from", message.getOriginator().getNumber());
+					parameters.put("from", message.getOriginator().getAddress());
 					requestFeatures += 16;
 					requestFeatures += 32;
 				}
 				else if (!getSenderId().isVoid())
 				{
-					parameters.put("from", getSenderId().getNumber());
+					parameters.put("from", getSenderId().getAddress());
 					requestFeatures += 16;
 					requestFeatures += 32;
 				}
 				parameters.put("session_id", this.sessionId);
-				parameters.put("to", message.getRecipient().getNumber());
+				parameters.put("to", message.getRecipient().getAddress());
 				parameters.put("text", translateText(message.getPayload().getText()));
 				parameters.put("concat", Integer.toString(getMaxMessageParts()));
 				parameters.put("climsgid", message.getId());
@@ -136,7 +136,7 @@ public class Clickatell extends AbstractHttpGateway
 	}
 
 	@Override
-	protected void parseResponse(Operation operation, Object o, List<String> responseList)
+	protected void parseResponse(Operation operation, Object o, List<String> responseList) throws Exception
 	{
 		StringTokenizer tokens;
 		String t1, t2, t3;

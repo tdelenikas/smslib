@@ -41,7 +41,7 @@ public class NumberRouter extends AbstractRouter
 			for (String rx : r)
 			{
 				Pattern p = Pattern.compile(rx);
-				Matcher m = p.matcher(message.getRecipient().getNumber());
+				Matcher m = p.matcher(message.getRecipient().getAddress());
 				if (m.matches() && gateways.contains(getRules().get(rx))) candidates.add(getRules().get(rx));
 			}
 		}

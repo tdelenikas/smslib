@@ -18,14 +18,14 @@ public class PreQueueHook implements IPreQueueHook
 	public boolean process(OutboundMessage message)
 	{
 		Connection db = null;
+		PreparedStatement s = null;
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
+			s = db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
 			s.setString(1, OutboundMessage.SentStatus.Queued.toShortString());
 			s.setString(2, message.getId());
 			s.executeUpdate();
-			s.close();
 			db.commit();
 			return true;
 		}
@@ -36,6 +36,17 @@ public class PreQueueHook implements IPreQueueHook
 		}
 		finally
 		{
+			if (s != null)
+			{
+				try
+				{
+					s.close();
+				}
+				catch (SQLException e)
+				{
+					logger.error("Error!", e);
+				}
+			}
 			if (db != null)
 			{
 				try

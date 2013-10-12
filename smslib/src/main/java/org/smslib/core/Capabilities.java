@@ -55,7 +55,7 @@ public class Capabilities
 		{
 			if (c == Caps.CanSetSenderId)
 			{
-				if (message.getOriginator().getNumber().length() > 0) bs.set(c.ordinal());
+				if (message.getOriginator().getAddress().length() > 0) bs.set(c.ordinal());
 			}
 			else if (c == Caps.CanRequestDeliveryStatus)
 			{

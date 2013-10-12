@@ -565,9 +565,9 @@ public class Service
 	public LinkedList<OutboundMessage> distributeToGroup(OutboundMessage message)
 	{
 		LinkedList<OutboundMessage> messageList = new LinkedList<OutboundMessage>();
-		if (getGroupManager().exist(message.getRecipient().getNumber()))
+		if (getGroupManager().exist(message.getRecipient().getAddress()))
 		{
-			for (MsIsdn msisdn : getGroupManager().getGroup(message.getRecipient().getNumber()).getRecipients())
+			for (MsIsdn msisdn : getGroupManager().getGroup(message.getRecipient().getAddress()).getRecipients())
 			{
 				OutboundMessage m = new OutboundMessage(message);
 				m.setRecipient(new MsIsdn(msisdn));

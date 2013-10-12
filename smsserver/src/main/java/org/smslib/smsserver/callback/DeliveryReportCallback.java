@@ -19,17 +19,17 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 	public boolean process(DeliveryReportCallbackEvent event)
 	{
 		Connection db = null;
+		PreparedStatement s = null;
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where recipient = ? and operator_message_id = ? and gateway_id = ?");
+			s = db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where recipient = ? and operator_message_id = ? and gateway_id = ?");
 			s.setString(1, event.getMessage().getDeliveryStatus().toShortString());
 			s.setTimestamp(2, new Timestamp(event.getMessage().getOriginalReceivedDate().getTime()));
-			s.setString(3, event.getMessage().getRecipient().getNumber());
+			s.setString(3, event.getMessage().getRecipient().getAddress());
 			s.setString(4, event.getMessage().getOriginalOperatorMessageId());
 			s.setString(5, event.getMessage().getGatewayId());
 			s.executeUpdate();
-			s.close();
 			db.commit();
 			return true;
 		}
@@ -40,6 +40,17 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 		}
 		finally
 		{
+			if (s != null)
+			{
+				try
+				{
+					s.close();
+				}
+				catch (SQLException e)
+				{
+					logger.error("Error!", e);
+				}
+			}
 			if (db != null)
 			{
 				try

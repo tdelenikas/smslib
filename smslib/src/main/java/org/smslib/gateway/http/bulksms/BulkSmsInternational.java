@@ -59,11 +59,11 @@ public class BulkSmsInternational extends AbstractHttpGateway
 		{
 			case SendMessage:
 				message = (OutboundMessage) o;
-				if (!message.getOriginator().isVoid()) parameters.put("sender", message.getOriginator().getNumber());
-				else if (!getSenderId().isVoid()) parameters.put("sender", getSenderId().getNumber());
+				if (!message.getOriginator().isVoid()) parameters.put("sender", message.getOriginator().getAddress());
+				else if (!getSenderId().isVoid()) parameters.put("sender", getSenderId().getAddress());
 				parameters.put("username", this.username);
 				parameters.put("password", this.password);
-				parameters.put("msisdn", message.getRecipient().getNumber());
+				parameters.put("msisdn", message.getRecipient().getAddress());
 				parameters.put("message", translateText(message.getPayload().getText()));
 				if(message.getEncoding() == Encoding.EncUcs2) parameters.put("dca", "16bit");
 				parameters.put("source_id", message.getId());
@@ -91,7 +91,7 @@ public class BulkSmsInternational extends AbstractHttpGateway
 	}
 
 	@Override
-	protected void parseResponse(Operation operation, Object o, List<String> responseList)
+	protected void parseResponse(Operation operation, Object o, List<String> responseList) throws Exception
 	{
 		OutboundMessage message;
 		StringTokenizer tokens;

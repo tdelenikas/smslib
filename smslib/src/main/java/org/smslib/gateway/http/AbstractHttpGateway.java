@@ -16,7 +16,6 @@ import java.util.Hashtable;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.core.Coverage;
@@ -31,7 +30,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public abstract class AbstractHttpGateway extends AbstractGateway
 {
@@ -152,7 +150,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 		this.settings.put("http-encoding", enc);
 	}
 
-	protected Document loadXMLFromString(List<String> xmlLines) throws ParserConfigurationException, SAXException, IOException
+	protected Document loadXMLFromString(List<String> xmlLines) throws Exception
 	{
 		StringBuffer b = new StringBuffer(512);
 		for (String l : xmlLines)
@@ -160,7 +158,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 		return loadXMLFromString(b.toString().replaceAll("\\s\\s", " "));
 	}
 
-	protected Document loadXMLFromString(String xml) throws ParserConfigurationException, SAXException, IOException
+	protected Document loadXMLFromString(String xml) throws Exception
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -208,7 +206,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	}
 
 	@Override
-	public boolean _send(OutboundMessage message) throws IOException, ParserConfigurationException, SAXException
+	public boolean _send(OutboundMessage message) throws Exception
 	{
 		Hashtable<String, String> parameters = new Hashtable<String, String>();
 		prepareParameters(Operation.SendMessage, message, parameters);
@@ -223,7 +221,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	}
 
 	@Override
-	public CreditBalance _queryCreditBalance() throws IOException, ParserConfigurationException, SAXException
+	public CreditBalance _queryCreditBalance() throws Exception
 	{
 		Hashtable<String, String> parameters = new Hashtable<String, String>();
 		prepareParameters(Operation.QueryBalance, this, parameters);
@@ -232,7 +230,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	}
 
 	@Override
-	public DeliveryStatus _queryDeliveryStatus(String operatorMessageId) throws IOException, ParserConfigurationException, SAXException
+	public DeliveryStatus _queryDeliveryStatus(String operatorMessageId) throws Exception
 	{
 		DeliveryReportMessage dummyMessage = new DeliveryReportMessage();
 		dummyMessage.setOperatorMessageId(operatorMessageId);
@@ -243,7 +241,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	}
 
 	@Override
-	public Coverage _queryCoverage(Coverage c) throws IOException, ParserConfigurationException, SAXException
+	public Coverage _queryCoverage(Coverage c) throws Exception
 	{
 		Hashtable<String, String> parameters = new Hashtable<String, String>();
 		prepareParameters(Operation.QueryCoverage, c, parameters);
@@ -318,7 +316,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 
 	abstract protected void prepareParameters(Operation operation, Object o, Hashtable<String, String> responseList, Object... args);
 
-	abstract protected void parseResponse(Operation operation, Object o, List<String> responseList) throws ParserConfigurationException, SAXException, IOException;
+	abstract protected void parseResponse(Operation operation, Object o, List<String> responseList) throws Exception;
 
 	abstract protected String translateText(String text);
 }

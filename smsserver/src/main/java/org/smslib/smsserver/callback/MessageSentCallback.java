@@ -20,10 +20,10 @@ public class MessageSentCallback implements IMessageSentCallback
 	public boolean process(MessageSentCallbackEvent event)
 	{
 		Connection db = null;
+		PreparedStatement s = null;
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s;
 			if (event.getMessage().getSentStatus() == SentStatus.Sent)
 			{
 				s = db.prepareStatement("update smslib_out set sent_status = ?, sent_date = ?, gateway_id = ?, operator_message_id = ? where message_id = ?");
@@ -40,7 +40,6 @@ public class MessageSentCallback implements IMessageSentCallback
 				s.setString(2, event.getMessage().getId());
 			}
 			s.executeUpdate();
-			s.close();
 			db.commit();
 			return true;
 		}
@@ -51,6 +50,17 @@ public class MessageSentCallback implements IMessageSentCallback
 		}
 		finally
 		{
+			if (s != null)
+			{
+				try
+				{
+					s.close();
+				}
+				catch (SQLException e)
+				{
+					logger.error("Error!", e);
+				}
+			}
 			if (db != null)
 			{
 				try

@@ -128,7 +128,7 @@ public class Modem extends AbstractGateway
 		return this.readMessagesSet;
 	}
 
-	public void refreshDeviceInfo() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public void refreshDeviceInfo() throws Exception
 	{
 		synchronized (this.modemDriver._LOCK_)
 		{
@@ -136,19 +136,19 @@ public class Modem extends AbstractGateway
 		}
 	}
 
-	public ModemResponse sendATCommand(String atCommand) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public ModemResponse sendATCommand(String atCommand) throws Exception
 	{
 		return this.modemDriver.write(atCommand);
 	}
 
 	@Override
-	public boolean _send(OutboundMessage message) throws TimeoutException, IOException, NumberFormatException, InterruptedException
+	public boolean _send(OutboundMessage message) throws Exception
 	{
 		synchronized (this.modemDriver._LOCK_)
 		{
 			if (this.modemDriver.getDeviceInformation().getMode() == Modes.PDU)
 			{
-				List<String> pdus = message.getPdus(getSmscNumber(), GetNextMultipartReferenceNo(), getRequestDeliveryReport());
+				List<String> pdus = message.getPdus(getSmscNumber(), getNextMultipartReferenceNo(), getRequestDeliveryReport());
 				for (String pdu : pdus)
 				{
 					int j = pdu.length() / 2;
@@ -159,7 +159,7 @@ public class Modem extends AbstractGateway
 					else if (getSmscNumber().getType() == Type.Void) j--;
 					else
 					{
-						int smscNumberLen = getSmscNumber().getNumber().length();
+						int smscNumberLen = getSmscNumber().getAddress().length();
 						if (smscNumberLen % 2 != 0) smscNumberLen++;
 						int smscLen = (2 + smscNumberLen) / 2;
 						j = j - smscLen - 1;
@@ -182,7 +182,7 @@ public class Modem extends AbstractGateway
 			}
 			else
 			{
-				int refNo = this.modemDriver.atSendTEXTMessage(message.getRecipient().getNumber(), message.getPayload().getText());
+				int refNo = this.modemDriver.atSendTEXTMessage(message.getRecipient().getAddress(), message.getPayload().getText());
 				if (refNo > 0)
 				{
 					message.setGatewayId(getGatewayId());
@@ -202,7 +202,7 @@ public class Modem extends AbstractGateway
 	}
 
 	@Override
-	protected boolean _delete(InboundMessage message) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected boolean _delete(InboundMessage message) throws Exception
 	{
 		synchronized (this.modemDriver._LOCK_)
 		{

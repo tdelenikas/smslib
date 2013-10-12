@@ -233,7 +233,7 @@ public abstract class Pdu
 	public void setAddress(MsIsdn address)
 	{
 		if (address.getType() == Type.Void) this.address = "";
-		else this.address = address.getNumber();
+		else this.address = address.getAddress();
 		setAddressType(PduUtils.getAddressTypeFor(address));
 	}
 

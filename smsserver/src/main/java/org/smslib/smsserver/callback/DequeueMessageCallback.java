@@ -18,13 +18,13 @@ public class DequeueMessageCallback implements IDequeueMessageCallback
 	public boolean process(DequeueMessageCallbackEvent event)
 	{
 		Connection db = null;
+		PreparedStatement s = null;
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = db.prepareStatement("update smslib_out set sent_status = 'U' where message_id = ?");
+			s = db.prepareStatement("update smslib_out set sent_status = 'U' where message_id = ?");
 			s.setString(1, event.getMessage().getId());
 			s.executeUpdate();
-			s.close();
 			db.commit();
 			return true;
 		}
@@ -35,6 +35,17 @@ public class DequeueMessageCallback implements IDequeueMessageCallback
 		}
 		finally
 		{
+			if (s != null)
+			{
+				try
+				{
+					s.close();
+				}
+				catch (SQLException e)
+				{
+					logger.error("Error!", e);
+				}
+			}
 			if (db != null)
 			{
 				try

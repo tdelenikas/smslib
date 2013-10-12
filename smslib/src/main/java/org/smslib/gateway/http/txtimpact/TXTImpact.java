@@ -61,7 +61,7 @@ public class TXTImpact extends AbstractHttpGateway
 				parameters.put("password", this.password);
 				parameters.put("vasid", this.vasId);
 				parameters.put("from", this.shortCode);
-				parameters.put("to", message.getRecipient().getNumber());
+				parameters.put("to", message.getRecipient().getAddress());
 				parameters.put("text", translateText(message.getPayload().getText()));
 				break;
 			case QueryBalance:
@@ -75,7 +75,7 @@ public class TXTImpact extends AbstractHttpGateway
 	}
 
 	@Override
-	protected void parseResponse(Operation operation, Object o, List<String> responseList)
+	protected void parseResponse(Operation operation, Object o, List<String> responseList) throws Exception
 	{
 		OutboundMessage message;
 		StringTokenizer tokens;
