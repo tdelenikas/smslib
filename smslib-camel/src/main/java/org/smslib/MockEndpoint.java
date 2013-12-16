@@ -1,10 +1,12 @@
 package org.smslib;
 
+import org.apache.camel.spi.UriPath;
 import org.smslib.gateway.MockGateway;
 
 public class MockEndpoint extends SMSLibEndpoint {
-
+	@UriPath
 	private int failureRate;
+	@UriPath
 	private int delay;
 
 	public MockEndpoint(String uri, SMSLibComponent component) {
