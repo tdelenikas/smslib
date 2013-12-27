@@ -19,7 +19,7 @@ Here is the Gateway Support / Feature Map, the list of gateways currently suppor
 </tr>
 <tr>
 	<td>GSM Modem</td>
-	<td>org.smslib.modem.Modem</td>
+	<td>org.smslib.gateway.modem.Modem</td>
 	<td>Serial or IP GSM modem gateway</td></tr>
 <tr>
 	<td>BULKSMS</td>
