@@ -21,9 +21,9 @@ public class NumberRouter extends AbstractRouter
 		return this.rules;
 	}
 
-	public void addRule(String pattern, AbstractGateway gateway)
+	public void addRule(String addressRegEx, AbstractGateway gateway)
 	{
-		getRules().put(pattern, gateway);
+		getRules().put(addressRegEx, gateway);
 	}
 
 	public void deleteRule(String pattern)
@@ -41,7 +41,7 @@ public class NumberRouter extends AbstractRouter
 			for (String rx : r)
 			{
 				Pattern p = Pattern.compile(rx);
-				Matcher m = p.matcher(message.getRecipient().getAddress());
+				Matcher m = p.matcher(message.getRecipientAddress().getAddress());
 				if (m.matches() && gateways.contains(getRules().get(rx))) candidates.add(getRules().get(rx));
 			}
 		}

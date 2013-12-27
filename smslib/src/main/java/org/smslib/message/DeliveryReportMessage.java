@@ -39,7 +39,7 @@ public class DeliveryReportMessage extends InboundMessage
 	{
 		super(Type.StatusReport, memLocation, memIndex);
 		setOriginalOperatorMessageId(String.valueOf(pdu.getMessageReference()));
-		setRecipient(new MsIsdn(pdu.getAddress()));
+		setRecipientAddress(new MsIsdn(pdu.getAddress()));
 		setSentDate(pdu.getTimestamp());
 		setOriginalReceivedDate(pdu.getDischargeTime());
 		int i = pdu.getStatus();
@@ -51,11 +51,11 @@ public class DeliveryReportMessage extends InboundMessage
 		else setDeliveryStatus(DeliveryStatus.Error);
 	}
 
-	public DeliveryReportMessage(String messageId, String recipient, String memLocation, int memIndex, Date originalSentDate, Date receivedDate)
+	public DeliveryReportMessage(String messageId, String recipientAddress, String memLocation, int memIndex, Date originalSentDate, Date receivedDate)
 	{
 		super(Type.StatusReport, memLocation, memIndex);
 		setOriginalOperatorMessageId(messageId);
-		setRecipient(new MsIsdn(recipient));
+		setRecipientAddress(new MsIsdn(recipientAddress));
 		setSentDate(originalSentDate);
 		setOriginalReceivedDate(receivedDate);
 		setDeliveryStatus(DeliveryStatus.Unknown);
@@ -94,12 +94,12 @@ public class DeliveryReportMessage extends InboundMessage
 	@Override
 	public String getSignature()
 	{
-		return hashSignature(String.format("%s-%s-%s-%s", getOriginator(), getOriginalOperatorMessageId(), getOriginalReceivedDate(), getDeliveryStatus()));
+		return hashSignature(String.format("%s-%s-%s-%s", getOriginatorAddress(), getOriginalOperatorMessageId(), getOriginalReceivedDate(), getDeliveryStatus()));
 	}
 
 	@Override
 	public String toShortString()
 	{
-		return String.format("[%s @ %s = %s @ %s]", getId(), getRecipient(), getDeliveryStatus(), getOriginalReceivedDate());
+		return String.format("[%s @ %s = %s @ %s]", getId(), getRecipientAddress(), getDeliveryStatus(), getOriginalReceivedDate());
 	}
 }

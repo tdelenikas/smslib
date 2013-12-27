@@ -12,14 +12,14 @@ public class OutboundEncryptedMessage extends OutboundBinaryMessage
 {
 	private static final long serialVersionUID = 1L;
 
-	public OutboundEncryptedMessage(MsIsdn recipient, byte[] data) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, NoSuchAlgorithmException
+	public OutboundEncryptedMessage(MsIsdn recipientAddress, byte[] data) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, NoSuchAlgorithmException
 	{
-		super(recipient, data);
-		setPayload(new Payload(Service.getInstance().getKeyManager().encrypt(recipient, data)));
+		super(recipientAddress, data);
+		setPayload(new Payload(Service.getInstance().getKeyManager().encrypt(recipientAddress, data)));
 	}
 
-	public OutboundEncryptedMessage(String recipient, byte[] data) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, NoSuchAlgorithmException
+	public OutboundEncryptedMessage(String recipientAddress, byte[] data) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, NoSuchAlgorithmException
 	{
-		this(new MsIsdn(recipient), data);
+		this(new MsIsdn(recipientAddress), data);
 	}
 }

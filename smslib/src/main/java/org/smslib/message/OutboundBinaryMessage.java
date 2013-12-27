@@ -9,9 +9,9 @@ public class OutboundBinaryMessage extends OutboundMessage
 	{
 	}
 
-	public OutboundBinaryMessage(MsIsdn originator, MsIsdn recipient, byte[] data)
+	public OutboundBinaryMessage(MsIsdn originatorAddress, MsIsdn recipientAddress, byte[] data)
 	{
-		super(originator, recipient, new Payload(data));
+		super(originatorAddress, recipientAddress, new Payload(data));
 		setEncoding(Encoding.Enc8);
 	}
 
@@ -20,13 +20,13 @@ public class OutboundBinaryMessage extends OutboundMessage
 		this(new MsIsdn(""), recipient, data);
 	}
 
-	public OutboundBinaryMessage(String originator, String recipient, byte[] data)
+	public OutboundBinaryMessage(String originatorAddress, String recipientAddress, byte[] data)
 	{
-		this(new MsIsdn(originator), new MsIsdn(recipient), data);
+		this(new MsIsdn(originatorAddress), new MsIsdn(recipientAddress), data);
 	}
 
-	public OutboundBinaryMessage(String recipient, byte[] data)
+	public OutboundBinaryMessage(String recipientAddress, byte[] data)
 	{
-		this(new MsIsdn(""), new MsIsdn(recipient), data);
+		this(new MsIsdn(""), new MsIsdn(recipientAddress), data);
 	}
 }

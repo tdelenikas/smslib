@@ -28,29 +28,29 @@ public class OutboundWapMessage extends OutboundBinaryMessage
 
 	String text;
 
-	public OutboundWapMessage(String recipient, URL url, String siId, String text)
+	public OutboundWapMessage(String recipientAddress, URL url, String siId, String text)
 	{
-		this(new MsIsdn(recipient), url, new Date(), new Date(), WapSignals.MEDIUM, siId, text);
+		this(new MsIsdn(recipientAddress), url, new Date(), new Date(), WapSignals.MEDIUM, siId, text);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.HOUR, 24);
 		this.expiryDate = cal.getTime();
 	}
 
-	public OutboundWapMessage(MsIsdn recipient, URL url, String siId, String text)
+	public OutboundWapMessage(MsIsdn recipientAddress, URL url, String siId, String text)
 	{
-		this(recipient, url, new Date(), new Date(), WapSignals.MEDIUM, siId, text);
+		this(recipientAddress, url, new Date(), new Date(), WapSignals.MEDIUM, siId, text);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.HOUR, 24);
 		this.expiryDate = cal.getTime();
 	}
 
-	public OutboundWapMessage(MsIsdn myRecipient, URL url, Date createDate, Date expiryDate, WapSignals wapSignal, String siId, String text)
+	public OutboundWapMessage(MsIsdn recipientAddress, URL url, Date createDate, Date expiryDate, WapSignals wapSignal, String siId, String text)
 	{
 		super();
 		setEncoding(Encoding.Enc8);
-		setRecipient(myRecipient);
+		setRecipientAddress(recipientAddress);
 		this.url = url;
 		this.createDate = new java.util.Date(createDate.getTime());
 		this.expiryDate = new java.util.Date(expiryDate.getTime());

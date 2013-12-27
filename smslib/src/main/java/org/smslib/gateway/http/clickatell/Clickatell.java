@@ -95,20 +95,20 @@ public class Clickatell extends AbstractHttpGateway
 			case SendMessage:
 				int requestFeatures = 1;
 				message = (OutboundMessage) o;
-				if (!message.getOriginator().isVoid())
+				if (!message.getOriginatorAddress().isVoid())
 				{
-					parameters.put("from", message.getOriginator().getAddress());
+					parameters.put("from", message.getOriginatorAddress().getAddress());
 					requestFeatures += 16;
 					requestFeatures += 32;
 				}
-				else if (!getSenderId().isVoid())
+				else if (!getSenderAddress().isVoid())
 				{
-					parameters.put("from", getSenderId().getAddress());
+					parameters.put("from", getSenderAddress().getAddress());
 					requestFeatures += 16;
 					requestFeatures += 32;
 				}
 				parameters.put("session_id", this.sessionId);
-				parameters.put("to", message.getRecipient().getAddress());
+				parameters.put("to", message.getRecipientAddress().getAddress());
 				parameters.put("text", translateText(message.getPayload().getText()));
 				parameters.put("concat", Integer.toString(getMaxMessageParts()));
 				parameters.put("climsgid", message.getId());

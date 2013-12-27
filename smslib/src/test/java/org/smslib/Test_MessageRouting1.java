@@ -93,7 +93,7 @@ public class Test_MessageRouting1 extends TestCase
 			MockGateway g = new MockGateway("G1", "Mock Gateway #1", c, 0, 0);
 			Service.getInstance().registerGateway(g);
 			OutboundMessage m = new OutboundMessage("3069741234567", "Hello World!");
-			m.setOriginator(new MsIsdn("AAA"));
+			m.setOriginatorAddress(new MsIsdn("AAA"));
 			Service.getInstance().send(m);
 			assert (m.getSentStatus() == SentStatus.Failed);
 			assert (m.getFailureCause() == FailureCause.NoRoute);

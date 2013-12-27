@@ -182,7 +182,7 @@ public class Modem extends AbstractGateway
 			}
 			else
 			{
-				int refNo = this.modemDriver.atSendTEXTMessage(message.getRecipient().getAddress(), message.getPayload().getText());
+				int refNo = this.modemDriver.atSendTEXTMessage(message.getRecipientAddress().getAddress(), message.getPayload().getText());
 				if (refNo > 0)
 				{
 					message.setGatewayId(getGatewayId());

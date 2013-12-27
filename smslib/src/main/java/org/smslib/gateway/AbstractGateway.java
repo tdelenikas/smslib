@@ -33,7 +33,7 @@ public abstract class AbstractGateway
 
 	String gatewayId = "";
 
-	MsIsdn senderId = new MsIsdn();
+	MsIsdn senderAddress = new MsIsdn();
 
 	String description = "";
 
@@ -92,14 +92,14 @@ public abstract class AbstractGateway
 		this.gatewayId = gatewayId;
 	}
 
-	public MsIsdn getSenderId()
+	public MsIsdn getSenderAddress()
 	{
-		return this.senderId;
+		return this.senderAddress;
 	}
 
-	public void setSenderId(MsIsdn senderId)
+	public void setSenderAddress(MsIsdn senderAddress)
 	{
-		this.senderId = senderId;
+		this.senderAddress = senderAddress;
 	}
 
 	public String getDescription()
@@ -416,7 +416,7 @@ public abstract class AbstractGateway
 		b.append("== GATEWAY ========================================================================\n");
 		b.append(String.format("Gateway ID:  %s\n", getGatewayId()));
 		b.append(String.format("Description: %s\n", getDescription()));
-		b.append(String.format("Sender ID:   %s\n", getSenderId()));
+		b.append(String.format("Sender ID:   %s\n", getSenderAddress()));
 		b.append(String.format("-- Capabilities --\n"));
 		b.append(getCapabilities().toString());
 		b.append(String.format("-- Settings --\n"));

@@ -53,9 +53,9 @@ public abstract class AbstractMessage implements Serializable
 
 	String id = UUID.randomUUID().toString();
 
-	MsIsdn originator = new MsIsdn();
+	MsIsdn originatorAddress = new MsIsdn();
 
-	MsIsdn recipient = new MsIsdn();
+	MsIsdn recipientAddress = new MsIsdn();
 
 	Payload payload = new Payload("");
 
@@ -80,8 +80,8 @@ public abstract class AbstractMessage implements Serializable
 	public AbstractMessage(AbstractMessage m)
 	{
 		this.creationDate = m.getCreationDate();
-		this.originator = new MsIsdn(m.getOriginator());
-		this.recipient = new MsIsdn(m.getRecipient());
+		this.originatorAddress = new MsIsdn(m.getOriginatorAddress());
+		this.recipientAddress = new MsIsdn(m.getRecipientAddress());
 		this.payload = new Payload(m.getPayload());
 		this.type = m.getType();
 		this.encoding = m.getEncoding();
@@ -92,11 +92,11 @@ public abstract class AbstractMessage implements Serializable
 		this.sentDate = m.getSentDate();
 	}
 
-	public AbstractMessage(Type type, MsIsdn originator, MsIsdn recipient, Payload payload)
+	public AbstractMessage(Type type, MsIsdn originatorAddress, MsIsdn recipientAddress, Payload payload)
 	{
 		setType(type);
-		setOriginator(originator);
-		setRecipient(recipient);
+		setOriginatorAddress(originatorAddress);
+		setRecipientAddress(recipientAddress);
 		setPayload(payload);
 	}
 
@@ -115,24 +115,24 @@ public abstract class AbstractMessage implements Serializable
 		return this.creationDate;
 	}
 
-	public MsIsdn getOriginator()
+	public MsIsdn getOriginatorAddress()
 	{
-		return this.originator;
+		return this.originatorAddress;
 	}
 
-	public void setOriginator(MsIsdn originator)
+	public void setOriginatorAddress(MsIsdn originator)
 	{
-		this.originator = originator;
+		this.originatorAddress = originator;
 	}
 
-	public MsIsdn getRecipient()
+	public MsIsdn getRecipientAddress()
 	{
-		return this.recipient;
+		return this.recipientAddress;
 	}
 
-	public void setRecipient(MsIsdn recipient)
+	public void setRecipientAddress(MsIsdn recipient)
 	{
-		this.recipient = recipient;
+		this.recipientAddress = recipient;
 	}
 
 	public Payload getPayload()
@@ -249,8 +249,8 @@ public abstract class AbstractMessage implements Serializable
 		b.append(String.format("DCS Class: %s\n", getDcsClass()));
 		b.append(String.format("Source Port: %s\n", getSourcePort()));
 		b.append(String.format("Destination Port: %s\n", getDestinationPort()));
-		b.append(String.format("Originator: %s\n", getOriginator()));
-		b.append(String.format("Recipient: %s\n", getRecipient()));
+		b.append(String.format("Originator Address: %s\n", getOriginatorAddress()));
+		b.append(String.format("Recipient Address: %s\n", getRecipientAddress()));
 		if (getPayload() != null)
 		{
 			b.append(String.format("Payload Type: %s\n", getPayload().getType()));

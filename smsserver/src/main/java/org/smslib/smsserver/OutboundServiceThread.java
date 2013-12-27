@@ -74,7 +74,7 @@ public class OutboundServiceThread extends Thread
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			PreparedStatement s = db.prepareStatement("select message_id, sender_id, recipient, text, encoding, priority, request_delivery_report, flash_sms from smslib_out where sent_status = ? order by priority desc limit 50");
+			PreparedStatement s = db.prepareStatement("select message_id, sender_address, address, text, encoding, priority, request_delivery_report, flash_sms from smslib_out where sent_status = ? order by priority desc limit 50");
 			s.setString(1, OutboundMessage.SentStatus.Unsent.toShortString());
 			ResultSet rs = s.executeQuery();
 			while (rs.next())
@@ -107,7 +107,7 @@ public class OutboundServiceThread extends Thread
 					}
 					message.setEncoding(Encoding.getEncodingFromShortString(encoding));
 					message.setId(messageId);
-					if (!Common.isNullOrEmpty(senderId)) message.setOriginator(new MsIsdn(senderId));
+					if (!Common.isNullOrEmpty(senderId)) message.setOriginatorAddress(new MsIsdn(senderId));
 					message.setPriority(rs.getInt(6));
 					message.setRequestDeliveryReport(rs.getInt(7) == 1);
 					message.setFlashSms(rs.getInt(8) == 1);
@@ -129,7 +129,7 @@ public class OutboundServiceThread extends Thread
 
 	private boolean isGroupMessage(OutboundMessage message) throws ClassNotFoundException, SQLException, InterruptedException
 	{
-		if (Service.getInstance().getGroupManager().exist(message.getRecipient().getAddress()))
+		if (Service.getInstance().getGroupManager().exist(message.getRecipientAddress().getAddress()))
 		{
 			Connection db = SMSServer.getInstance().getDbConnection();
 			PreparedStatement s = db.prepareStatement("update smslib_out set sent_status = '~' where message_id = ?");
@@ -145,14 +145,14 @@ public class OutboundServiceThread extends Thread
 			s.close();
 			s = db.prepareStatement("insert into smslib_out (parent_id, message_id, sender_id, recipient, text, encoding, priority, request_delivery_report, flash_sms, gateway_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			int counter = 0;
-			for (MsIsdn recipient : Service.getInstance().getGroupManager().getGroup(message.getRecipient().getAddress()).getRecipients())
+			for (MsIsdn recipient : Service.getInstance().getGroupManager().getGroup(message.getRecipientAddress().getAddress()).getRecipients())
 			{
 				counter++;
 				String messageId = String.format("%s?%05d", message.getId(), counter);
 				logger.debug("$$$ " + messageId);
 				s.setInt(1, id);
 				s.setString(2, messageId);
-				s.setString(3, (message.getOriginator() != null && message.getOriginator().getType() != MsIsdn.Type.Void ? message.getOriginator().getAddress() : ""));
+				s.setString(3, (message.getOriginatorAddress() != null && message.getOriginatorAddress().getType() != MsIsdn.Type.Void ? message.getOriginatorAddress().getAddress() : ""));
 				s.setString(4, recipient.getAddress());
 				s.setString(5, message.getPayload().getText());
 				s.setString(6, message.getEncoding().toShortString());

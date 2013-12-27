@@ -21,11 +21,11 @@ public class Test_Smpp extends TestCase
 		Service.getInstance().registerGateway(gateway);
 		Thread.sleep(10000);
 		OutboundMessage m = new OutboundMessage("306974...", "Test");
-		m.setOriginator(new MsIsdn("SMSLIB"));
+		m.setOriginatorAddress(new MsIsdn("SMSLIB"));
 		Service.getInstance().send(m);
 		logger.debug(m.toString());
 		m = new OutboundMessage("306974...", "Test");
-		m.setOriginator(new MsIsdn("306974..."));
+		m.setOriginatorAddress(new MsIsdn("306974..."));
 		Service.getInstance().send(m);
 		logger.debug(m.toString());
 		Thread.sleep(10000);

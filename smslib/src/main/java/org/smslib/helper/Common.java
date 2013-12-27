@@ -30,7 +30,7 @@ public class Common
 	{
 		StringBuffer b = new StringBuffer(1024);
 		b.append(String.format("Message Id: %s%s", message.getId(), System.getProperty("line.separator")));
-		b.append(String.format("Message Recipient: %s%s", message.getRecipient(), System.getProperty("line.separator")));
+		b.append(String.format("Message Recipient: %s%s", message.getRecipientAddress(), System.getProperty("line.separator")));
 		b.append("Routed via: ");
 		for (AbstractGateway g : message.getRoutingTable())
 			b.append(g.getGatewayId() + " -> ");

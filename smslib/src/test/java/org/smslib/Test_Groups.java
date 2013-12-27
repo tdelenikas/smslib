@@ -14,15 +14,15 @@ public class Test_Groups extends TestCase
 	{
 		Group g = new Group("my-group-id", "my-group-description");
 
-		assert(g.addRecipient(new MsIsdn("0")));
-		assert(g.addRecipient(new MsIsdn("1")));
-		assert(g.addRecipient(new MsIsdn("2")));
-		assert(g.addRecipient(new MsIsdn("3")));
-		assert(g.addRecipient(new MsIsdn("4")));
-		assert(g.addRecipient(new MsIsdn("5")));
+		assert(g.addAddress(new MsIsdn("0")));
+		assert(g.addAddress(new MsIsdn("1")));
+		assert(g.addAddress(new MsIsdn("2")));
+		assert(g.addAddress(new MsIsdn("3")));
+		assert(g.addAddress(new MsIsdn("4")));
+		assert(g.addAddress(new MsIsdn("5")));
 
-		assert(g.removeRecipient(new MsIsdn("2")));
-		assert(!g.removeRecipient(new MsIsdn("unknown-recipient")));
+		assert(g.removeAddress(new MsIsdn("2")));
+		assert(!g.removeAddress(new MsIsdn("unknown-recipient")));
 
 		Service.getInstance().addGroup(g);
 

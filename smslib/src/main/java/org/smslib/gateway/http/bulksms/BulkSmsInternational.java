@@ -59,11 +59,11 @@ public class BulkSmsInternational extends AbstractHttpGateway
 		{
 			case SendMessage:
 				message = (OutboundMessage) o;
-				if (!message.getOriginator().isVoid()) parameters.put("sender", message.getOriginator().getAddress());
-				else if (!getSenderId().isVoid()) parameters.put("sender", getSenderId().getAddress());
+				if (!message.getOriginatorAddress().isVoid()) parameters.put("sender", message.getOriginatorAddress().getAddress());
+				else if (!getSenderAddress().isVoid()) parameters.put("sender", getSenderAddress().getAddress());
 				parameters.put("username", this.username);
 				parameters.put("password", this.password);
-				parameters.put("msisdn", message.getRecipient().getAddress());
+				parameters.put("msisdn", message.getRecipientAddress().getAddress());
 				parameters.put("message", translateText(message.getPayload().getText()));
 				if(message.getEncoding() == Encoding.EncUcs2) parameters.put("dca", "16bit");
 				parameters.put("source_id", message.getId());

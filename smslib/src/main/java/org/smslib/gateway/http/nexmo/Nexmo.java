@@ -59,9 +59,9 @@ public class Nexmo extends AbstractHttpGateway
 				message = (OutboundMessage) o;
 				parameters.put("username", this.key);
 				parameters.put("password", this.secret);
-				if (!message.getOriginator().isVoid()) parameters.put("from", message.getOriginator().getAddress());
-				else if (!getSenderId().isVoid()) parameters.put("from", getSenderId().getAddress());
-				parameters.put("to", message.getRecipient().getAddress());
+				if (!message.getOriginatorAddress().isVoid()) parameters.put("from", message.getOriginatorAddress().getAddress());
+				else if (!getSenderAddress().isVoid()) parameters.put("from", getSenderAddress().getAddress());
+				parameters.put("to", message.getRecipientAddress().getAddress());
 				parameters.put("text", translateText(message.getPayload().getText()));
 				parameters.put("client-ref", message.getId());
 				if (message.getEncoding() == Encoding.EncUcs2) parameters.put("type", "unicode");

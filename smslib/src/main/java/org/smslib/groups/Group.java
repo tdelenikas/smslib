@@ -9,13 +9,13 @@ public class Group
 {
 	String name = null;
 	String description = null;
-	List<MsIsdn> recipientList = null;
+	List<MsIsdn> addressList = null;
 
 	public Group(String name, String description)
 	{
 		this.name = name;
 		this.description = description;
-		this.recipientList = new LinkedList<MsIsdn>();
+		this.addressList = new LinkedList<MsIsdn>();
 	}
 
 	public String getName()
@@ -38,28 +38,28 @@ public class Group
 		this.description = description;
 	}
 
-	public boolean addRecipient(String msisdn)
+	public boolean addAddress(String msisdn)
 	{
-		return addRecipient(new MsIsdn(msisdn));
+		return addAddress(new MsIsdn(msisdn));
 	}
 
-	public boolean addRecipient(MsIsdn msisdn)
+	public boolean addAddress(MsIsdn msisdn)
 	{
-		return this.recipientList.add(msisdn);
+		return this.addressList.add(msisdn);
 	}
 
-	public boolean removeRecipient(String msisdn)
+	public boolean removeAddress(String msisdn)
 	{
-		return removeRecipient(new MsIsdn(msisdn));
+		return removeAddress(new MsIsdn(msisdn));
 	}
 
-	public boolean removeRecipient(MsIsdn msisdn)
+	public boolean removeAddress(MsIsdn msisdn)
 	{
-		return this.recipientList.remove(msisdn);
+		return this.addressList.remove(msisdn);
 	}
 
 	public List<MsIsdn> getRecipients()
 	{
-		return this.recipientList;
+		return this.addressList;
 	}
 }

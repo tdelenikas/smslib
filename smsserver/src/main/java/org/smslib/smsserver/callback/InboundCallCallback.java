@@ -23,7 +23,7 @@ public class InboundCallCallback implements IInboundCallCallback
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			s = db.prepareStatement("insert into smslib_calls (date, caller_id, gateway_id) values (?, ?, ?)");
+			s = db.prepareStatement("insert into smslib_calls (date, address, gateway_id) values (?, ?, ?)");
 			s.setTimestamp(1, new Timestamp(event.getDate().getTime()));
 			s.setString(2, event.getMsisdn().getAddress());
 			s.setString(3, event.getGatewayId());

@@ -110,7 +110,7 @@ public class MessageReader extends Thread
 				if (pdu.isBinary())
 				{
 					msg = new InboundBinaryMessage((SmsDeliveryPdu) pdu, memLocation, memIndex);
-					if (Service.getInstance().getKeyManager().getKey(msg.getOriginator()) != null) msg = new InboundEncryptedMessage((SmsDeliveryPdu) pdu, memLocation, memIndex);
+					if (Service.getInstance().getKeyManager().getKey(msg.getOriginatorAddress()) != null) msg = new InboundEncryptedMessage((SmsDeliveryPdu) pdu, memLocation, memIndex);
 				}
 				else
 				{

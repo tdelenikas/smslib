@@ -59,7 +59,7 @@ public class InboundMessage extends AbstractMessage
 			default:
 				logger.error("Unknown DCS Encoding: " + dcsEncoding);
 		}
-		setOriginator(new MsIsdn(pdu.getAddress()));
+		setOriginatorAddress(new MsIsdn(pdu.getAddress()));
 		setSentDate(pdu.getTimestamp());
 		setSmscNumber(new MsIsdn(pdu.getSmscAddress()));
 		setPayload(new Payload(pdu.getDecodedText()));
@@ -92,7 +92,7 @@ public class InboundMessage extends AbstractMessage
 		super(Type.Inbound, null, null, null);
 		setMemLocation(memLocation);
 		setMemIndex(memIndex);
-		setOriginator(new MsIsdn(originator));
+		setOriginatorAddress(new MsIsdn(originator));
 		setPayload(new Payload(text));
 		setSentDate(sentDate);
 	}
@@ -100,7 +100,7 @@ public class InboundMessage extends AbstractMessage
 	public InboundMessage(Type type, String memLocation, int memIndex)
 	{
 		super(type, null, null, null);
-		setOriginator(new MsIsdn());
+		setOriginatorAddress(new MsIsdn());
 		setMemIndex(memIndex);
 		setMemLocation(memLocation);
 		setMpRefNo(0);
@@ -209,12 +209,12 @@ public class InboundMessage extends AbstractMessage
 	@Override
 	public String getSignature()
 	{
-		return hashSignature(String.format("%s-%s-%s", getOriginator(), getSentDate(), getPayload().getText()));
+		return hashSignature(String.format("%s-%s-%s", getOriginatorAddress(), getSentDate(), getPayload().getText()));
 	}
 
 	@Override
 	public String toShortString()
 	{
-		return String.format("[%s @ %s]", getId(), getOriginator());
+		return String.format("[%s @ %s]", getId(), getOriginatorAddress());
 	}
 }

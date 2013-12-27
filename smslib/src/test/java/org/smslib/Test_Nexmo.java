@@ -22,7 +22,7 @@ public class Test_Nexmo extends TestCase
 		Nexmo gateway = new Nexmo("nexmo", API_ID, SECRET);
 		Service.getInstance().registerGateway(gateway);
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via Nexmo!");
-		m.setOriginator(new MsIsdn("SMSLIB"));
+		m.setOriginatorAddress(new MsIsdn("SMSLIB"));
 		Service.getInstance().send(m);
 		logger.info(m.toString());
 		logger.info("Credit Balance: " + Service.getInstance().queryCreditBalance(gateway));

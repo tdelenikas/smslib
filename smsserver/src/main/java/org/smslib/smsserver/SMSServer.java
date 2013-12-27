@@ -134,7 +134,7 @@ public class SMSServer
 	{
 		Connection db = getDbConnection();
 		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs = s.executeQuery("select class, gateway_id, p0, p1, p2, p3, p4, p5, sender_id, priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
+		ResultSet rs = s.executeQuery("select class, gateway_id, p0, p1, p2, p3, p4, p5, sender_address, priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
 		while (rs.next())
 		{
 			int fIndex = 0;
@@ -165,7 +165,7 @@ public class SMSServer
 				Class<?> c = Class.forName(className);
 				Constructor<?> constructor = c.getConstructor(argsClass);
 				AbstractGateway g = (AbstractGateway) constructor.newInstance(args);
-				if (!Common.isNullOrEmpty(senderId)) g.setSenderId(new MsIsdn(senderId));
+				if (!Common.isNullOrEmpty(senderId)) g.setSenderAddress(new MsIsdn(senderId));
 				g.setPriority(priority);
 				g.setMaxMessageParts(maxMessageParts);
 				g.setRequestDeliveryReport(requestDeliveryReport);
@@ -192,11 +192,11 @@ public class SMSServer
 			String groupName = rs1.getString(2);
 			String groupDescription = rs1.getString(3);
 			Group group = new Group(groupName, groupDescription);
-			PreparedStatement s2 = db.prepareStatement("select recipient from smslib_group_recipients where group_id = ?");
+			PreparedStatement s2 = db.prepareStatement("select address from smslib_group_recipients where group_id = ?");
 			s2.setInt(1, groupId);
 			ResultSet rs2 = s2.executeQuery();
 			while (rs2.next())
-				group.addRecipient(new MsIsdn(rs2.getString(1)));
+				group.addAddress(new MsIsdn(rs2.getString(1)));
 			rs2.close();
 			Service.getInstance().getGroupManager().addGroup(group);
 		}
@@ -210,13 +210,13 @@ public class SMSServer
 		NumberRouter nr = null;
 		Connection db = getDbConnection();
 		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs = s.executeQuery("select regex, gateway_id from smslib_number_routes where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
+		ResultSet rs = s.executeQuery("select address_regex, gateway_id from smslib_number_routes where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
 		while (rs.next())
 		{
 			if (nr == null) nr = new NumberRouter();
-			String regex = rs.getString(1);
+			String address_regex = rs.getString(1);
 			String gatewayId = rs.getString(2);
-			nr.addRule(regex, Service.getInstance().getGatewayById(gatewayId));
+			nr.addRule(address_regex, Service.getInstance().getGatewayById(gatewayId));
 		}
 		rs.close();
 		s.close();

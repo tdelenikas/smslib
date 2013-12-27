@@ -74,29 +74,29 @@ public class OutboundMessage extends AbstractMessage
 	{
 	}
 
-	public OutboundMessage(MsIsdn originator, MsIsdn recipient, Payload payload)
+	public OutboundMessage(MsIsdn originatorAddress, MsIsdn recipientAddress, Payload payload)
 	{
-		super(Type.Outbound, originator, recipient, payload);
+		super(Type.Outbound, originatorAddress, recipientAddress, payload);
 	}
 
-	public OutboundMessage(MsIsdn originator, MsIsdn recipient, String text)
+	public OutboundMessage(MsIsdn originatorAddress, MsIsdn recipientAddress, String text)
 	{
-		this(originator, recipient, new Payload(text));
+		this(originatorAddress, recipientAddress, new Payload(text));
 	}
 
-	public OutboundMessage(String originator, String recipient, String text)
+	public OutboundMessage(String originatorAddress, String recipientAddress, String text)
 	{
-		this(new MsIsdn(originator), new MsIsdn(recipient), new Payload(text));
+		this(new MsIsdn(originatorAddress), new MsIsdn(recipientAddress), new Payload(text));
 	}
 
-	public OutboundMessage(MsIsdn recipient, String text)
+	public OutboundMessage(MsIsdn recipientAddress, String text)
 	{
-		this(new MsIsdn(""), recipient, new Payload(text));
+		this(new MsIsdn(""), recipientAddress, new Payload(text));
 	}
 
-	public OutboundMessage(String recipient, String text)
+	public OutboundMessage(String recipientAddress, String text)
 	{
-		this(new MsIsdn(""), new MsIsdn(recipient), new Payload(text));
+		this(new MsIsdn(""), new MsIsdn(recipientAddress), new Payload(text));
 	}
 
 	public OutboundMessage(OutboundMessage m)
@@ -216,7 +216,7 @@ public class OutboundMessage extends AbstractMessage
 	@Override
 	public String toShortString()
 	{
-		return String.format("[%s @ %s]", getId(), getRecipient());
+		return String.format("[%s @ %s]", getId(), getRecipientAddress());
 	}
 
 	public List<String> getPdus(MsIsdn smscNumber, int mpRefNo, boolean extRequestDeliveryReport)
@@ -240,8 +240,8 @@ public class OutboundMessage extends AbstractMessage
 		pdu.setSmscAddress(smscNumber.getAddress());
 		pdu.setSmscAddressType(PduUtils.getAddressTypeFor(smscNumber));
 		pdu.setMessageReference(0);
-		pdu.setAddress(getRecipient());
-		pdu.setAddressType(PduUtils.getAddressTypeFor(getRecipient()));
+		pdu.setAddress(getRecipientAddress());
+		pdu.setAddressType(PduUtils.getAddressTypeFor(getRecipientAddress()));
 		pdu.setProtocolIdentifier(0);
 		if (!pdu.isBinary())
 		{
@@ -308,6 +308,6 @@ public class OutboundMessage extends AbstractMessage
 	@Override
 	public String getSignature()
 	{
-		return hashSignature(String.format("%s-%s", getRecipient(), getId()));
+		return hashSignature(String.format("%s-%s", getRecipientAddress(), getId()));
 	}
 }

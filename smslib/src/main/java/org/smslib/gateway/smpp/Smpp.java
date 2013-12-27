@@ -126,9 +126,9 @@ public class Smpp extends AbstractGateway
 	protected boolean _send(OutboundMessage message) throws Exception
 	{
 		SubmitSm submitRequest = new SubmitSm();
-		if (message.getOriginator().isVoid()) throw new Exception("Originator not set!");
-		submitRequest.setSourceAddress(new Address(getTON(message.getOriginator()), getNPI(message.getOriginator()), message.getOriginator().getAddress()));
-		submitRequest.setDestAddress(new Address(getTON(message.getRecipient()), getNPI(message.getRecipient()), message.getRecipient().getAddress()));
+		if (message.getOriginatorAddress().isVoid()) throw new Exception("Originator not set!");
+		submitRequest.setSourceAddress(new Address(getTON(message.getOriginatorAddress()), getNPI(message.getOriginatorAddress()), message.getOriginatorAddress().getAddress()));
+		submitRequest.setDestAddress(new Address(getTON(message.getRecipientAddress()), getNPI(message.getRecipientAddress()), message.getRecipientAddress().getAddress()));
 		switch (message.getEncoding())
 		{
 			case Enc7:

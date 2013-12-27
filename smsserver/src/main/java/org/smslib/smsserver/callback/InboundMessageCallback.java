@@ -24,8 +24,8 @@ public class InboundMessageCallback implements IInboundMessageCallback
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			s = db.prepareStatement("insert into smslib_in (originator, encoding, text, message_date, receive_date, gateway_id) values (?, ?, ?, ?, ?, ?)");
-			s.setString(1, event.getMessage().getOriginator().getAddress());
+			s = db.prepareStatement("insert into smslib_in (address, encoding, text, message_date, receive_date, gateway_id) values (?, ?, ?, ?, ?, ?)");
+			s.setString(1, event.getMessage().getOriginatorAddress().getAddress());
 			s.setString(2, event.getMessage().getEncoding().toShortString());
 			switch (event.getMessage().getEncoding())
 			{

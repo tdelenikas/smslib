@@ -23,10 +23,10 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 		try
 		{
 			db = SMSServer.getInstance().getDbConnection();
-			s = db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where recipient = ? and operator_message_id = ? and gateway_id = ?");
+			s = db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where address = ? and operator_message_id = ? and gateway_id = ?");
 			s.setString(1, event.getMessage().getDeliveryStatus().toShortString());
 			s.setTimestamp(2, new Timestamp(event.getMessage().getOriginalReceivedDate().getTime()));
-			s.setString(3, event.getMessage().getRecipient().getAddress());
+			s.setString(3, event.getMessage().getRecipientAddress().getAddress());
 			s.setString(4, event.getMessage().getOriginalOperatorMessageId());
 			s.setString(5, event.getMessage().getGatewayId());
 			s.executeUpdate();

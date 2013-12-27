@@ -67,11 +67,11 @@ public class TextMagic extends AbstractHttpGateway
 				parameters.put("username", this.userId);
 				parameters.put("password", this.password);
 				parameters.put("cmd", "send");
-				parameters.put("phone", message.getRecipient().getAddress());
+				parameters.put("phone", message.getRecipientAddress().getAddress());
 				parameters.put("text", translateText(message.getPayload().getText()));
 				parameters.put("unicode", (message.getEncoding() == Encoding.EncUcs2 ? "1" : "0"));
-				if (!message.getOriginator().isVoid()) parameters.put("from", message.getOriginator().getAddress());
-				else if (!getSenderId().isVoid()) parameters.put("from", getSenderId().getAddress());
+				if (!message.getOriginatorAddress().isVoid()) parameters.put("from", message.getOriginatorAddress().getAddress());
+				else if (!getSenderAddress().isVoid()) parameters.put("from", getSenderAddress().getAddress());
 				parameters.put("max_length", new Integer(getMaxMessageParts()).toString());
 				break;
 			case QueryBalance:
