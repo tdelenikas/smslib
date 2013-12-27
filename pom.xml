@@ -165,7 +165,7 @@
 			<id>smslib-snapshots</id>
 			<name>SMSLib Snapshot Repository</name>
 			<uniqueVersion>false</uniqueVersion>
-			<url>scp://${smslib-repo-url}/snapshots</url>
+			<url>scp://smslib.org/home/web/smslib.org/public_html/maven2/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
