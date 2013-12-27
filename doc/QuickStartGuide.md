@@ -113,6 +113,6 @@ OutboundMessage m = new OutboundMessage("301234999999", "Hello there!");
 Service.getInstance().send(m);
 ```
 
-We define a `OutboundMessage` object with the recipient's number (msisdn) and the actual message. Then, we pass it over to the Service, using the `send()` method. You will get back a TRUE if the message was sent successfully.
+We define a `OutboundMessage` object with the recipient's number (msisdn address) and the actual message. Then, we pass it over to the Service, using the `send()` method. You will get back a TRUE if the message was sent successfully.
 
 The `send()` method is a synchronous method, i.e. you will block until the message is sent (or failed). You could also use `queue()` to instruct SMSLib to send the message in the background.
