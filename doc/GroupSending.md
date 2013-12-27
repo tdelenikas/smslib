@@ -19,15 +19,15 @@ Group group = new Group("family", "My family members");
 Then, add some recipients:
 
 ```
-group.addRecipient("+306900123456");
-group.addRecipient("+306900234567");
+group.addAddress("+306900123456");
+group.addAddress("+306900234567");
 ```
 
 or
 
 ```
-group.addRecipient(new MsIsdn("+306900123456"));
-group.addRecipient(new MsIsdn("+306900234567"));
+group.addAddress(new MsIsdn("+306900123456"));
+group.addAddress(new MsIsdn("+306900234567"));
 ```
 
 Finally, register your group definition to SMSLib:
