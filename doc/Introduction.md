@@ -6,7 +6,7 @@ Welcome to the **SMSLib v4** release.
 
 SMSLib is a SMS messaging library.
 
-The goal of this library is to provide a universal texting API, which can be used for sending and receiving messages via GSM modems or bulk sms operators.
+The purpose of this library is to provide a universal texting API, which can be used for sending and receiving messages via GSM modems or bulk sms operators.
 
 Together with the universal API, SMSLib provides a messaging infrastructure with features like multiple gateways, routing, callbacks, hooks, etc. By unifying operators' requests and responses and by providing a rich set of features, SMSLib aims to be your favorite library for sms messaging.
 
@@ -14,18 +14,9 @@ SMSLib is available for Java and .NET Framework platforms. SMSLib is a pure Java
 
 SMSLib is licensed by the terms of the [Apache v2 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
-## SMSLib v4 redesign
+## SMSLib v4 vs SMSLib v3
 
-SMSLib v4 has been redesigned almost from the ground up. Here are the general goals:
-
- * Implement a simple architecture which can be easily extended.
- * Event/callback driven programming model.
- * Consistent model for both GSM modems and bulk operators.
- * Simpler serial port handling.
- * Java and .NET (IKVM) targets.
- * Maven support.
-
-Since SMSLib v4 is fully redesigned, **it's incompatible with SMSLib v3** - although many of the concepts are the same, so the transition would not be extremely difficult.
+Since SMSLib v4 is redesigned in much extent, **it's incompatible with SMSLib v3**. Most of the concepts though are the same, so the transition would not be very difficult.
 
 ## Features
 

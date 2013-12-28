@@ -2,7 +2,7 @@
 
 ## Project structure
 
-SMSLib sources are located [https://github.com/smslib](https://github.com/smslib).
+SMSLib sources are available at [https://github.com/smslib](https://github.com/smslib).
 
 We use the following git repository workflow: `master` contains the latest stable source, `dev` has the mainline development and other feature branches contain experimental code, etc.
 
@@ -23,7 +23,7 @@ The `mvn package` cycle also builds the .NET Framework library. If you work on L
 
 ## Prebuilt binaries
 
-Prebuilt binaries are published on the [SMSLib web site](http://smslib.org).
+Prebuilt binaries are frequently published on the [SMSLib web site](http://smslib.org).
 
 ## Maven
 
@@ -51,7 +51,7 @@ Don't forget to add the private SMSLib repository as well!
 </repositories>
 ```
 
-## Discussion Group
+## Announcement / Discussion Group
 
 Feel free to join [SMSLib Discussion Group](https://groups.google.com/d/forum/smslib) to ask for help, give feedback or just say hello!
 
