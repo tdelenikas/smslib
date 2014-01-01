@@ -1,1 +1,0 @@
-- Modem Flow Control should be configurable (org.smslib.gateway.modem.driver.SerialModemDriver())
