@@ -347,7 +347,12 @@ public class Service
 	public int queue(OutboundMessage message) throws Exception
 	{
 		int messageCount = 0;
-		if ((getPreQueueHook() != null) && !getPreQueueHook().process(message)) return 0;
+		if ((getPreQueueHook() != null) && !getPreQueueHook().process(message))
+		{
+			message.setSentStatus(SentStatus.Failed);
+			message.setFailureCause(FailureCause.Cancelled);
+			return 0;
+		}
 		LinkedList<OutboundMessage> messageList = distributeToGroup(message);
 		for (OutboundMessage m : messageList)
 		{
