@@ -46,4 +46,7 @@ If you want to send a message to a predefined group, do
 Service.getInstance().queue(new OutboundMessage("family", "Greetings, family!");
 ```
 
-Note that a message sent to a group automatically creates many similar messages (with different recipients). So prepare to receive many callback calls - as many as your group's recipients.
+Note that:
+
+* The group expansion works **only** with asynchronous messaging, i.e. when using the `queue()` method. When using the `send()` method, **no** group expansion takes place.
+* a message sent to a group automatically creates many similar messages (with different recipients). So prepare to receive many notification calls - as many as your group's recipients.

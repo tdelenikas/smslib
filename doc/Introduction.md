@@ -14,9 +14,9 @@ SMSLib is available for Java and .NET Framework platforms. SMSLib is a pure Java
 
 SMSLib is licensed by the terms of the [Apache v2 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
-## SMSLib v4 vs SMSLib v3
+## Compatibility issues
 
-Since SMSLib v4 is redesigned in much extent, **it's incompatible with SMSLib v3**. Most of the concepts though are the same, so the transition would not be very difficult.
+Since SMSLib v4 is redesigned to a great extent, **it's incompatible with SMSLib v3**. Most of the concepts though are the same, so the transition would not be very difficult.
 
 ## Features
 
