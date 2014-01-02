@@ -3,6 +3,7 @@ package org.smslib;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -11,6 +12,7 @@ import org.junit.Test;
  * @author derjust
  *
  */
+@Ignore("Requires hardware to be present. Please check final fields and update for your local settings")
 public class SMSLibModemTest extends CamelTestSupport {
 
 	private static final String port = "COM5";
