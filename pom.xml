@@ -12,6 +12,7 @@
 		<mail.version>1.4</mail.version>
 		<ikvm>ikvm-7.2.4630.5</ikvm>
 		<camel.version>2.12.0</camel.version>
+		<nrjavaserial.version>3.7.5.1</nrjavaserial.version>
 	</properties>
 	<prerequisites>
 		<maven>2.2.1</maven>
@@ -61,11 +62,11 @@
 	<modules>
 		<module>smslib</module>
 		<module>smslib-camel</module>
-		<module>smslib-dep</module>
-		<module>smslib-dotnet</module>
+		<module>smslib-dep</module><!-- 
+		<module>smslib-dotnet</module> -->
 		<module>smsserver</module>
-		<module>smsserver-dep</module>
-		<module>smsserver-dotnet</module>
+		<module>smsserver-dep</module><!-- 
+		<module>smsserver-dotnet</module>-->
   </modules>
 	<build>
 <!--

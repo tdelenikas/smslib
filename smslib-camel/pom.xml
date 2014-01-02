@@ -12,6 +12,24 @@
   <artifactId>smslib-camel</artifactId>
   <packaging>bundle</packaging>
   <name>SMSLib - SMSLib Camel Endpoint</name>
+  <description>Apache Camel endpoint implementation of the SMSlib API</description>
+
+  <developers>
+    <developer>
+      <name>Thanasis Delenikas</name>
+      <email>admin@smslib.org</email>
+      <roles>
+        <role>Author</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>derjust</name>
+      <email>zeeman@zeeman.de</email>
+      <roles>
+        <role>Author</role>
+      </roles>
+    </developer>
+  </developers>
 
   <dependencies>
     <dependency>
@@ -24,7 +42,7 @@
       <artifactId>camel-core</artifactId>
       <version>${camel.version}</version>
     </dependency>
-
+    
     <!-- logging -->
 	<dependency>
 		<groupId>org.slf4j</groupId>
@@ -57,12 +75,17 @@
 		<version>${junit.version}</version>
 		<scope>test</scope>
 	</dependency>
+    <dependency>
+		<groupId>com.neuronrobotics</groupId>
+		<artifactId>nrjavaserial</artifactId>
+		<version>${nrjavaserial.version}</version>
+		<scope>test</scope>
+	</dependency>
   </dependencies>
 
   <build>
 
     <plugins>
-      
       <!-- to generate the MANIFEST-FILE of the bundle -->
       <plugin>
         <groupId>org.apache.felix</groupId>

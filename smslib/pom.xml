@@ -11,6 +11,24 @@
 	<name>SMSLib - SMSLib</name>
 	<dependencies>
 		<dependency>
+			<!-- Optional dependency usually for Linux/MacOS - only required during runtime. 1:1 replacement of RXTX but
+			with active community and "hidden" native library loading: https://code.google.com/p/nrjavaserial/ -->
+			<groupId>com.neuronrobotics</groupId>
+			<artifactId>nrjavaserial</artifactId>
+			<version>${nrjavaserial.version}</version>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<!-- Optional dependency usually for Windows - only required during runtime. -->
+			<groupId>javax.comm</groupId>
+			<artifactId>comm</artifactId>
+			<version>2.0.3</version>
+			<type>pom</type>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
