@@ -90,7 +90,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -112,7 +112,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -131,7 +131,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -190,7 +190,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
