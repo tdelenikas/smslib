@@ -1,11 +1,24 @@
-package org.smslib;
+package org.smslib.camel;
 
 import org.apache.camel.spi.UriPath;
 import org.smslib.gateway.MockGateway;
 
+/**
+ * Wrapper around {@link MockGateway} for Camel.
+ * Provides a delay and a failureRate at which messages are generated and delivered to the route.
+ * 
+ * @author derjust
+ */
 public class MockEndpoint extends SMSLibEndpoint {
+	/**
+	 * percent rate of failure. Any value > 0 is treated as "always".
+	 * Details can be found in {@link org.smslib.gateway.MockGateway.failOperation()}
+	 */
 	@UriPath
 	private int failureRate;
+	/**
+	 * Delay in ms between each message
+	 */
 	@UriPath
 	private int delay;
 

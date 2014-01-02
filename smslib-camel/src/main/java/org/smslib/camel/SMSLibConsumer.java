@@ -1,4 +1,4 @@
-package org.smslib;
+package org.smslib.camel;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -6,15 +6,18 @@ import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smslib.Service;
 import org.smslib.callback.IInboundMessageCallback;
 import org.smslib.callback.events.InboundMessageEvent;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.message.InboundMessage;
 
-import static org.smslib.SMSLibEndpoint.*;
+import static org.smslib.camel.SMSLibEndpoint.*;
 
 /**
  * The SMSLib consumer.
+ * The consumer maps all fields of the incomming message to headers in the exchange and preserves the incomming payload (String or Byte[]) as exchange's body.
+ * @author derjust
  */
 public class SMSLibConsumer extends DefaultConsumer {
 
@@ -22,17 +25,23 @@ public class SMSLibConsumer extends DefaultConsumer {
 
     private IInboundMessageCallback inboundMessageCallback = new IInboundMessageCallback() {
 
+		/**
+		 * Maps the incomming SMSlib event to a Camel exchange.
+		 * @param event The SMSlib event which was received
+		 * @return The created and filled exchange
+		 */
 		private Exchange mapMessage(InboundMessageEvent event) {
 			Exchange exchange = getEndpoint().createExchange();
 
 			InboundMessage inputMessage = event.getMessage();
-			
+			//Update the timesamp to "now"
 	        exchange.setProperty(Exchange.RECEIVED_TIMESTAMP, (new java.util.Date()).getTime());
 	        
 	        Message outputMessage = exchange.getIn();
 			outputMessage.setHeader(HEADER_BODY_TYPE, inputMessage.getPayload().getType().name());
 			switch (inputMessage.getPayload().getType()) {
 			case Text:
+				//Encoding is expected to done already by SMSlib
 				outputMessage.setBody(inputMessage.getPayload().getText());
 				break;
 			case Binary:
@@ -43,6 +52,7 @@ public class SMSLibConsumer extends DefaultConsumer {
 				break;
 			}
 			
+			//Map all fields to exchange headers
 			outputMessage.setHeader(HEADER_TYPE, inputMessage.getType().name());
 	        outputMessage.setHeader(HEADER_DESTINATION_PORT, inputMessage.getDestinationPort());
 	        outputMessage.setHeader(HEADER_ENCODING, inputMessage.getEncoding().name());
@@ -64,6 +74,13 @@ public class SMSLibConsumer extends DefaultConsumer {
 			return exchange;
 		}
 		
+		/** 
+		 * Handler of SMSlib to process the incomming messages.
+		 * Each event is mapped to a Camel exchange and any exception is propagated to Camel
+		 * @param event The SMSlib event to process
+		 * @see Exchange#setException(Throwable)
+		 * @see org.smslib.callback.IInboundMessageCallback#process(org.smslib.callback.events.InboundMessageEvent)
+		 */
 		@Override
 		public boolean process(InboundMessageEvent event) {
 			Exchange exchange = mapMessage(event);

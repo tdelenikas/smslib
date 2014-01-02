@@ -1,1 +1,1 @@
-class=org.smslib.SMSLibComponent
+class=org.smslib.camel.SMSLibComponent

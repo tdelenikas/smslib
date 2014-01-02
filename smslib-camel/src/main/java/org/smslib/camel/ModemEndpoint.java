@@ -1,8 +1,14 @@
-package org.smslib;
+package org.smslib.camel;
 
 import org.apache.camel.spi.UriParam;
 import org.smslib.gateway.modem.Modem;
 
+/**
+ * Wrapper around {@link Modem} for Camel.
+ * Provides all the constructor paramters of SMSlib's Modem as URI paramter to pass all initalization data from the route to SMSlib
+ * 
+ * @author derjust
+ */
 public class ModemEndpoint extends SMSLibEndpoint {
 	/** IP Address to a bulk provider or COM port */
 	@UriParam
@@ -10,12 +16,16 @@ public class ModemEndpoint extends SMSLibEndpoint {
 	/** Port to a bulk provider or COM baud rate */
 	@UriParam
 	private String port;
+	/** PIN of the used SIM  */
 	@UriParam
 	private String simPin;
+	/** PIN2 of the used SIM  */
 	@UriParam
 	private String simPin2;
+	/** SMSC number to be used - Only digits and + are allowed*/
 	@UriParam
 	private String smscNumber;
+	/** Memory location of the GSM hardware to use - usually not required */
 	@UriParam
 	private String memoryLocations;
 

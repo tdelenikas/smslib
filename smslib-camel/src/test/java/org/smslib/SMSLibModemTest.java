@@ -5,23 +5,38 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
+/**
+ * Test case to test incoming SMS via SMSlib based serial port modem
+ * 
+ * @author derjust
+ *
+ */
 public class SMSLibModemTest extends CamelTestSupport {
 
-    @Test
-    public void testSMSLib() throws Exception {
-        MockEndpoint mock = getMockEndpoint("mock:result");
-        mock.expectedMinimumMessageCount(1);       
-        
-        assertMockEndpointsSatisfied();
-    }
+	private static final String port = "COM5";
+	private static final String baud = "19200";
+	private static final String pin = "0000";
+	private static final String smscNumber = "3097100000";
 
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            public void configure() {
-                from("smslib://modem?address=COM8&port=19200&simPin=0000&simPin2=0000&smscNumber=3097100000")
-                  .to("mock:result");
-            }
-        };
-    }
+	@Test
+	public void testSMSLib() throws Exception {
+		MockEndpoint mock = getMockEndpoint("mock:result");
+		mock.expectedMinimumMessageCount(1);
+
+		assertMockEndpointsSatisfied();
+	}
+
+	@Override
+	protected RouteBuilder createRouteBuilder() throws Exception {
+		return new RouteBuilder() {
+			public void configure() {
+				from("smslib://modem?" //
+						+ "address=" + port //
+						+ "&port=" + baud //
+						+ "&simPin=" + pin + "&simPin2=" + pin //
+						+ "&smscNumber=" + smscNumber) //
+						.to("mock:result");
+			}
+		};
+	}
 }
