@@ -111,6 +111,18 @@ If you are getting one or two framing errors during the initial connection (and 
 
 If you are consistently getting framing errors, probably you are trying to connect with a baud rate that is unsupported by your modem. Some modems require a fixed baud rate to operate. Either consult your manual or try with different baud speeds.
 
+### Identify the port a modem is attached to
+
+If you run the SMSLib jar file alone, it will run an auto-detect function which will iterate all "visible" comm ports of your system and will try to communicate with the devices attached to them.
+
+Run
+
+```
+java -jar smslib-dep-dev-SNAPSHOT-all.jar
+```
+
+and observe the output.
+
 ## Notes regarding modem usage
 
 ### Inbound Messages
