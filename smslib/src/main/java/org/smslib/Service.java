@@ -20,10 +20,13 @@
 
 package org.smslib;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import org.slf4j.Logger;
@@ -42,6 +45,8 @@ import org.smslib.core.Settings;
 import org.smslib.core.Statistics;
 import org.smslib.crypto.KeyManager;
 import org.smslib.gateway.AbstractGateway;
+import org.smslib.gateway.modem.driver.serial.CommPortIdentifier;
+import org.smslib.gateway.modem.driver.serial.SerialPort;
 import org.smslib.groups.Group;
 import org.smslib.groups.GroupManager;
 import org.smslib.helper.Common;
@@ -659,24 +664,122 @@ public class Service
 		return keyManager;
 	}
 
+	public void testCommPorts()
+	{
+		int bauds[] = { 9600, 14400, 19200, 28800, 33600, 38400, 56000, 57600, 115200 };
+		Enumeration<CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
+		while (portList.hasMoreElements())
+		{
+			CommPortIdentifier portId = portList.nextElement();
+			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL)
+			{
+				System.out.println(String.format("====== Found port: %-5s", portId.getName()));
+				for (int i = 0; i < bauds.length; i++)
+				{
+					SerialPort serialPort = null;
+					System.out.print(String.format(">> Trying at %6d...", bauds[i]));
+					try
+					{
+						InputStream inStream;
+						OutputStream outStream;
+						int c;
+						String response;
+						serialPort = portId.open("SMSLibCommTester", 5000);
+						serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN);
+						serialPort.setSerialPortParams(bauds[i], SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+						inStream = serialPort.getInputStream();
+						outStream = serialPort.getOutputStream();
+						serialPort.enableReceiveTimeout(1000);
+						c = inStream.read();
+						while (c != -1)
+							c = inStream.read();
+						outStream.write('A');
+						outStream.write('T');
+						outStream.write('\r');
+						Thread.sleep(1000);
+						response = "";
+						StringBuilder sb = new StringBuilder();
+						c = inStream.read();
+						while (c != -1)
+						{
+							sb.append((char) c);
+							c = inStream.read();
+						}
+						response = sb.toString();
+						if (response.indexOf("OK") >= 0)
+						{
+							try
+							{
+								System.out.print("  Getting Info...");
+								outStream.write('A');
+								outStream.write('T');
+								outStream.write('+');
+								outStream.write('C');
+								outStream.write('G');
+								outStream.write('M');
+								outStream.write('M');
+								outStream.write('\r');
+								response = "";
+								c = inStream.read();
+								while (c != -1)
+								{
+									response += (char) c;
+									c = inStream.read();
+								}
+								System.out.println(" Found: " + response.replaceAll("\\s+OK\\s+", "").replaceAll("\n", "").replaceAll("\r", ""));
+							}
+							catch (Exception e)
+							{
+								System.out.println("No device...");
+							}
+						}
+						else
+						{
+							System.out.println("No device...");
+						}
+					}
+					catch (Exception e)
+					{
+						System.out.print("No device...");
+						Throwable cause = e;
+						while (cause.getCause() != null)
+							cause = cause.getCause();
+						System.out.println(" (" + cause.getMessage() + ")");
+					}
+					finally
+					{
+						if (serialPort != null)
+						{
+							serialPort.close();
+						}
+					}
+				}
+			}
+		}
+		System.out.println("\nTest complete.");
+	}
+
 	public static void main(String[] args)
 	{
-		logger.info(Settings.LIBRARY_INFO);
-		logger.info(Settings.LIBRARY_COPYRIGHT);
-		logger.info(Settings.LIBRARY_LICENSE);
-		logger.info("SMSLib Version: " + Settings.LIBRARY_VERSION);
-		logger.info("OS Version: " + System.getProperty("os.name") + " / " + System.getProperty("os.arch") + " / " + System.getProperty("os.version"));
-		logger.info("JAVA Version: " + System.getProperty("java.version"));
-		logger.info("JAVA Runtime Version: " + System.getProperty("java.runtime.version"));
-		logger.info("JAVA Vendor: " + System.getProperty("java.vm.vendor"));
-		logger.info("JAVA Class Path: " + System.getProperty("java.class.path"));
+		System.out.println(Settings.LIBRARY_INFO);
+		System.out.println(Settings.LIBRARY_COPYRIGHT);
+		System.out.println(Settings.LIBRARY_LICENSE);
+		System.out.println("SMSLib Version: " + Settings.LIBRARY_VERSION);
+		System.out.println("OS Version: " + System.getProperty("os.name") + " / " + System.getProperty("os.arch") + " / " + System.getProperty("os.version"));
+		System.out.println("JAVA Version: " + System.getProperty("java.version"));
+		System.out.println("JAVA Runtime Version: " + System.getProperty("java.runtime.version"));
+		System.out.println("JAVA Vendor: " + System.getProperty("java.vm.vendor"));
+		System.out.println("JAVA Class Path: " + System.getProperty("java.class.path"));
 		try
 		{
 			getInstance().terminate();
+			System.out.println();
+			System.out.println("Running port autodetection / diagnostics...");
+			System.out.println();
+			getInstance().testCommPorts();
 		}
 		catch (Exception e)
 		{
-			logger.error("Unhandled exception!", e);
 			e.printStackTrace();
 		}
 	}
