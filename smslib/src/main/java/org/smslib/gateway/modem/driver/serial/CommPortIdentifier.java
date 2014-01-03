@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Vector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Communications port management.
@@ -37,6 +39,8 @@ import java.util.Vector;
  */
 public class CommPortIdentifier
 {
+	static Logger logger = LoggerFactory.getLogger(CommPortIdentifier.class);
+
 	static private Class<?> classCommPortIdentifier;
 
 	public static final int PORT_SERIAL;
@@ -45,12 +49,14 @@ public class CommPortIdentifier
 		try
 		{
 			classCommPortIdentifier = Class.forName("javax.comm.CommPortIdentifier");
+			logger.info("Using 'javax.comm' serial library.");
 		}
 		catch (ClassNotFoundException e1)
 		{
 			try
 			{
 				classCommPortIdentifier = Class.forName("gnu.io.CommPortIdentifier");
+				logger.info("Using 'RxTx' serial library.");
 			}
 			catch (ClassNotFoundException e2)
 			{
