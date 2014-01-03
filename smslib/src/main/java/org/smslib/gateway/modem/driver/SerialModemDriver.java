@@ -36,7 +36,7 @@ public class SerialModemDriver extends AbstractModemDriver implements SerialPort
 		logger.debug("Opening comm port: " + getPortInfo());
 		CommPortIdentifier.getPortIdentifiers();
 		this.portId = CommPortIdentifier.getPortIdentifier(this.portName);
-		this.serialPort = this.portId.open("org.smslib", 1971);
+		this.serialPort = this.portId.open("smslib", 10000);
 		this.in = this.serialPort.getInputStream();
 		this.out = this.serialPort.getOutputStream();
 		this.serialPort.setSerialPortParams(this.baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
@@ -46,9 +46,9 @@ public class SerialModemDriver extends AbstractModemDriver implements SerialPort
 		this.serialPort.enableReceiveTimeout(Integer.valueOf(getModemSettings("timeout")));
 		this.serialPort.notifyOnDataAvailable(true);
 		this.serialPort.addEventListener(this);
-		if (getModemSettings("flowcontrol").equalsIgnoreCase("INOUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | SerialPort.FLOWCONTROL_RTSCTS_OUT);
-		else if (getModemSettings("flowcontrol").equalsIgnoreCase("IN")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN);
-		else if (getModemSettings("flowcontrol").equalsIgnoreCase("OUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_OUT);
+		//if (getModemSettings("flowcontrol").equalsIgnoreCase("INOUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | SerialPort.FLOWCONTROL_RTSCTS_OUT);
+		//else if (getModemSettings("flowcontrol").equalsIgnoreCase("IN")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN);
+		//else if (getModemSettings("flowcontrol").equalsIgnoreCase("OUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_OUT);
 		this.pollReader = new PollReader();
 		this.pollReader.start();
 	}
