@@ -1,7 +1,7 @@
 // SMSLib for Java v4
 // A universal API for sms messaging.
 //
-// Copyright (C) 2002-2013, smslib.org
+// Copyright (C) 2002-2014, smslib.org
 // For more information, visit http://smslib.org
 // SMSLib is distributed under the terms of the Apache License version 2.0
 //

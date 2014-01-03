@@ -10,7 +10,7 @@ The goal of this library is to provide a universal texting API, which can be use
 
 All SMSLib components are licensed under the terms of the Apache v2 license.
 
-Copyright (c) 2002-2013, smslib.org
+Copyright (c) 2002-2014, smslib.org
 
 Copyright (c) 2008, Ateneo Java Wireless Competency Center/Blueblade Technologies, Philippines.
 
