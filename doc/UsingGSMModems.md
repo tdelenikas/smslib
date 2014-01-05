@@ -56,7 +56,7 @@ IP modems do not require anything special or any 3rd party libraries. Just make 
 
 The SMSLib for Microsoft .NET Framework sees all modems as IP Modems. If you have a serial modem, you can use the [Comm2IP](https://github.com/smslib/comm2ip) in order to map your serial port to an IP endpoint. From then on, use your modem as an IP modem.
 
-### Modem gateway initialization
+## Modem gateway initialization
 
 A Serial Modem gateway is initialized like this:
 
@@ -123,7 +123,7 @@ java -jar smslib-dep-dev-SNAPSHOT-all.jar
 
 and observe the output.
 
-## Notes regarding modem usage
+## Notes about modem usage
 
 ### Inbound Messages
 

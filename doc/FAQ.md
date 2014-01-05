@@ -47,6 +47,8 @@ Yes.
 
 SMSLib supports 7bit (GSM default alphabet), 8bit (aka binary) and Unicode (UCS2) encoding.
 
+Furthermore, SMSLib supports both PDU and TEXT mode modem communication. Although some modems (CDMA, etc) can only work in TEXT mode, you are advised to **avoid** TEXT mode whenever possible.
+
 ### Does SMSLib support port addressing?
 
 Yes.

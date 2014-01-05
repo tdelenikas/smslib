@@ -4,7 +4,7 @@ SMSLib has some settings that affect modem operation. For the majority of cases,
 
 ## Configuration file
 
-The configuration file is called `modem.properties`, located in folder `smslib\src\main\resources`. It's a plain text file.
+The configuration file is called `modem.properties`, located in folder `smslib/src/main/resources`. It's a plain text file.
 
 Settings are hierarchically defined. Settings starting with *default* are the (guess what...) default values. You can override the settings, by redefining the setting by the appropriate key starting with the *modem signature id*. The look-up order start with the **manufacturer/model** specific settings, falls back to **manufacturer** specific settings and finally to **default** settings.
 

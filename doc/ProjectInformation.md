@@ -8,8 +8,8 @@ We use the following git repository workflow: `master` contains the latest stabl
 
 The SMSLib project includes the following subprojects:
 
-* `comm2ip` : The Comm2IP utility: [https://github.com/smslib/comm2ip](https://github.com/smslib/comm2ip).
-* `smslib` : The SMSLib library: [https://github.com/smslib/smslib](https://github.com/smslib/smslib).
+* `comm2ip` : The Comm2IP utility: [https://github.com/smslib/comm2ip](https://github.com/smslib/comm2ip)
+* `smslib` : The SMSLib library: [https://github.com/smslib/smslib](https://github.com/smslib/smslib)
 
 ## How to build Comm2IP
 
@@ -21,13 +21,11 @@ For SMSLib, clone the source repository and follow the typical Maven cycles.
 
 The `mvn package` cycle also builds the .NET Framework library. If you work on Linux, remember to edit the main `pom.xml` and remove the `xxx-dotnet` dependencies.
 
-## Prebuilt binaries
-
-Prebuilt binaries are frequently published on the [SMSLib web site](http://smslib.org).
-
 ## Maven
 
-If you are using Maven, SMSLib provices a private maven repository. Add the following dependency to your project:
+If you are using Maven, SMSLib provides a private maven repository.
+
+To access the snapshot builds, add the following dependency to your project:
 
 ```
 <dependency>
@@ -37,7 +35,7 @@ If you are using Maven, SMSLib provices a private maven repository. Add the foll
 </dependency>
 ```
 
-Don't forget to add the private SMSLib repository as well!
+Don't forget to add the private SMSLib repositories as well!
 
 ```
 <repositories>
@@ -50,6 +48,8 @@ Don't forget to add the private SMSLib repository as well!
    ...
 </repositories>
 ```
+
+Snapshot artifacts are **always** named `dev-SNAPSHOT` and are based on the `dev` branch. They are updated whenever there are changes in the `dev` branch.
 
 ## Announcement / Discussion Group
 
