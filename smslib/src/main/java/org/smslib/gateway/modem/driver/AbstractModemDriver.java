@@ -49,6 +49,8 @@ public abstract class AbstractModemDriver
 
 	Pattern rxCallerId = Pattern.compile("\\p{Punct}CLIP\\s*:\\s*(\"\\p{Punct}*\\d*\").*");
 
+	Pattern rxSupportedEncodings = Pattern.compile("\\+CSCS:\\s+(.*)");
+
 	public abstract void openPort() throws IOException, TimeoutException, InterruptedException;
 
 	public abstract void closePort() throws IOException, TimeoutException, InterruptedException;
@@ -339,6 +341,16 @@ public abstract class AbstractModemDriver
 					caps.set(Caps.CanSendMessage);
 					this.modem.setCapabilities(caps);
 					this.deviceInformation.setMode(Modes.TEXT);
+					ModemResponse encodings = atGetSupportedEncodings();
+					String encSet = encodings.getResponseData();
+					Matcher m = this.rxSupportedEncodings.matcher(encodings.getResponseData());
+					encSet = m.group(1);
+					encSet = encSet.replace("(", "");
+					encSet = encSet.replace(")", "");
+					encSet = encSet.replace("\"", "");
+					StringTokenizer tokens = new StringTokenizer(encSet, ",");
+					while (tokens.hasMoreTokens())
+						deviceInformation.getSupportedEncodings().add(tokens.nextToken());
 				}
 				else throw new IOException("Neither PDU nor TEXT mode are supported by this modem!");
 			}
@@ -524,18 +536,26 @@ public abstract class AbstractModemDriver
 
 	public int atSendTEXTMessage(String recipient, String text) throws IOException, TimeoutException, NumberFormatException, InterruptedException
 	{
-		write(String.format("AT+CSCS=\"GSM\""));
-		clearResponses();
 		write(String.format("AT+CMGS=\"%s\"\r", recipient), true);
 		while (this.buffer.length() == 0)
 			Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")));
 		Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")) * Integer.valueOf(getModemSettings("delay_before_send_pdu")));
 		clearResponses();
-		write(text);
+		write(text, true);
 		write((byte) 26);
 		String response = getResponse();
 		if (this.responseOk) return Integer.parseInt(response.substring(response.indexOf(":") + 1).trim());
 		return -1;
+	}
+
+	public ModemResponse atSetEncoding(String encoding) throws NumberFormatException, IOException, TimeoutException, InterruptedException
+	{
+		return write(String.format("AT+CSCS=\"%s\"\r", encoding));
+	}
+
+	public ModemResponse atGetSupportedEncodings() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	{
+		return write("AT+CSCS=?\r");
 	}
 
 	public ModemResponse atGetMemoryLocations() throws IOException, TimeoutException, NumberFormatException, InterruptedException

@@ -1,6 +1,9 @@
 
 package org.smslib.gateway.modem;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 public class DeviceInformation
 {
 	public enum Modes
@@ -20,7 +23,9 @@ public class DeviceInformation
 
 	int rssi = 0;
 
-	public Modes mode;
+	Modes mode;
+
+	Collection<String> supportedEncodings = new HashSet<String>();
 
 	public String getManufacturer()
 	{
@@ -90,6 +95,11 @@ public class DeviceInformation
 	public void setMode(Modes mode)
 	{
 		this.mode = mode;
+	}
+
+	public Collection<String> getSupportedEncodings()
+	{
+		return this.supportedEncodings;
 	}
 
 	@Override

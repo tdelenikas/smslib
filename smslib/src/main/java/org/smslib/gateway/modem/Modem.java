@@ -136,6 +136,11 @@ public class Modem extends AbstractGateway
 		}
 	}
 
+	public boolean setEncoding(String encoding) throws Exception
+	{
+		return (this.modemDriver.atSetEncoding(encoding).isResponseOk());
+	}
+
 	public ModemResponse sendATCommand(String atCommand) throws Exception
 	{
 		return this.modemDriver.write(atCommand);

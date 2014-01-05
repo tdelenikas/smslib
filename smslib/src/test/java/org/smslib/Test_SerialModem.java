@@ -45,36 +45,39 @@ public class Test_SerialModem extends TestCase
 	public void test() throws Exception
 	{
 		if (RECIPIENT.length() > 0) Service.getInstance().getKeyManager().registerKey(RECIPIENT, new AESKey(new SecretKeySpec("0011223344556677".getBytes(), "AES")));
-		if (true) logger.info("Serial Modem test disabled!");
-		else
+		Service.getInstance().setInboundMessageCallback(new InboundMessageCallback());
+		Service.getInstance().setDeliveryReportCallback(new DeliveryReportCallback());
+		Service.getInstance().start();
+		Modem gateway = new Modem("modem", "COM4", "19200", "0000", "0000", "3097100000", "");
+		Service.getInstance().registerGateway(gateway);
+		// Print out some device information.
+		logger.info("Manufacturer       : " + gateway.getModemDriver().getDeviceInformation().getManufacturer());
+		logger.info("Signal (RSSI)      : " + gateway.getModemDriver().getDeviceInformation().getRssi() + "dBm");
+		logger.info("Mode               : " + gateway.getModemDriver().getDeviceInformation().getMode());
+		logger.info("Supported Encodings: " + gateway.getModemDriver().getDeviceInformation().getSupportedEncodings());
+		// Sleep to emulate async operation.
+		Thread.sleep(20000);
+		if (RECIPIENT.length() > 0)
 		{
-			Service.getInstance().setInboundMessageCallback(new InboundMessageCallback());
-			Service.getInstance().setDeliveryReportCallback(new DeliveryReportCallback());
-			Service.getInstance().start();
-			Modem gateway = new Modem("modem", "COM4", "19200", "0000", "0000", "3097100000", "");
-			Service.getInstance().registerGateway(gateway);
-			Thread.sleep(20000);
-			if (RECIPIENT.length() > 0)
-			{
-				logger.info("Sending a simple test message...");
-				Service.getInstance().send(new OutboundMessage(RECIPIENT, "Test"));
-				Thread.sleep(20000);
-				logger.info("Sending an encrypted message...");
-				Service.getInstance().send(new OutboundEncryptedMessage(RECIPIENT, "TestABC123".getBytes()));
-				Thread.sleep(20000);
-			}
-			Service.getInstance().unregisterGateway(gateway);
-			try
-			{
-				gateway.refreshDeviceInfo();
-				throw new RuntimeException("Should never get here!");
-			}
-			catch (Exception e)
-			{
-				//
-			}
-			Service.getInstance().stop();
-			Service.getInstance().terminate();
+			logger.info("Sending a simple test message...");
+			OutboundMessage message = new OutboundMessage(RECIPIENT, "Test");
+			message.setRequestDeliveryReport(true);
+			if (!Service.getInstance().send(message)) logger.error("The message could NOT be send!");
+			//logger.info("Sending an encrypted message...");
+			//Service.getInstance().send(new OutboundEncryptedMessage(RECIPIENT, "TestABC123".getBytes()));
+			Thread.sleep(60000);
 		}
+		Service.getInstance().unregisterGateway(gateway);
+		try
+		{
+			gateway.refreshDeviceInfo();
+			throw new RuntimeException("Should never get here!");
+		}
+		catch (Exception e)
+		{
+			// Normal to get here... Swallow it!
+		}
+		Service.getInstance().stop();
+		Service.getInstance().terminate();
 	}
 }
