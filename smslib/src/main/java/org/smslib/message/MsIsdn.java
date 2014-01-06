@@ -77,7 +77,7 @@ public class MsIsdn
 	@Override
 	public int hashCode()
 	{
-		return address.hashCode() + (15 * type.hashCode());
+		return this.address.hashCode() + (15 * this.type.hashCode());
 	}
 
 	private static Type typeOf(String number)

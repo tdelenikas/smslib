@@ -2,6 +2,7 @@
 package org.smslib.gateway.http.clickatell;
 
 import java.io.IOException;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
@@ -64,6 +65,12 @@ public class Clickatell extends AbstractHttpGateway
 	public Clickatell(String gatewayId, String... parms)
 	{
 		this(gatewayId, parms[0], parms[1], parms[2]);
+	}
+
+	@Override
+	protected void prepareUrlConnection(URLConnection con)
+	{
+		// Nothing here on purpose!
 	}
 
 	@Override
@@ -236,7 +243,7 @@ public class Clickatell extends AbstractHttpGateway
 
 	protected boolean authorize() throws IOException
 	{
-		Hashtable<String, String> parms = new Hashtable<String, String>();
+		Hashtable<String, String> parms = new Hashtable<>();
 		parms.put("api_id", this.apiId);
 		parms.put("user", this.username);
 		parms.put("password", this.password);

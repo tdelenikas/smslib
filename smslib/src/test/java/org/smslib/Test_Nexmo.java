@@ -17,9 +17,9 @@ public class Test_Nexmo extends TestCase
 
 	public void test() throws Exception
 	{
-		if (API_ID.equalsIgnoreCase("api-id")) return;
+		if (this.API_ID.equalsIgnoreCase("api-id")) return;
 		Service.getInstance().start();
-		Nexmo gateway = new Nexmo("nexmo", API_ID, SECRET);
+		Nexmo gateway = new Nexmo("nexmo", this.API_ID, this.SECRET);
 		Service.getInstance().registerGateway(gateway);
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via Nexmo!");
 		m.setOriginatorAddress(new MsIsdn("SMSLIB"));

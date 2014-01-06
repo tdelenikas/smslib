@@ -57,6 +57,6 @@ public class DefaultOutboundQueue implements IOutboundQueue<OutboundMessage>
 	@Override
 	public int size() throws Exception
 	{
-		return messageQueue.size();
+		return this.messageQueue.size();
 	}
 }

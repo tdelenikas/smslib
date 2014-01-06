@@ -513,7 +513,7 @@ public abstract class Pdu
 		{
 			case PduUtils.DCS_ENCODING_7BIT:
 				// unpack all septets to octets with MSB holes
-				byte[] septets = PduUtils.encodedSeptetsToUnencodedSeptets(udData);
+				byte[] septets = PduUtils.encodedSeptetsToUnencodedSeptets(this.udData);
 				int septetUDHLength = 0;
 				if (getUDHData() != null)
 				{
@@ -524,7 +524,7 @@ public abstract class Pdu
 						septetUDHLength++;
 					}
 				}
-				byte[] septetsNoUDH = new byte[udLength - septetUDHLength];
+				byte[] septetsNoUDH = new byte[this.udLength - septetUDHLength];
 				// src, srcStart, dest, destStart, length
 				System.arraycopy(septets, septetUDHLength, septetsNoUDH, 0, septetsNoUDH.length);
 				return PduUtils.unencodedSeptetsToString(septetsNoUDH);

@@ -171,7 +171,7 @@ public class HttpServer implements Container
 	public void start() throws IOException
 	{
 		this.container = new HttpServer();
-		this.server = new ContainerServer(container);
+		this.server = new ContainerServer(this.container);
 		this.connection = new SocketConnection(this.server);
 		SocketAddress address = new InetSocketAddress(Settings.httpServerPort);
 		this.connection.connect(address);

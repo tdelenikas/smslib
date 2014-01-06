@@ -10,6 +10,7 @@ import org.smslib.helper.Common;
 
 public class IPModemDriver extends AbstractModemDriver
 {
+	@SuppressWarnings("hiding")
 	static Logger logger = LoggerFactory.getLogger(IPModemDriver.class);
 
 	String address;

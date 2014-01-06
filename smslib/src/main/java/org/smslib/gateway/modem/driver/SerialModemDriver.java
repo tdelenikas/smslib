@@ -12,6 +12,7 @@ import org.smslib.gateway.modem.driver.serial.SerialPortEventListener;
 
 public class SerialModemDriver extends AbstractModemDriver implements SerialPortEventListener
 {
+	@SuppressWarnings("hiding")
 	static Logger logger = LoggerFactory.getLogger(SerialModemDriver.class);
 
 	String portName;

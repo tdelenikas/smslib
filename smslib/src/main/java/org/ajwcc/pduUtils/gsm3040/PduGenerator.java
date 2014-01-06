@@ -269,11 +269,8 @@ public class PduGenerator
 			// add 1 for the UDH Length field
 			return ConcatInformationElement.getDefaultConcatLength() + 1;
 		}
-		else
-		{
-			// this already has the UDH Length field, no need to add 1
-			return currentUdhLength + ConcatInformationElement.getDefaultConcatLength();
-		}
+		// this already has the UDH Length field, no need to add 1
+		return currentUdhLength + ConcatInformationElement.getDefaultConcatLength();
 	}
 
 	protected void writeUDData7bit(Pdu pdu, int mpRefNo, int partNo) throws Exception

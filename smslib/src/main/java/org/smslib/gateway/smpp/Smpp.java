@@ -77,7 +77,7 @@ public class Smpp extends AbstractGateway
 	@Override
 	protected void _start() throws Exception
 	{
-		monitorExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1, new ThreadFactory()
+		this.monitorExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1, new ThreadFactory()
 		{
 			private AtomicInteger sequence = new AtomicInteger(0);
 
@@ -85,41 +85,41 @@ public class Smpp extends AbstractGateway
 			public Thread newThread(Runnable r)
 			{
 				Thread t = new Thread(r);
-				t.setName("SmppClientSessionWindowMonitorPool-" + sequence.getAndIncrement());
+				t.setName("SmppClientSessionWindowMonitorPool-" + this.sequence.getAndIncrement());
 				return t;
 			}
 		});
-		clientBootstrap = new DefaultSmppClient(Executors.newCachedThreadPool(), 1, monitorExecutor);
-		sessionHandler = new ClientSmppSessionHandler();
-		smppConfig = new SmppSessionConfiguration();
-		smppConfig.setWindowSize(1);
-		smppConfig.setName("SMSLib.Session.0");
-		smppConfig.setType(SmppBindType.TRANSCEIVER);
-		smppConfig.setHost(this.hostAddress);
-		smppConfig.setPort(this.hostPort);
-		smppConfig.setConnectTimeout(timeout);
-		smppConfig.setSystemId(this.username);
-		smppConfig.setPassword(this.password);
-		smppConfig.getLoggingOptions().setLogBytes(true);
+		this.clientBootstrap = new DefaultSmppClient(Executors.newCachedThreadPool(), 1, this.monitorExecutor);
+		this.sessionHandler = new ClientSmppSessionHandler();
+		this.smppConfig = new SmppSessionConfiguration();
+		this.smppConfig.setWindowSize(1);
+		this.smppConfig.setName("SMSLib.Session.0");
+		this.smppConfig.setType(SmppBindType.TRANSCEIVER);
+		this.smppConfig.setHost(this.hostAddress);
+		this.smppConfig.setPort(this.hostPort);
+		this.smppConfig.setConnectTimeout(this.timeout);
+		this.smppConfig.setSystemId(this.username);
+		this.smppConfig.setPassword(this.password);
+		this.smppConfig.getLoggingOptions().setLogBytes(true);
 		// to enable monitoring (request expiration)
-		smppConfig.setRequestExpiryTimeout(30000);
-		smppConfig.setWindowMonitorInterval(15000);
-		smppConfig.setCountersEnabled(true);
-		smppSession = clientBootstrap.bind(smppConfig, sessionHandler);
-		enquireLinkResp = smppSession.enquireLink(new EnquireLink(), timeout);
-		if (enquireLinkResp.getCommandStatus() != SmppConstants.STATUS_OK) throw new Exception("Error connection to SMPP host: " + enquireLinkResp.getResultMessage());
+		this.smppConfig.setRequestExpiryTimeout(30000);
+		this.smppConfig.setWindowMonitorInterval(15000);
+		this.smppConfig.setCountersEnabled(true);
+		this.smppSession = this.clientBootstrap.bind(this.smppConfig, this.sessionHandler);
+		this.enquireLinkResp = this.smppSession.enquireLink(new EnquireLink(), this.timeout);
+		if (this.enquireLinkResp.getCommandStatus() != SmppConstants.STATUS_OK) throw new Exception("Error connection to SMPP host: " + this.enquireLinkResp.getResultMessage());
 	}
 
 	@Override
 	protected void _stop() throws Exception
 	{
-		if (smppSession != null)
+		if (this.smppSession != null)
 		{
-			if (smppSession.isBinding() || smppSession.isBound()) smppSession.unbind(timeout);
-			smppSession.destroy();
+			if (this.smppSession.isBinding() || this.smppSession.isBound()) this.smppSession.unbind(this.timeout);
+			this.smppSession.destroy();
 		}
-		if (clientBootstrap != null) clientBootstrap.destroy();
-		if (monitorExecutor != null) monitorExecutor.shutdownNow();
+		if (this.clientBootstrap != null) this.clientBootstrap.destroy();
+		if (this.monitorExecutor != null) this.monitorExecutor.shutdownNow();
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class Smpp extends AbstractGateway
 			default:
 				throw new RuntimeException("Unsupported Encoding!");
 		}
-		SubmitSmResp sumbitResponse = smppSession.submit(submitRequest, timeout);
+		SubmitSmResp sumbitResponse = this.smppSession.submit(submitRequest, this.timeout);
 		if (sumbitResponse.getCommandStatus() == SmppConstants.STATUS_OK)
 		{
 			message.setGatewayId(getGatewayId());

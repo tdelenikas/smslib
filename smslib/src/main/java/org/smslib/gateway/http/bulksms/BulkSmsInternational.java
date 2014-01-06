@@ -1,6 +1,7 @@
 
 package org.smslib.gateway.http.bulksms;
 
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
@@ -49,6 +50,12 @@ public class BulkSmsInternational extends AbstractHttpGateway
 	public BulkSmsInternational(String gatewayId, String... parms)
 	{
 		this(gatewayId, parms[0], parms[1]);
+	}
+
+	@Override
+	protected void prepareUrlConnection(URLConnection con)
+	{
+		// Nothing here on purpose!
 	}
 
 	@Override

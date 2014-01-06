@@ -36,6 +36,8 @@ public class InboundMessageCallback implements IInboundMessageCallback
 				case Enc8:
 					s.setString(3, Common.bytesToString(event.getMessage().getPayload().getBytes()));
 					break;
+				case EncCustom:
+					throw new UnsupportedOperationException();
 			}
 			s.setTimestamp(4, new Timestamp(event.getMessage().getSentDate().getTime()));
 			s.setTimestamp(5, new Timestamp(event.getMessage().getCreationDate().getTime()));

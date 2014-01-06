@@ -669,18 +669,15 @@ public class PduUtils
 			// convert string to uncompressed septets
 			return unencodedSeptetsToEncodedSeptets(textSeptets);
 		}
-		else
-		{
-			// convert UDH octets as if they were encoded septets
-			// NOTE: DO NOT DISCARD THE LAST SEPTET IF IT IS ZERO
-			byte[] udhSeptets = PduUtils.encodedSeptetsToUnencodedSeptets(udhOctets, false);
-			// combine the two arrays and encode them as a whole
-			byte[] combined = new byte[udhSeptets.length + textSeptets.length];
-			System.arraycopy(udhSeptets, 0, combined, 0, udhSeptets.length);
-			System.arraycopy(textSeptets, 0, combined, udhSeptets.length, textSeptets.length);
-			// convert encoded byte[] to a PDU string
-			return unencodedSeptetsToEncodedSeptets(combined);
-		}
+		// convert UDH octets as if they were encoded septets
+		// NOTE: DO NOT DISCARD THE LAST SEPTET IF IT IS ZERO
+		byte[] udhSeptets = PduUtils.encodedSeptetsToUnencodedSeptets(udhOctets, false);
+		// combine the two arrays and encode them as a whole
+		byte[] combined = new byte[udhSeptets.length + textSeptets.length];
+		System.arraycopy(udhSeptets, 0, combined, 0, udhSeptets.length);
+		System.arraycopy(textSeptets, 0, combined, udhSeptets.length, textSeptets.length);
+		// convert encoded byte[] to a PDU string
+		return unencodedSeptetsToEncodedSeptets(combined);
 	}
 
 	public static String decode7bitEncoding(byte[] encodedPduData)
@@ -696,15 +693,9 @@ public class PduUtils
 			// just process the whole pdu as one thing
 			return unencodedSeptetsToString(encodedSeptetsToUnencodedSeptets(encodedPduData));
 		}
-		else
-		{
-			// 
-			String decodedUdh = unencodedSeptetsToString(encodedSeptetsToUnencodedSeptets(udhData, false));
-			String decoded = unencodedSeptetsToString(encodedSeptetsToUnencodedSeptets(encodedPduData));
-			//System.out.println("'"+decoded+"'");
-			//System.out.println("'"+decodedUdh+"'");
-			return decoded.substring(decodedUdh.length());
-		}
+		String decodedUdh = unencodedSeptetsToString(encodedSeptetsToUnencodedSeptets(udhData, false));
+		String decoded = unencodedSeptetsToString(encodedSeptetsToUnencodedSeptets(encodedPduData));
+		return decoded.substring(decodedUdh.length());
 	}
 
 	public static String decode8bitEncoding(byte[] udhData, byte[] pduData)

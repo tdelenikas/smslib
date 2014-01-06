@@ -1,6 +1,7 @@
 
 package org.smslib.gateway.http.txtimpact;
 
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
@@ -46,6 +47,12 @@ public class TXTImpact extends AbstractHttpGateway
 	public TXTImpact(String gatewayId, String... parms)
 	{
 		this(gatewayId, parms[0], parms[1], parms[2], parms[3]);
+	}
+
+	@Override
+	protected void prepareUrlConnection(URLConnection con)
+	{
+		// Nothing here on purpose!
 	}
 
 	@Override

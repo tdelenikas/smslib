@@ -243,7 +243,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	@Override
 	public Coverage _queryCoverage(Coverage c) throws Exception
 	{
-		Hashtable<String, String> parameters = new Hashtable<String, String>();
+		Hashtable<String, String> parameters = new Hashtable<>();
 		prepareParameters(Operation.QueryCoverage, c, parameters);
 		parseResponse(Operation.QueryCoverage, c, performHttpRequest(getOperationHttpMethod(Operation.QueryCoverage), getQueryCoverageUrl(), parameters));
 		return c;
@@ -252,7 +252,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	protected List<String> performHttpRequest(HttpMethod method, String url, Hashtable<String, String> parameters) throws IOException
 	{
 		URL u;
-		List<String> responseList = new ArrayList<String>();
+		List<String> responseList = new ArrayList<>();
 		URLConnection con;
 		String line;
 		BufferedReader in;
@@ -310,9 +310,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 		}
 	}
 
-	protected void prepareUrlConnection(URLConnection con)
-	{
-	}
+	abstract protected void prepareUrlConnection(URLConnection con);
 
 	abstract protected void prepareParameters(Operation operation, Object o, Hashtable<String, String> responseList, Object... args);
 

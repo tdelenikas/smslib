@@ -16,9 +16,9 @@ public class Test_Bulksms extends TestCase
 
 	public void test() throws Exception
 	{
-		if (USERNAME.equalsIgnoreCase("username")) return;
+		if (this.USERNAME.equalsIgnoreCase("username")) return;
 		Service.getInstance().start();
-		BulkSmsInternational gateway = new BulkSmsInternational("bulksms", USERNAME, PASSWORD);
+		BulkSmsInternational gateway = new BulkSmsInternational("bulksms", this.USERNAME, this.PASSWORD);
 		Service.getInstance().registerGateway(gateway);
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via BulkSms!");
 		Service.getInstance().send(m);

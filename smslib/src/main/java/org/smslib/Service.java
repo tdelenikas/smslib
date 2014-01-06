@@ -148,7 +148,7 @@ public class Service
 				setStatus(Status.Starting);
 				try
 				{
-					messageQueue.start();
+					this.messageQueue.start();
 				}
 				catch (Exception e)
 				{
@@ -219,7 +219,7 @@ public class Service
 					getCallbackManager().stop();
 					try
 					{
-						messageQueue.stop();
+						this.messageQueue.stop();
 					}
 					catch (Exception e)
 					{

@@ -21,6 +21,6 @@ public class InboundEncryptedMessage extends InboundBinaryMessage
 	public byte[] getDecryptedData() throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, NoSuchAlgorithmException
 	{
 		if (Service.getInstance().getKeyManager().getKey(getOriginatorAddress()) != null) return (Service.getInstance().getKeyManager().decrypt(getOriginatorAddress(), getPayload().getBytes()));
-		else return new byte[0];
+		return new byte[0];
 	}
 }

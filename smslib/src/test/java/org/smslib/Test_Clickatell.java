@@ -17,9 +17,9 @@ public class Test_Clickatell extends TestCase
 
 	public void test() throws Exception
 	{
-		if (USERNAME.equalsIgnoreCase("username")) return;
+		if (this.USERNAME.equalsIgnoreCase("username")) return;
 		Service.getInstance().start();
-		Clickatell gateway = new Clickatell("clickatell", API_ID, USERNAME, PASSWORD);
+		Clickatell gateway = new Clickatell("clickatell", this.API_ID, this.USERNAME, this.PASSWORD);
 		Service.getInstance().registerGateway(gateway);
 		OutboundMessage m = new OutboundMessage("306974...", "Hello from 'SMSLib' via Clickatell!");
 		Service.getInstance().send(m);
