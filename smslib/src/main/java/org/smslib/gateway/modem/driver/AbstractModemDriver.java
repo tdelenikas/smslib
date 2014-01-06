@@ -528,6 +528,8 @@ public abstract class AbstractModemDriver
 
 	public int atSendTEXTMessage(String recipient, String text) throws IOException, TimeoutException, NumberFormatException, InterruptedException
 	{
+		write(String.format("AT+CSCS=\"%s\"\r", modem.getDeviceInformation().getEncoding()), true);
+		if (!responseOk) throw new IOException("Unsupported encoding: " + modem.getDeviceInformation().getEncoding());
 		write(String.format("AT+CMGS=\"%s\"\r", recipient), true);
 		while (this.buffer.length() == 0)
 			Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")));

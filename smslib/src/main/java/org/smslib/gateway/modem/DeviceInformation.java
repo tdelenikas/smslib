@@ -27,6 +27,8 @@ public class DeviceInformation
 
 	Collection<String> supportedEncodings = new HashSet<String>();
 
+	String encoding;
+
 	public String getManufacturer()
 	{
 		return this.manufacturer;
@@ -100,6 +102,16 @@ public class DeviceInformation
 	public Collection<String> getSupportedEncodings()
 	{
 		return this.supportedEncodings;
+	}
+
+	public String getEncoding()
+	{
+		return this.encoding;
+	}
+
+	public void setEncoding(String encoding)
+	{
+		this.encoding = encoding;
 	}
 
 	@Override
