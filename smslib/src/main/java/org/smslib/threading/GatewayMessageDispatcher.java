@@ -79,13 +79,13 @@ public class GatewayMessageDispatcher extends Thread
 				}
 				sleep(Settings.gatewayDispatcherYield);
 			}
-			catch (InterruptedException e1)
+			catch (InterruptedException e)
 			{
-				if (!this.shouldCancel) logger.error("Interrupted!", e1);
+				if (!this.shouldCancel) logger.error("Interrupted!", e);
 			}
-			catch (Exception e1)
+			catch (Exception e)
 			{
-				logger.error("Unhandled exception!", e1);
+				logger.error("Unhandled exception!", e);
 			}
 		}
 		logger.debug("Stopped!");

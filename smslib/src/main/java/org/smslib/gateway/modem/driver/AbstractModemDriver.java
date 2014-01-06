@@ -276,7 +276,7 @@ public abstract class AbstractModemDriver
 		}
 	}
 
-	public void initializeModem() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public void initializeModem() throws Exception
 	{
 		int counter = 0;
 		synchronized (this._LOCK_)
@@ -357,7 +357,7 @@ public abstract class AbstractModemDriver
 		}
 	}
 
-	public void refreshDeviceInformation() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public void refreshDeviceInformation() throws Exception
 	{
 		this.modem.getDeviceInformation().setManufacturer(atGetManufacturer().getResponseData());
 		this.modem.getDeviceInformation().setModel(atGetModel().getResponseData());
@@ -425,94 +425,94 @@ public abstract class AbstractModemDriver
 		return (complete ? manufacturer + "_" + model : manufacturer);
 	}
 
-	protected ModemResponse atAT() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atAT() throws Exception
 	{
 		return write("AT\r", true);
 	}
 
-	protected ModemResponse atATWithResponse() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atATWithResponse() throws Exception
 	{
 		return write("AT\r");
 	}
 
-	protected ModemResponse atEchoOff() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atEchoOff() throws Exception
 	{
 		return write("ATE0\r", true);
 	}
 
-	protected ModemResponse atGetSimStatus() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atGetSimStatus() throws Exception
 	{
 		return write("AT+CPIN?\r");
 	}
 
-	protected ModemResponse atEnterPin(String pin) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atEnterPin(String pin) throws Exception
 	{
 		return write(String.format("AT+CPIN=\"%s\"\r", pin));
 	}
 
-	protected ModemResponse atNetworkRegistration() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atNetworkRegistration() throws Exception
 	{
 		write("AT+CREG=1\r");
 		Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")) * Integer.valueOf(getModemSettings("delay_network_registration")));
 		return write("AT+CREG?\r");
 	}
 
-	protected ModemResponse atEnableClip() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atEnableClip() throws Exception
 	{
 		return write("AT+CLIP=1\r");
 	}
 
-	protected ModemResponse atVerboseOff() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atVerboseOff() throws Exception
 	{
 		return write("AT+CMEE=0\r");
 	}
 
-	protected ModemResponse atSetPDUMode() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atSetPDUMode() throws Exception
 	{
 		return write("AT+CMGF=0\r");
 	}
 
-	protected ModemResponse atSetTEXTMode() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atSetTEXTMode() throws Exception
 	{
 		return write("AT+CMGF=1\r");
 	}
 
-	protected ModemResponse atCnmiOff() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atCnmiOff() throws Exception
 	{
 		return write("AT+CNMI=2,0,0,0,0\r");
 	}
 
-	protected ModemResponse atGetManufacturer() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atGetManufacturer() throws Exception
 	{
 		return write("AT+CGMI\r");
 	}
 
-	protected ModemResponse atGetModel() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atGetModel() throws Exception
 	{
 		return write("AT+CGMM\r");
 	}
 
-	protected ModemResponse atGetImsi() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atGetImsi() throws Exception
 	{
 		return write("AT+CIMI\r");
 	}
 
-	protected ModemResponse atGetSerialNo() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atGetSerialNo() throws Exception
 	{
 		return write("AT+CGSN\r");
 	}
 
-	protected ModemResponse atGetSWVersion() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atGetSWVersion() throws Exception
 	{
 		return write("AT+CGMR\r");
 	}
 
-	protected ModemResponse atGetSignalStrengh() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	protected ModemResponse atGetSignalStrengh() throws Exception
 	{
 		return write("AT+CSQ\r");
 	}
 
-	public int atSendPDUMessage(int size, String pdu) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public int atSendPDUMessage(int size, String pdu) throws Exception
 	{
 		write(String.format("AT+CMGS=%d\r", size), true);
 		while (this.buffer.length() == 0)
@@ -526,10 +526,10 @@ public abstract class AbstractModemDriver
 		return -1;
 	}
 
-	public int atSendTEXTMessage(String recipient, String text) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public int atSendTEXTMessage(String recipient, String text) throws Exception
 	{
 		write(String.format("AT+CSCS=\"%s\"\r", modem.getDeviceInformation().getEncoding()), true);
-		if (!responseOk) throw new IOException("Unsupported encoding: " + modem.getDeviceInformation().getEncoding());
+		if (!responseOk) throw new Exception("Unsupported encoding: " + modem.getDeviceInformation().getEncoding());
 		write(String.format("AT+CMGS=\"%s\"\r", recipient), true);
 		while (this.buffer.length() == 0)
 			Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")));
@@ -542,39 +542,39 @@ public abstract class AbstractModemDriver
 		return -1;
 	}
 
-	public ModemResponse atSetEncoding(String encoding) throws NumberFormatException, IOException, TimeoutException, InterruptedException
+	public ModemResponse atSetEncoding(String encoding) throws Exception
 	{
 		return write(String.format("AT+CSCS=\"%s\"\r", encoding));
 	}
 
-	public ModemResponse atGetSupportedEncodings() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public ModemResponse atGetSupportedEncodings() throws Exception
 	{
 		return write("AT+CSCS=?\r");
 	}
 
-	public ModemResponse atGetMemoryLocations() throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public ModemResponse atGetMemoryLocations() throws Exception
 	{
 		return write("AT+CPMS=?\r");
 	}
 
-	public ModemResponse atSwitchMemoryLocation(String memoryLocation) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public ModemResponse atSwitchMemoryLocation(String memoryLocation) throws Exception
 	{
 		return write(String.format("AT+CPMS=\"%s\"\r", memoryLocation));
 	}
 
-	public ModemResponse atGetMessages(String memoryLocation) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public ModemResponse atGetMessages(String memoryLocation) throws Exception
 	{
 		if (atSwitchMemoryLocation(memoryLocation).isResponseOk()) return (this.modem.getDeviceInformation().getMode() == Modes.PDU ? write("AT+CMGL=4\r") : write("AT+CMGL=\"ALL\"\r"));
 		return new ModemResponse("", false);
 	}
 
-	public ModemResponse atDeleteMessage(String memoryLocation, int memoryIndex) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public ModemResponse atDeleteMessage(String memoryLocation, int memoryIndex) throws Exception
 	{
 		if (atSwitchMemoryLocation(memoryLocation).isResponseOk()) return write(String.format("AT+CMGD=%d\r", memoryIndex));
 		return new ModemResponse("", false);
 	}
 
-	public ModemResponse atFromModemSettings(String key) throws IOException, TimeoutException, NumberFormatException, InterruptedException
+	public ModemResponse atFromModemSettings(String key) throws Exception
 	{
 		String atCommand = getModemSettings(key);
 		if (!Common.isNullOrEmpty(atCommand)) return write(atCommand);

@@ -1,12 +1,10 @@
 
 package org.smslib.gateway.modem;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.core.Capabilities;
@@ -78,7 +76,7 @@ public class Modem extends AbstractGateway
 	}
 
 	@Override
-	public void _start() throws IOException, TimeoutException, InterruptedException
+	public void _start() throws Exception
 	{
 		synchronized (this.modemDriver._LOCK_)
 		{
@@ -91,7 +89,7 @@ public class Modem extends AbstractGateway
 	}
 
 	@Override
-	public void _stop() throws IOException, TimeoutException, InterruptedException
+	public void _stop() throws Exception
 	{
 		synchronized (this.modemDriver._LOCK_)
 		{
