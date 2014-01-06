@@ -8,7 +8,7 @@ import org.smslib.message.OutboundMessage;
 
 public class DefaultOutboundQueue implements IOutboundQueue<OutboundMessage>
 {
-	PriorityBlockingQueue<OutboundMessage> messageQueue = new PriorityBlockingQueue<OutboundMessage>(1024, new MessagePriorityComparator());
+	PriorityBlockingQueue<OutboundMessage> messageQueue = new PriorityBlockingQueue<>(1024, new MessagePriorityComparator());
 
 	@Override
 	public boolean start() throws Exception
@@ -25,7 +25,7 @@ public class DefaultOutboundQueue implements IOutboundQueue<OutboundMessage>
 	@Override
 	public boolean add(OutboundMessage o) throws Exception
 	{
-		return messageQueue.add(o);
+		return this.messageQueue.add(o);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class DefaultOutboundQueue implements IOutboundQueue<OutboundMessage>
 	{
 		try
 		{
-			return messageQueue.poll(1, TimeUnit.SECONDS);
+			return this.messageQueue.poll(1, TimeUnit.SECONDS);
 		}
 		catch (InterruptedException e)
 		{
@@ -46,7 +46,7 @@ public class DefaultOutboundQueue implements IOutboundQueue<OutboundMessage>
 	{
 		try
 		{
-			return messageQueue.poll(count, timeUnit);
+			return this.messageQueue.poll(count, timeUnit);
 		}
 		catch (InterruptedException e)
 		{

@@ -337,9 +337,9 @@ public abstract class Pdu
 	// UDH portion of UD if UDHI is present
 	// only Concat and Port info will be treated specially
 	// other IEs will have to get extracted from the map manually and parsed
-	private HashMap<Integer, InformationElement> ieMap = new HashMap<Integer, InformationElement>();
+	private HashMap<Integer, InformationElement> ieMap = new HashMap<>();
 
-	private ArrayList<InformationElement> ieList = new ArrayList<InformationElement>();
+	private ArrayList<InformationElement> ieList = new ArrayList<>();
 
 	public void addInformationElement(InformationElement ie)
 	{

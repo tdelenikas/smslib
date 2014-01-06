@@ -34,7 +34,7 @@ public class CallbackManager
 {
 	static Logger logger = LoggerFactory.getLogger(CallbackManager.class);
 
-	LinkedBlockingQueue<BaseCallbackEvent> eventQueue = new LinkedBlockingQueue<BaseCallbackEvent>();
+	LinkedBlockingQueue<BaseCallbackEvent> eventQueue = new LinkedBlockingQueue<>();
 
 	IServiceStatusCallback serviceStatusCallback = null;
 

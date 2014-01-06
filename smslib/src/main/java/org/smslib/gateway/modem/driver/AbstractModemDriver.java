@@ -528,8 +528,8 @@ public abstract class AbstractModemDriver
 
 	public int atSendTEXTMessage(String recipient, String text) throws Exception
 	{
-		write(String.format("AT+CSCS=\"%s\"\r", modem.getDeviceInformation().getEncoding()), true);
-		if (!responseOk) throw new Exception("Unsupported encoding: " + modem.getDeviceInformation().getEncoding());
+		write(String.format("AT+CSCS=\"%s\"\r", this.modem.getDeviceInformation().getEncoding()), true);
+		if (!this.responseOk) throw new Exception("Unsupported encoding: " + this.modem.getDeviceInformation().getEncoding());
 		write(String.format("AT+CMGS=\"%s\"\r", recipient), true);
 		while (this.buffer.length() == 0)
 			Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")));
@@ -583,15 +583,23 @@ public abstract class AbstractModemDriver
 
 	public String getModemSettings(String key) throws IOException
 	{
-		String fullSignature = getSignature(true);
-		String shortSignature = getSignature(false);
-		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("modem.properties");
-		Properties properties = new Properties();
-		properties.load(inputStream);
-		String value = "";
-		if (!Common.isNullOrEmpty(fullSignature)) properties.getProperty(fullSignature + "." + key);
-		if ((Common.isNullOrEmpty(value)) && (!Common.isNullOrEmpty(shortSignature))) value = properties.getProperty(shortSignature + "." + key);
-		if (Common.isNullOrEmpty(value)) value = properties.getProperty("default" + "." + key);
-		return (Common.isNullOrEmpty(value) ? "" : value);
+		InputStream inputStream = null;
+		try
+		{
+			String fullSignature = getSignature(true);
+			String shortSignature = getSignature(false);
+			inputStream = this.getClass().getClassLoader().getResourceAsStream("modem.properties");
+			Properties properties = new Properties();
+			properties.load(inputStream);
+			String value = "";
+			if (!Common.isNullOrEmpty(fullSignature)) properties.getProperty(fullSignature + "." + key);
+			if ((Common.isNullOrEmpty(value)) && (!Common.isNullOrEmpty(shortSignature))) value = properties.getProperty(shortSignature + "." + key);
+			if (Common.isNullOrEmpty(value)) value = properties.getProperty("default" + "." + key);
+			return (Common.isNullOrEmpty(value) ? "" : value);
+		}
+		finally
+		{
+			if (inputStream != null) inputStream.close();
+		}
 	}
 }

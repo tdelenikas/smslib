@@ -14,7 +14,7 @@ public class DefaultBalancer extends AbstractBalancer
 	@Override
 	public Collection<AbstractGateway> balance(OutboundMessage message, Collection<AbstractGateway> candidates)
 	{
-		ArrayList<AbstractGateway> gatewayList = new ArrayList<AbstractGateway>(candidates);
+		ArrayList<AbstractGateway> gatewayList = new ArrayList<>(candidates);
 		GatewayOutboundTrafficComparator comp = new GatewayOutboundTrafficComparator();
 		Collections.sort(gatewayList, comp);
 		return gatewayList;

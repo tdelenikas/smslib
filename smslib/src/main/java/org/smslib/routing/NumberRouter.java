@@ -14,7 +14,7 @@ import org.smslib.message.OutboundMessage;
 
 public class NumberRouter extends AbstractRouter
 {
-	Map<String, AbstractGateway> rules = new HashMap<String, AbstractGateway>();
+	Map<String, AbstractGateway> rules = new HashMap<>();
 
 	public Map<String, AbstractGateway> getRules()
 	{
@@ -34,7 +34,7 @@ public class NumberRouter extends AbstractRouter
 	@Override
 	public Collection<AbstractGateway> customRoute(OutboundMessage message, Collection<AbstractGateway> gateways)
 	{
-		Collection<AbstractGateway> candidates = new ArrayList<AbstractGateway>();
+		Collection<AbstractGateway> candidates = new ArrayList<>();
 		if (getRules().size() != 0)
 		{
 			Set<String> r = getRules().keySet();

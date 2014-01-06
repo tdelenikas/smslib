@@ -14,7 +14,7 @@ public abstract class AbstractSymmetricKey extends AbstractKey
 
 	public SecretKeySpec getKey()
 	{
-		return key;
+		return this.key;
 	}
 
 	public void setKey(SecretKeySpec key)

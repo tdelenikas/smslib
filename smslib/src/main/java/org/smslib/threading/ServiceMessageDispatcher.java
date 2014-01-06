@@ -62,7 +62,7 @@ public class ServiceMessageDispatcher extends Thread
 						}
 						else
 						{
-							message.setRoutingTable(new LinkedList<AbstractGateway>(routes));
+							message.setRoutingTable(new LinkedList<>(routes));
 							logger.debug("Routing table: " + Common.dumpRoutingTable(message));
 							message.getRoutingTable().get(0).queue(message);
 						}

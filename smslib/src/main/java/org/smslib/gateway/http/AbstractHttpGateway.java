@@ -60,7 +60,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 		None, SendMessage, QueryBalance, QueryMessage, QueryCoverage
 	}
 
-	HashMap<String, String> settings = new HashMap<String, String>();
+	HashMap<String, String> settings = new HashMap<>();
 
 	public AbstractHttpGateway(String id, String description)
 	{
@@ -208,7 +208,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	@Override
 	public boolean _send(OutboundMessage message) throws Exception
 	{
-		Hashtable<String, String> parameters = new Hashtable<String, String>();
+		Hashtable<String, String> parameters = new Hashtable<>();
 		prepareParameters(Operation.SendMessage, message, parameters);
 		parseResponse(Operation.SendMessage, message, performHttpRequest(getOperationHttpMethod(Operation.SendMessage), getSubmitMessageUrl(), parameters));
 		return (message.getSentStatus() == SentStatus.Sent);
@@ -223,7 +223,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	@Override
 	public CreditBalance _queryCreditBalance() throws Exception
 	{
-		Hashtable<String, String> parameters = new Hashtable<String, String>();
+		Hashtable<String, String> parameters = new Hashtable<>();
 		prepareParameters(Operation.QueryBalance, this, parameters);
 		parseResponse(Operation.QueryBalance, this, performHttpRequest(getOperationHttpMethod(Operation.QueryBalance), getQueryBalanceUrl(), parameters));
 		return getCreditBalance();
@@ -234,7 +234,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 	{
 		DeliveryReportMessage dummyMessage = new DeliveryReportMessage();
 		dummyMessage.setOperatorMessageId(operatorMessageId);
-		Hashtable<String, String> parameters = new Hashtable<String, String>();
+		Hashtable<String, String> parameters = new Hashtable<>();
 		prepareParameters(Operation.QueryMessage, dummyMessage, parameters);
 		parseResponse(Operation.QueryMessage, dummyMessage, performHttpRequest(getOperationHttpMethod(Operation.QueryMessage), getQueryMessageUrl(), parameters));
 		return dummyMessage.getDeliveryStatus();

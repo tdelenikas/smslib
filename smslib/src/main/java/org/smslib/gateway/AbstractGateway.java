@@ -389,7 +389,7 @@ public abstract class AbstractGateway
 
 	protected IOutboundQueue<OutboundMessage> getMessageQueue()
 	{
-		return (IOutboundQueue<OutboundMessage>) this.messageQueue;
+		return this.messageQueue;
 	}
 
 	protected int getNextMultipartReferenceNo()

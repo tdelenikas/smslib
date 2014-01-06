@@ -86,8 +86,8 @@ public class MessageReader extends Thread
 
 	private ArrayList<InboundMessage> parsePDU(String data, String memLocation) throws IOException
 	{
-		ArrayList<InboundMessage> messageList = new ArrayList<InboundMessage>();
-		List<List<InboundMessage>> mpMsgList = new ArrayList<List<InboundMessage>>();
+		ArrayList<InboundMessage> messageList = new ArrayList<>();
+		List<List<InboundMessage>> mpMsgList = new ArrayList<>();
 		BufferedReader reader = new BufferedReader(new StringReader(data));
 		while (true)
 		{
@@ -156,7 +156,7 @@ public class MessageReader extends Thread
 					{
 						// no existing list present for this message
 						// add one
-						tmpList = new ArrayList<InboundMessage>();
+						tmpList = new ArrayList<>();
 						tmpList.add(msg);
 						mpMsgList.add(tmpList);
 					}
@@ -183,7 +183,7 @@ public class MessageReader extends Thread
 
 	private ArrayList<InboundMessage> parseTEXT(String data, String memLocation) throws IOException
 	{
-		ArrayList<InboundMessage> messageList = new ArrayList<InboundMessage>();
+		ArrayList<InboundMessage> messageList = new ArrayList<>();
 		BufferedReader reader;
 		String line;
 

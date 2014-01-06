@@ -467,7 +467,7 @@ public class PduGenerator
 	{
 		// generate all required PDUs for a given message
 		// mpRefNo comes from the ModemGateway
-		ArrayList<String> pduList = new ArrayList<String>();
+		ArrayList<String> pduList = new ArrayList<>();
 		for (int i = 1; i <= pdu.getMpMaxNo(); i++)
 		{
 			String pduString = generatePduString(pdu, mpRefNo, i);

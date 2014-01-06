@@ -15,12 +15,12 @@ public class KeyManager
 
 	public KeyManager()
 	{
-		keys = new HashMap<MsIsdn, AbstractKey>();
+		this.keys = new HashMap<>();
 	}
 
 	public void registerKey(MsIsdn msisdn, AbstractKey key)
 	{
-		keys.put(msisdn, key);
+		this.keys.put(msisdn, key);
 	}
 
 	public void registerKey(String msisdn, AbstractKey key)
@@ -30,7 +30,7 @@ public class KeyManager
 
 	public void unregisterKey(MsIsdn msisdn)
 	{
-		keys.remove(msisdn);
+		this.keys.remove(msisdn);
 	}
 
 	public void unregisterKey(String msisdn)
@@ -40,12 +40,12 @@ public class KeyManager
 
 	public void unregisterAllKeys()
 	{
-		keys.clear();
+		this.keys.clear();
 	}
 
 	public AbstractKey getKey(MsIsdn msisdn)
 	{
-		return keys.get(msisdn);
+		return this.keys.get(msisdn);
 	}
 
 	public AbstractKey getKey(String msisdn)

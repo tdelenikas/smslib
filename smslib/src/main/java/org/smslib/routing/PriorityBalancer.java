@@ -14,7 +14,7 @@ public class PriorityBalancer extends AbstractBalancer
 	@Override
 	public Collection<AbstractGateway> balance(OutboundMessage message, Collection<AbstractGateway> candidates)
 	{
-		ArrayList<AbstractGateway> gatewayList = new ArrayList<AbstractGateway>(candidates);
+		ArrayList<AbstractGateway> gatewayList = new ArrayList<>(candidates);
 		GatewayPriorityComparator comp = new GatewayPriorityComparator();
 		Collections.sort(gatewayList, comp);
 		Collections.reverse(gatewayList);

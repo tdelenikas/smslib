@@ -80,7 +80,7 @@ public class Service
 
 	IOutboundQueue<OutboundMessage> messageQueue = new DefaultOutboundQueue();
 
-	HashMap<String, AbstractGateway> gateways = new HashMap<String, AbstractGateway>();
+	HashMap<String, AbstractGateway> gateways = new HashMap<>();
 
 	AbstractRouter router = new DefaultRouter();
 
@@ -94,7 +94,7 @@ public class Service
 
 	HttpServer httpServer = new HttpServer();
 
-	HashMap<String, IHttpRequestHandler> httpRequestHandlers = new HashMap<String, IHttpRequestHandler>();
+	HashMap<String, IHttpRequestHandler> httpRequestHandlers = new HashMap<>();
 
 	Object _LOCK_ = new Object();
 
@@ -400,7 +400,7 @@ public class Service
 			Collection<AbstractGateway> routes = routeMessage(message);
 			if (!routes.isEmpty())
 			{
-				LinkedList<AbstractGateway> selectedGateways = new LinkedList<AbstractGateway>(routes);
+				LinkedList<AbstractGateway> selectedGateways = new LinkedList<>(routes);
 				if (!selectedGateways.isEmpty())
 				{
 					for (int i = 0; i < selectedGateways.size(); i++)
@@ -574,7 +574,7 @@ public class Service
 
 	public LinkedList<OutboundMessage> distributeToGroup(OutboundMessage message)
 	{
-		LinkedList<OutboundMessage> messageList = new LinkedList<OutboundMessage>();
+		LinkedList<OutboundMessage> messageList = new LinkedList<>();
 		if (getGroupManager().exist(message.getRecipientAddress().getAddress()))
 		{
 			for (MsIsdn msisdn : getGroupManager().getGroup(message.getRecipientAddress().getAddress()).getRecipients())
@@ -654,17 +654,17 @@ public class Service
 
 	public Collection<String> getGatewayIDs()
 	{
-		ArrayList<String> listOfGatewayIds = new ArrayList<String>(this.gateways.keySet());
+		ArrayList<String> listOfGatewayIds = new ArrayList<>(this.gateways.keySet());
 		Collections.sort(listOfGatewayIds);
 		return listOfGatewayIds;
 	}
 
 	public KeyManager getKeyManager()
 	{
-		return keyManager;
+		return this.keyManager;
 	}
 
-	public void testCommPorts()
+	public static void testCommPorts() throws Exception
 	{
 		int bauds[] = { 9600, 14400, 19200, 28800, 33600, 38400, 56000, 57600, 115200 };
 		Enumeration<CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
@@ -677,11 +677,11 @@ public class Service
 				for (int i = 0; i < bauds.length; i++)
 				{
 					SerialPort serialPort = null;
+					InputStream inStream = null;
+					OutputStream outStream = null;
 					System.out.print(String.format(">> Trying at %6d...", bauds[i]));
 					try
 					{
-						InputStream inStream;
-						OutputStream outStream;
 						int c;
 						String response;
 						serialPort = portId.open("SMSLibCommTester", 5000);
@@ -748,10 +748,9 @@ public class Service
 					}
 					finally
 					{
-						if (serialPort != null)
-						{
-							serialPort.close();
-						}
+						if (inStream != null) inStream.close();
+						if (outStream != null) outStream.close();
+						if (serialPort != null) serialPort.close();
 					}
 				}
 			}
@@ -776,7 +775,7 @@ public class Service
 			System.out.println();
 			System.out.println("Running port autodetection / diagnostics...");
 			System.out.println();
-			getInstance().testCommPorts();
+			testCommPorts();
 		}
 		catch (Exception e)
 		{

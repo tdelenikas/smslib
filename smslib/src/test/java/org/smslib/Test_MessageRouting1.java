@@ -28,7 +28,7 @@ public class Test_MessageRouting1 extends TestCase
 		@Override
 		public Collection<AbstractGateway> process(OutboundMessage message, Collection<AbstractGateway> gateways)
 		{
-			Collection<AbstractGateway> newRoutes = new ArrayList<AbstractGateway>();
+			Collection<AbstractGateway> newRoutes = new ArrayList<>();
 			Iterator<AbstractGateway> i = gateways.iterator();
 			while (i.hasNext())
 			{

@@ -8,7 +8,7 @@ public class GroupManager
 
 	public GroupManager()
 	{
-		this.groupList = new HashMap<String, Group>();
+		this.groupList = new HashMap<>();
 	}
 
 	public void addGroup(Group g)

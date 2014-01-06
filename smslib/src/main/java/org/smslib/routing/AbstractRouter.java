@@ -14,7 +14,7 @@ public abstract class AbstractRouter
 	public Collection<AbstractGateway> route(OutboundMessage message, Collection<AbstractGateway> gateways)
 	{
 		AbstractGateway candidateGateway;
-		ArrayList<AbstractGateway> candidateGateways = new ArrayList<AbstractGateway>();
+		ArrayList<AbstractGateway> candidateGateways = new ArrayList<>();
 		for (AbstractGateway g : gateways)
 		{
 			candidateGateway = null;

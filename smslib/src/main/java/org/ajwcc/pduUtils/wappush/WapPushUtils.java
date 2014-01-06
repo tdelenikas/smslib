@@ -56,13 +56,13 @@ public class WapPushUtils
 	public static final int WBXML_INDICATION_TAG_CONTENT_AND_ATTRIBUTES = 0xC6;
 
 	// maps for protocol / domain bytes    
-	private static final List<String> WBXML_PROTOCOLS = new ArrayList<String>();
+	private static final List<String> WBXML_PROTOCOLS = new ArrayList<>();
 
-	private static final HashMap<String, Integer> WBXML_PROTOCOL_BYTES = new HashMap<String, Integer>();
+	private static final HashMap<String, Integer> WBXML_PROTOCOL_BYTES = new HashMap<>();
 
-	private static final List<String> WBXML_DOMAINS = new ArrayList<String>();
+	private static final List<String> WBXML_DOMAINS = new ArrayList<>();
 
-	private static final HashMap<String, Integer> WBXML_DOMAIN_BYTES = new HashMap<String, Integer>();
+	private static final HashMap<String, Integer> WBXML_DOMAIN_BYTES = new HashMap<>();
 
 	// href protocol constants
 	public static final int WBXML_HREF_UNKNOWN = 0x0B;

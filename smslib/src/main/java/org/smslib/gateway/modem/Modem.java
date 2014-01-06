@@ -62,7 +62,7 @@ public class Modem extends AbstractGateway
 		this.simPin = simPin;
 		this.simPin2 = simPin2;
 		this.smscNumber = (smscNumber == null ? new MsIsdn() : smscNumber);
-		this.readMessagesSet = new HashSet<String>();
+		this.readMessagesSet = new HashSet<>();
 	}
 
 	public Modem(String gatewayId, String... parms)

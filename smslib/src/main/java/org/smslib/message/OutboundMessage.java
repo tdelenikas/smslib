@@ -58,7 +58,7 @@ public class OutboundMessage extends AbstractMessage
 
 	String operatorFailureCode = "";
 
-	List<String> operatorMessageIds = new ArrayList<String>();
+	List<String> operatorMessageIds = new ArrayList<>();
 
 	boolean requestDeliveryReport = false;
 
@@ -68,7 +68,7 @@ public class OutboundMessage extends AbstractMessage
 
 	int priority = 0;
 
-	LinkedList<AbstractGateway> routingTable = new LinkedList<AbstractGateway>();
+	LinkedList<AbstractGateway> routingTable = new LinkedList<>();
 
 	public OutboundMessage()
 	{

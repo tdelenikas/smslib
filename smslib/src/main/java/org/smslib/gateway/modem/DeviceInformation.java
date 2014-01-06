@@ -9,7 +9,7 @@ public class DeviceInformation
 	public enum Modes
 	{
 		PDU, TEXT
-	};
+	}
 
 	String manufacturer = "N/A";
 
@@ -25,7 +25,7 @@ public class DeviceInformation
 
 	Modes mode;
 
-	Collection<String> supportedEncodings = new HashSet<String>();
+	Collection<String> supportedEncodings = new HashSet<>();
 
 	String encoding;
 

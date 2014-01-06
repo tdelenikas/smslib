@@ -168,7 +168,7 @@ public class CommPortIdentifier
 			throw new RuntimeException(e);
 		}
 		// wrap the real objects
-		Vector<CommPortIdentifier> vec = new Vector<CommPortIdentifier>();
+		Vector<CommPortIdentifier> vec = new Vector<>();
 		while (list.hasMoreElements())
 			vec.add(new CommPortIdentifier(list.nextElement()));
 		return vec.elements();

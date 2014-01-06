@@ -15,7 +15,7 @@ public class Group
 	{
 		this.name = name;
 		this.description = description;
-		this.addressList = new LinkedList<MsIsdn>();
+		this.addressList = new LinkedList<>();
 	}
 
 	public String getName()
