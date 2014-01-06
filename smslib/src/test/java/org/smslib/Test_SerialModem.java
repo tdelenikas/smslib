@@ -11,7 +11,6 @@ import org.smslib.callback.events.DeliveryReportCallbackEvent;
 import org.smslib.callback.events.InboundMessageEvent;
 import org.smslib.crypto.AESKey;
 import org.smslib.gateway.modem.Modem;
-import org.smslib.message.OutboundEncryptedMessage;
 import org.smslib.message.OutboundMessage;
 
 public class Test_SerialModem extends TestCase
@@ -51,10 +50,10 @@ public class Test_SerialModem extends TestCase
 		Modem gateway = new Modem("modem", "COM4", "19200", "0000", "0000", "3097100000", "");
 		Service.getInstance().registerGateway(gateway);
 		// Print out some device information.
-		logger.info("Manufacturer       : " + gateway.getModemDriver().getDeviceInformation().getManufacturer());
-		logger.info("Signal (RSSI)      : " + gateway.getModemDriver().getDeviceInformation().getRssi() + "dBm");
-		logger.info("Mode               : " + gateway.getModemDriver().getDeviceInformation().getMode());
-		logger.info("Supported Encodings: " + gateway.getModemDriver().getDeviceInformation().getSupportedEncodings());
+		logger.info("Manufacturer       : " + gateway.getDeviceInformation().getManufacturer());
+		logger.info("Signal (RSSI)      : " + gateway.getDeviceInformation().getRssi() + "dBm");
+		logger.info("Mode               : " + gateway.getDeviceInformation().getMode());
+		logger.info("Supported Encodings: " + gateway.getDeviceInformation().getSupportedEncodings());
 		// Sleep to emulate async operation.
 		Thread.sleep(20000);
 		if (RECIPIENT.length() > 0)

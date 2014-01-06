@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
-import org.smslib.gateway.modem.DeviceInformation;
 import org.smslib.gateway.modem.DeviceInformation.Modes;
 import org.smslib.gateway.modem.Modem;
 import org.smslib.gateway.modem.ModemResponse;
@@ -38,8 +37,6 @@ public abstract class AbstractModemDriver
 	PollReader pollReader;
 
 	Modem modem;
-
-	DeviceInformation deviceInformation = new DeviceInformation();
 
 	boolean responseOk;
 
@@ -290,8 +287,8 @@ public abstract class AbstractModemDriver
 			atAT();
 			atEchoOff();
 			clearResponses();
-			this.deviceInformation.setManufacturer(atGetManufacturer().getResponseData());
-			this.deviceInformation.setModel(atGetModel().getResponseData());
+			this.modem.getDeviceInformation().setManufacturer(atGetManufacturer().getResponseData());
+			this.modem.getDeviceInformation().setModel(atGetModel().getResponseData());
 			Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")));
 			atFromModemSettings("init1");
 			Common.countSheeps(Integer.valueOf(getModemSettings("wait_unit")) * Integer.valueOf(getModemSettings("delay_after_init1")));
@@ -331,7 +328,7 @@ public abstract class AbstractModemDriver
 			atEnableClip();
 			if (!atNetworkRegistration().isResponseOk()) throw new IOException("Network registration failed!", null);
 			atVerboseOff();
-			if (atSetPDUMode().isResponseOk()) this.deviceInformation.setMode(Modes.PDU);
+			if (atSetPDUMode().isResponseOk()) this.modem.getDeviceInformation().setMode(Modes.PDU);
 			else
 			{
 				logger.warn("Modem does not support PDU, trying to switch to TEXT...");
@@ -340,7 +337,7 @@ public abstract class AbstractModemDriver
 					Capabilities caps = new Capabilities();
 					caps.set(Caps.CanSendMessage);
 					this.modem.setCapabilities(caps);
-					this.deviceInformation.setMode(Modes.TEXT);
+					this.modem.getDeviceInformation().setMode(Modes.TEXT);
 					ModemResponse encodings = atGetSupportedEncodings();
 					String encSet = encodings.getResponseData();
 					Matcher m = this.rxSupportedEncodings.matcher(encodings.getResponseData());
@@ -350,7 +347,7 @@ public abstract class AbstractModemDriver
 					encSet = encSet.replace("\"", "");
 					StringTokenizer tokens = new StringTokenizer(encSet, ",");
 					while (tokens.hasMoreTokens())
-						deviceInformation.getSupportedEncodings().add(tokens.nextToken());
+						this.modem.getDeviceInformation().getSupportedEncodings().add(tokens.nextToken());
 				}
 				else throw new IOException("Neither PDU nor TEXT mode are supported by this modem!");
 			}
@@ -360,25 +357,20 @@ public abstract class AbstractModemDriver
 		}
 	}
 
-	public DeviceInformation getDeviceInformation()
-	{
-		return this.deviceInformation;
-	}
-
 	public void refreshDeviceInformation() throws IOException, TimeoutException, NumberFormatException, InterruptedException
 	{
-		this.deviceInformation.setManufacturer(atGetManufacturer().getResponseData());
-		this.deviceInformation.setModel(atGetModel().getResponseData());
-		this.deviceInformation.setSerialNo(atGetSerialNo().getResponseData());
-		this.deviceInformation.setImsi(atGetImsi().getResponseData());
-		this.deviceInformation.setSwVersion(atGetSWVersion().getResponseData());
+		this.modem.getDeviceInformation().setManufacturer(atGetManufacturer().getResponseData());
+		this.modem.getDeviceInformation().setModel(atGetModel().getResponseData());
+		this.modem.getDeviceInformation().setSerialNo(atGetSerialNo().getResponseData());
+		this.modem.getDeviceInformation().setImsi(atGetImsi().getResponseData());
+		this.modem.getDeviceInformation().setSwVersion(atGetSWVersion().getResponseData());
 		String s = atGetSignalStrengh().getResponseData();
 		if (this.responseOk)
 		{
 			String s1 = s.substring(s.indexOf(':') + 1).trim();
 			StringTokenizer tokens = new StringTokenizer(s1, ",");
 			int rssi = Integer.valueOf(tokens.nextToken().trim());
-			this.deviceInformation.setRssi(rssi == 99 ? 99 : (-113 + 2 * rssi));
+			this.modem.getDeviceInformation().setRssi(rssi == 99 ? 99 : (-113 + 2 * rssi));
 		}
 	}
 
@@ -428,8 +420,8 @@ public abstract class AbstractModemDriver
 
 	public String getSignature(boolean complete)
 	{
-		String manufacturer = this.deviceInformation.getManufacturer().toLowerCase().replaceAll(" ", "").replaceAll(" ", "").replaceAll(" ", "");
-		String model = this.deviceInformation.getModel().toLowerCase().replaceAll(" ", "").replaceAll(" ", "").replaceAll(" ", "");
+		String manufacturer = this.modem.getDeviceInformation().getManufacturer().toLowerCase().replaceAll(" ", "").replaceAll(" ", "").replaceAll(" ", "");
+		String model = this.modem.getDeviceInformation().getModel().toLowerCase().replaceAll(" ", "").replaceAll(" ", "").replaceAll(" ", "");
 		return (complete ? manufacturer + "_" + model : manufacturer);
 	}
 
@@ -570,7 +562,7 @@ public abstract class AbstractModemDriver
 
 	public ModemResponse atGetMessages(String memoryLocation) throws IOException, TimeoutException, NumberFormatException, InterruptedException
 	{
-		if (atSwitchMemoryLocation(memoryLocation).isResponseOk()) return (this.deviceInformation.getMode() == Modes.PDU ? write("AT+CMGL=4\r") : write("AT+CMGL=\"ALL\"\r"));
+		if (atSwitchMemoryLocation(memoryLocation).isResponseOk()) return (this.modem.getDeviceInformation().getMode() == Modes.PDU ? write("AT+CMGL=4\r") : write("AT+CMGL=\"ALL\"\r"));
 		return new ModemResponse("", false);
 	}
 

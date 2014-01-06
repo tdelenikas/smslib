@@ -64,7 +64,7 @@ public class MessageReader extends Thread
 							String data = this.modem.getModemDriver().atGetMessages(memLocation).getResponseData();
 							if (data.length() > 0)
 							{
-								ArrayList<InboundMessage> messageList = (this.modem.getModemDriver().getDeviceInformation().getMode() == Modes.PDU ? parsePDU(data, memLocation) : parseTEXT(data, memLocation));
+								ArrayList<InboundMessage> messageList = (this.modem.getDeviceInformation().getMode() == Modes.PDU ? parsePDU(data, memLocation) : parseTEXT(data, memLocation));
 								for (InboundMessage message : messageList)
 									processMessage(message);
 							}

@@ -31,6 +31,8 @@ public class Modem extends AbstractGateway
 {
 	static Logger logger = LoggerFactory.getLogger(Modem.class);
 
+	DeviceInformation deviceInformation = new DeviceInformation();
+
 	AbstractModemDriver modemDriver;
 
 	String simPin;
@@ -70,6 +72,11 @@ public class Modem extends AbstractGateway
 		this(gatewayId, parms[0], Integer.valueOf(parms[1]), parms[2], parms[3], (Common.isNullOrEmpty(parms[4]) ? null : new MsIsdn(parms[4])), (Common.isNullOrEmpty(parms[5]) ? null : parms[5]));
 	}
 
+	public DeviceInformation getDeviceInformation()
+	{
+		return this.deviceInformation;
+	}
+
 	@Override
 	public void _start() throws IOException, TimeoutException, InterruptedException
 	{
@@ -79,7 +86,7 @@ public class Modem extends AbstractGateway
 			this.modemDriver.initializeModem();
 			this.messageReader = new MessageReader(this);
 			this.messageReader.start();
-			logger.info(String.format("Gateway: %s: %s, SL:%s, SIG: %s / %s", toShortString(), this.modemDriver.getDeviceInformation(), this.modemDriver.getMemoryLocations(), this.modemDriver.getSignature(true), this.modemDriver.getSignature(false)));
+			logger.info(String.format("Gateway: %s: %s, SL:%s, SIG: %s / %s", toShortString(), getDeviceInformation(), this.modemDriver.getMemoryLocations(), this.modemDriver.getSignature(true), this.modemDriver.getSignature(false)));
 		}
 	}
 
@@ -151,7 +158,7 @@ public class Modem extends AbstractGateway
 	{
 		synchronized (this.modemDriver._LOCK_)
 		{
-			if (this.modemDriver.getDeviceInformation().getMode() == Modes.PDU)
+			if (getDeviceInformation().getMode() == Modes.PDU)
 			{
 				List<String> pdus = message.getPdus(getSmscNumber(), getNextMultipartReferenceNo(), getRequestDeliveryReport());
 				for (String pdu : pdus)
