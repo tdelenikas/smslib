@@ -29,21 +29,21 @@ public class Settings
 
 	public static int daemonDispatcherYield = 10000;
 
+	public static int modemPollingInterval = 15000;
+
 	public static boolean keepOutboundMessagesInQueue = true;
-
-	public static int queueCallbackLowThreshold = 10;
-
-	public static int queueCallbackHighThreshold = 50;
 
 	public static int hoursToRetainOrphanedMessageParts = 72;
 
 	public static boolean deleteMessagesAfterCallback = false;
 
-	public static int modemPollingInterval = 15000;
-
 	public static void loadSettings()
 	{
 		if (System.getProperty("smslib.httpserver.port") != null) httpServerPort = Integer.parseInt(System.getProperty("smslib.httpserver.port"));
 		if (System.getProperty("smslib.httpserver.acl.status") != null) httpServerACLStatus = System.getProperty("smslib.httpserver.acl.status");
+
+		if (System.getProperty("smslib.keepoutboundmessagesinqueue") != null) keepOutboundMessagesInQueue = Boolean.valueOf(System.getProperty("smslib.keepoutboundmessagesinqueue"));
+		if (System.getProperty("smslib.hourstoretainorphanedmessageparts") != null) hoursToRetainOrphanedMessageParts = Integer.valueOf(System.getProperty("hourstoretainorphanedmessageparts"));
+		if (System.getProperty("smslib.deletemessagesaftercallback") != null) deleteMessagesAfterCallback = Boolean.valueOf(System.getProperty("smslib.deletemessagesaftercallback"));
 	}
 }
