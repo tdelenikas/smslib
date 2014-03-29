@@ -592,7 +592,7 @@ public abstract class AbstractModemDriver
 			Properties properties = new Properties();
 			properties.load(inputStream);
 			String value = "";
-			if (!Common.isNullOrEmpty(fullSignature)) properties.getProperty(fullSignature + "." + key);
+			if (!Common.isNullOrEmpty(fullSignature)) value = properties.getProperty(fullSignature + "." + key);
 			if ((Common.isNullOrEmpty(value)) && (!Common.isNullOrEmpty(shortSignature))) value = properties.getProperty(shortSignature + "." + key);
 			if (Common.isNullOrEmpty(value)) value = properties.getProperty("default" + "." + key);
 			return (Common.isNullOrEmpty(value) ? "" : value);
