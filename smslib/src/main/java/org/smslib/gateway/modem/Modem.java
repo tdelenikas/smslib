@@ -177,7 +177,7 @@ public class Modem extends AbstractGateway
 						j = j - smscLen - 1;
 					}
 					int refNo = this.modemDriver.atSendPDUMessage(j, pdu);
-					if (refNo > 0)
+					if (refNo >= 0)
 					{
 						message.setGatewayId(getGatewayId());
 						message.setSentDate(new Date());
@@ -195,7 +195,7 @@ public class Modem extends AbstractGateway
 			else
 			{
 				int refNo = this.modemDriver.atSendTEXTMessage(message.getRecipientAddress().getAddress(), message.getPayload().getText());
-				if (refNo > 0)
+				if (refNo >= 0)
 				{
 					message.setGatewayId(getGatewayId());
 					message.setSentDate(new Date());
