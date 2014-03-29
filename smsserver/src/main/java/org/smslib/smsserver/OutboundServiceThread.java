@@ -79,14 +79,14 @@ public class OutboundServiceThread extends Thread
 			ResultSet rs = s.executeQuery();
 			while (rs.next())
 			{
-				String messageId = rs.getString(1);
+				String messageId = rs.getString(1).trim();
 				if (!Common.isNullOrEmpty(messageId))
 				{
 					OutboundMessage message;
-					String senderId = rs.getString(2);
-					String recipient = rs.getString(3);
-					String text = rs.getString(4);
-					String encoding = rs.getString(5);
+					String senderId = rs.getString(2).trim();
+					String recipient = rs.getString(3).trim();
+					String text = rs.getString(4).trim();
+					String encoding = rs.getString(5).trim();
 					if (Encoding.getEncodingFromShortString(encoding) == Encoding.Enc7)
 					{
 						message = new OutboundMessage(new MsIsdn(recipient), text);

@@ -138,15 +138,15 @@ public class SMSServer
 		while (rs.next())
 		{
 			int fIndex = 0;
-			String className = rs.getString(++fIndex);
-			String gatewayId = rs.getString(++fIndex);
-			String p0 = rs.getString(++fIndex);
-			String p1 = rs.getString(++fIndex);
-			String p2 = rs.getString(++fIndex);
-			String p3 = rs.getString(++fIndex);
-			String p4 = rs.getString(++fIndex);
-			String p5 = rs.getString(++fIndex);
-			String senderId = rs.getString(++fIndex);
+			String className = rs.getString(++fIndex).trim();
+			String gatewayId = rs.getString(++fIndex).trim();
+			String p0 = rs.getString(++fIndex).trim();
+			String p1 = rs.getString(++fIndex).trim();
+			String p2 = rs.getString(++fIndex).trim();
+			String p3 = rs.getString(++fIndex).trim();
+			String p4 = rs.getString(++fIndex).trim();
+			String p5 = rs.getString(++fIndex).trim();
+			String senderId = rs.getString(++fIndex).trim();
 			int priority = rs.getInt(++fIndex);
 			int maxMessageParts = rs.getInt(++fIndex);
 			boolean requestDeliveryReport = (rs.getInt(++fIndex) == 1);
@@ -189,14 +189,14 @@ public class SMSServer
 		while (rs1.next())
 		{
 			int groupId = rs1.getInt(1);
-			String groupName = rs1.getString(2);
-			String groupDescription = rs1.getString(3);
+			String groupName = rs1.getString(2).trim();
+			String groupDescription = rs1.getString(3).trim();
 			Group group = new Group(groupName, groupDescription);
 			PreparedStatement s2 = db.prepareStatement("select address from smslib_group_recipients where group_id = ?");
 			s2.setInt(1, groupId);
 			ResultSet rs2 = s2.executeQuery();
 			while (rs2.next())
-				group.addAddress(new MsIsdn(rs2.getString(1)));
+				group.addAddress(new MsIsdn(rs2.getString(1).trim()));
 			rs2.close();
 			Service.getInstance().getGroupManager().addGroup(group);
 		}
@@ -214,8 +214,8 @@ public class SMSServer
 		while (rs.next())
 		{
 			if (nr == null) nr = new NumberRouter();
-			String address_regex = rs.getString(1);
-			String gatewayId = rs.getString(2);
+			String address_regex = rs.getString(1).trim();
+			String gatewayId = rs.getString(2).trim();
 			nr.addRule(address_regex, Service.getInstance().getGatewayById(gatewayId));
 		}
 		rs.close();
