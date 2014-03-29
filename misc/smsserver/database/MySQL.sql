@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.5.34 - MySQL Community Server (GPL)
--- Server OS:                    Win32
+-- Server version:               5.6.16-log - MySQL Community Server (GPL)
+-- Server OS:                    Win64
 -- HeidiSQL Version:             8.2.0.4675
 -- --------------------------------------------------------
 
@@ -9,11 +9,6 @@
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
--- Dumping database structure for smslib
-CREATE DATABASE IF NOT EXISTS `smslib` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `smslib`;
-
 
 -- Dumping structure for table smslib.smslib_calls
 CREATE TABLE IF NOT EXISTS `smslib_calls` (
@@ -34,15 +29,15 @@ CREATE TABLE IF NOT EXISTS `smslib_gateways` (
   `gateway_id` varchar(32) NOT NULL,
   `p0` varchar(32) NOT NULL,
   `p1` varchar(32) NOT NULL,
-  `p2` varchar(32) NOT NULL,
-  `p3` varchar(32) NOT NULL,
-  `p4` varchar(32) NOT NULL,
-  `p5` varchar(32) NOT NULL,
-  `sender_address` varchar(16) NOT NULL,
+  `p2` varchar(32) DEFAULT NULL,
+  `p3` varchar(32) DEFAULT NULL,
+  `p4` varchar(32) DEFAULT NULL,
+  `p5` varchar(32) DEFAULT NULL,
+  `sender_address` varchar(16) DEFAULT NULL,
   `priority` int(11) NOT NULL DEFAULT '0',
   `max_message_parts` int(11) NOT NULL DEFAULT '2',
   `delivery_reports` int(11) NOT NULL DEFAULT '0',
-  `profile` varchar(32) NOT NULL,
+  `profile` varchar(32) NOT NULL DEFAULT '*',
   `is_enabled` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `gateway_id` (`gateway_id`)
