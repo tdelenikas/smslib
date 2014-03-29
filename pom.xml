@@ -7,7 +7,7 @@
 		<slf4j-log4j12.version>1.7.2</slf4j-log4j12.version>
 		<log4j.version>1.2.17</log4j.version>
 		<simple.version>5.0.4</simple.version>
-		<mysql.version>5.1.20</mysql.version>
+		<mysql.version>5.1.29</mysql.version>
 		<mail.version>1.4</mail.version>
 		<ikvm>ikvm-7.2.4630.5</ikvm>
 		<cloudhopper-smpp.version>5.0.1</cloudhopper-smpp.version>
