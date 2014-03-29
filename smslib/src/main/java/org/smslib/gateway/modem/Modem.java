@@ -1,6 +1,8 @@
 
 package org.smslib.gateway.modem;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -255,7 +257,14 @@ public class Modem extends AbstractGateway
 
 	private boolean isPortAnIpAddress(String address)
 	{
-		if (address.indexOf('.') >= 0) return true;
-		return false;
+		try
+		{
+			InetAddress.getByName(address);
+			return true;
+		}
+		catch (UnknownHostException e)
+		{
+			return false;
+		}
 	}
 }
