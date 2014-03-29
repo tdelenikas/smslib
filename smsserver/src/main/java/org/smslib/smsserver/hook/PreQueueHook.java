@@ -17,6 +17,7 @@ public class PreQueueHook implements IPreQueueHook
 	@Override
 	public boolean process(OutboundMessage message)
 	{
+/*
 		Connection db = null;
 		PreparedStatement s = null;
 		try
@@ -59,5 +60,7 @@ public class PreQueueHook implements IPreQueueHook
 				}
 			}
 		}
+*/
+		return false;
 	}
 }

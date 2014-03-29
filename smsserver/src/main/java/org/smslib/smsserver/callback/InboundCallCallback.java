@@ -18,6 +18,7 @@ public class InboundCallCallback implements IInboundCallCallback
 	@Override
 	public boolean process(InboundCallEvent event)
 	{
+/*
 		Connection db = null;
 		PreparedStatement s = null;
 		try
@@ -61,5 +62,7 @@ public class InboundCallCallback implements IInboundCallCallback
 				}
 			}
 		}
+*/
+		return false;
 	}
 }

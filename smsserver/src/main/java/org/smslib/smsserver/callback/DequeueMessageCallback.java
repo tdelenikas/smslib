@@ -17,6 +17,7 @@ public class DequeueMessageCallback implements IDequeueMessageCallback
 	@Override
 	public boolean process(DequeueMessageCallbackEvent event)
 	{
+/*
 		Connection db = null;
 		PreparedStatement s = null;
 		try
@@ -58,5 +59,7 @@ public class DequeueMessageCallback implements IDequeueMessageCallback
 				}
 			}
 		}
+*/
+		return false;
 	}
 }

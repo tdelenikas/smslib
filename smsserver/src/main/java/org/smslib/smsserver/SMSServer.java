@@ -21,18 +21,12 @@
 package org.smslib.smsserver;
 
 import java.lang.reflect.Constructor;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Settings;
 import org.smslib.gateway.AbstractGateway;
-import org.smslib.groups.Group;
 import org.smslib.helper.Common;
 import org.smslib.message.MsIsdn;
 import org.smslib.routing.NumberRouter;
@@ -43,6 +37,10 @@ import org.smslib.smsserver.callback.InboundCallCallback;
 import org.smslib.smsserver.callback.InboundMessageCallback;
 import org.smslib.smsserver.callback.MessageSentCallback;
 import org.smslib.smsserver.callback.ServiceStatusCallback;
+import org.smslib.smsserver.db.IDatabaseHandler;
+import org.smslib.smsserver.db.MySQLDatabaseHandler;
+import org.smslib.smsserver.db.data.GatewayDefinition;
+import org.smslib.smsserver.db.data.NumberRouteDefinition;
 import org.smslib.smsserver.hook.PreQueueHook;
 
 public class SMSServer
@@ -51,19 +49,13 @@ public class SMSServer
 
 	private static final SMSServer smsserver = new SMSServer();
 
-	public String dbUrl = "";
-
-	public String dbDriver = "";
-
-	public String dbUsername = "";
-
-	public String dbPassword = "";
-
-	public String profile = "";
+	String profile = "";
 
 	public Object LOCK = new Object();
 
 	OutboundServiceThread outboundService;
+
+	IDatabaseHandler databaseHandler;
 
 	public static SMSServer getInstance()
 	{
@@ -79,15 +71,7 @@ public class SMSServer
 		return this.outboundService;
 	}
 
-	public void setDatabase(String driver, String url, String username, String password)
-	{
-		this.dbDriver = driver;
-		this.dbUrl = url;
-		this.dbUsername = username;
-		this.dbPassword = password;
-	}
-
-	public void startup() throws SQLException, ClassNotFoundException, InterruptedException
+	public void startup() throws Exception
 	{
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 		Service.getInstance().setServiceStatusCallback(new ServiceStatusCallback());
@@ -100,7 +84,7 @@ public class SMSServer
 		Service.getInstance().setInboundCallCallback(new InboundCallCallback());
 		Service.getInstance().start();
 		loadGatewayDefinitions();
-		loadGroups();
+		//loadGroups();
 		loadNumberRoutes();
 		this.outboundService = new OutboundServiceThread();
 	}
@@ -110,77 +94,40 @@ public class SMSServer
 		new ShutdownThread().start();
 	}
 
-	public Connection getDbConnection() throws ClassNotFoundException, InterruptedException
+	private void loadGatewayDefinitions() throws Exception
 	{
-		Connection db = null;
-		while (db == null)
+		Collection<GatewayDefinition> gateways = databaseHandler.getGatewayDefinitions(profile);
+		for (GatewayDefinition gd : gateways)
 		{
-			try
-			{
-				Class.forName(this.dbDriver);
-				db = DriverManager.getConnection(this.dbUrl, this.dbUsername, this.dbPassword);
-				db.setAutoCommit(false);
-			}
-			catch (SQLException e)
-			{
-				logger.warn("DB error, retrying...", e);
-				Thread.sleep(5000);
-			}
-		}
-		return db;
-	}
-
-	private void loadGatewayDefinitions() throws ClassNotFoundException, SQLException, InterruptedException
-	{
-		Connection db = getDbConnection();
-		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs = s.executeQuery("select class, gateway_id, p0, p1, p2, p3, p4, p5, sender_address, priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
-		while (rs.next())
-		{
-			int fIndex = 0;
-			String className = rs.getString(++fIndex).trim();
-			String gatewayId = rs.getString(++fIndex).trim();
-			String p0 = rs.getString(++fIndex).trim();
-			String p1 = rs.getString(++fIndex).trim();
-			String p2 = rs.getString(++fIndex).trim();
-			String p3 = rs.getString(++fIndex).trim();
-			String p4 = rs.getString(++fIndex).trim();
-			String p5 = rs.getString(++fIndex).trim();
-			String senderId = rs.getString(++fIndex).trim();
-			int priority = rs.getInt(++fIndex);
-			int maxMessageParts = rs.getInt(++fIndex);
-			boolean requestDeliveryReport = (rs.getInt(++fIndex) == 1);
-			logger.info("Registering gateway: " + gatewayId);
+			logger.info("Registering gateway: " + gd.gatewayId);
 			try
 			{
 				String[] parms = new String[6];
-				parms[0] = p0;
-				parms[1] = p1;
-				parms[2] = p2;
-				parms[3] = p3;
-				parms[4] = p4;
-				parms[5] = p5;
-				Object[] args = new Object[] { gatewayId, parms };
+				parms[0] = gd.p0;
+				parms[1] = gd.p1;
+				parms[2] = gd.p2;
+				parms[3] = gd.p3;
+				parms[4] = gd.p4;
+				parms[5] = gd.p5;
+				Object[] args = new Object[] { gd.gatewayId, parms };
 				Class<?>[] argsClass = new Class[] { String.class, String[].class };
-				Class<?> c = Class.forName(className);
+				Class<?> c = Class.forName(gd.className);
 				Constructor<?> constructor = c.getConstructor(argsClass);
 				AbstractGateway g = (AbstractGateway) constructor.newInstance(args);
-				if (!Common.isNullOrEmpty(senderId)) g.setSenderAddress(new MsIsdn(senderId));
-				g.setPriority(priority);
-				g.setMaxMessageParts(maxMessageParts);
-				g.setRequestDeliveryReport(requestDeliveryReport);
+				if (!Common.isNullOrEmpty(gd.senderId)) g.setSenderAddress(new MsIsdn(gd.senderId));
+				g.setPriority(gd.priority);
+				g.setMaxMessageParts(gd.maxMessageParts);
+				g.setRequestDeliveryReport(gd.requestDeliveryReport);
 				Service.getInstance().registerGateway(g);
 			}
 			catch (Exception e)
 			{
-				logger.error("Gateway " + gatewayId + " did not start properly!", e);
+				logger.error("Gateway " + gd.gatewayId + " did not start properly!", e);
 			}
 		}
-		rs.close();
-		s.close();
-		db.close();
 	}
 
+/*
 	private void loadGroups() throws ClassNotFoundException, SQLException, InterruptedException
 	{
 		Connection db = getDbConnection();
@@ -204,24 +151,19 @@ public class SMSServer
 		s1.close();
 		db.close();
 	}
+*/
 
-	private void loadNumberRoutes() throws ClassNotFoundException, InterruptedException, SQLException
+	private void loadNumberRoutes() throws Exception
 	{
-		NumberRouter nr = null;
-		Connection db = getDbConnection();
-		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs = s.executeQuery("select address_regex, gateway_id from smslib_number_routes where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "') and is_enabled = 1");
-		while (rs.next())
+		NumberRouter nr = new NumberRouter();
+		Collection<NumberRouteDefinition> routes = databaseHandler.getNumberRouteDefinitions(profile);
+		for (NumberRouteDefinition r : routes)
 		{
-			if (nr == null) nr = new NumberRouter();
-			String address_regex = rs.getString(1).trim();
-			String gatewayId = rs.getString(2).trim();
-			nr.addRule(address_regex, Service.getInstance().getGatewayById(gatewayId));
+			AbstractGateway g = Service.getInstance().getGatewayById(r.gatewayId);
+			if (g == null) logger.error("Unknown gateway in number routes: " + r.gatewayId);
+			else nr.addRule(r.addressRegex, g);
 		}
-		rs.close();
-		s.close();
-		db.close();
-		if (nr != null) Service.getInstance().setRouter(nr);
+		if (nr.getRules().size() > 0) Service.getInstance().setRouter(nr);
 	}
 
 	public static void main(String[] args)
@@ -242,17 +184,26 @@ public class SMSServer
 		{
 			try
 			{
+				String dbUrl = "";
+
+				String dbDriver = "";
+
+				String dbUsername = "";
+
+				String dbPassword = "";
+
 				int i = 0;
 				while (i < args.length)
 				{
-					if (args[i].equalsIgnoreCase("-url")) SMSServer.getInstance().dbUrl = args[++i];
-					else if (args[i].equalsIgnoreCase("-driver")) SMSServer.getInstance().dbDriver = args[++i];
-					else if (args[i].equalsIgnoreCase("-username")) SMSServer.getInstance().dbUsername = args[++i];
-					else if (args[i].equalsIgnoreCase("-password")) SMSServer.getInstance().dbPassword = args[++i];
+					if (args[i].equalsIgnoreCase("-url")) dbUrl = args[++i];
+					else if (args[i].equalsIgnoreCase("-driver")) dbDriver = args[++i];
+					else if (args[i].equalsIgnoreCase("-username")) dbUsername = args[++i];
+					else if (args[i].equalsIgnoreCase("-password")) dbPassword = args[++i];
 					else if (args[i].equalsIgnoreCase("-profile")) SMSServer.getInstance().profile = args[++i];
 					i++;
 				}
-				if (SMSServer.getInstance().dbUrl.length() == 0 || SMSServer.getInstance().dbDriver.length() == 0 || SMSServer.getInstance().dbUsername.length() == 0) throw new IllegalArgumentException();
+				if (dbUrl.length() == 0 || dbDriver.length() == 0 || dbUsername.length() == 0) throw new IllegalArgumentException();
+				if (dbDriver.equalsIgnoreCase("com.mysql.jdbc.Driver")) getInstance().databaseHandler = new MySQLDatabaseHandler(dbUrl, dbDriver, dbUsername, dbPassword);
 				SMSServer.getInstance().startup();
 			}
 			catch (IllegalArgumentException e)

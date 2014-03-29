@@ -18,6 +18,7 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 	@Override
 	public boolean process(DeliveryReportCallbackEvent event)
 	{
+/*
 		Connection db = null;
 		PreparedStatement s = null;
 		try
@@ -63,5 +64,7 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 				}
 			}
 		}
+*/
+		return false;
 	}
 }

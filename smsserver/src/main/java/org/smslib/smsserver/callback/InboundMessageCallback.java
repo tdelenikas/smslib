@@ -19,6 +19,7 @@ public class InboundMessageCallback implements IInboundMessageCallback
 	@Override
 	public boolean process(InboundMessageEvent event)
 	{
+/*
 		Connection db = null;
 		PreparedStatement s = null;
 		try
@@ -76,5 +77,7 @@ public class InboundMessageCallback implements IInboundMessageCallback
 				}
 			}
 		}
+*/
+		return false;
 	}
 }
