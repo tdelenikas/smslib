@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.core.Settings;
 import org.smslib.gateway.AbstractGateway;
+import org.smslib.groups.Group;
 import org.smslib.helper.Common;
 import org.smslib.message.MsIsdn;
 import org.smslib.routing.NumberRouter;
@@ -40,6 +41,8 @@ import org.smslib.smsserver.callback.ServiceStatusCallback;
 import org.smslib.smsserver.db.IDatabaseHandler;
 import org.smslib.smsserver.db.MySQLDatabaseHandler;
 import org.smslib.smsserver.db.data.GatewayDefinition;
+import org.smslib.smsserver.db.data.GroupDefinition;
+import org.smslib.smsserver.db.data.GroupRecipientDefinition;
 import org.smslib.smsserver.db.data.NumberRouteDefinition;
 import org.smslib.smsserver.hook.PreQueueHook;
 
@@ -62,7 +65,7 @@ public class SMSServer
 		return smsserver;
 	}
 
-	public SMSServer()
+	private SMSServer()
 	{
 	}
 
@@ -84,7 +87,7 @@ public class SMSServer
 		Service.getInstance().setInboundCallCallback(new InboundCallCallback());
 		Service.getInstance().start();
 		loadGatewayDefinitions();
-		//loadGroups();
+		loadGroups();
 		loadNumberRoutes();
 		this.outboundService = new OutboundServiceThread();
 	}
@@ -127,31 +130,17 @@ public class SMSServer
 		}
 	}
 
-/*
-	private void loadGroups() throws ClassNotFoundException, SQLException, InterruptedException
+	private void loadGroups() throws Exception
 	{
-		Connection db = getDbConnection();
-		Statement s1 = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs1 = s1.executeQuery("select id, group_name, group_description from smslib_groups where (profile = '*' or profile = '" + SMSServer.getInstance().profile + "')");
-		while (rs1.next())
+		Collection<GroupDefinition> groups = databaseHandler.getGroupDefinitions(profile);
+		for (GroupDefinition g : groups)
 		{
-			int groupId = rs1.getInt(1);
-			String groupName = rs1.getString(2).trim();
-			String groupDescription = rs1.getString(3).trim();
-			Group group = new Group(groupName, groupDescription);
-			PreparedStatement s2 = db.prepareStatement("select address from smslib_group_recipients where group_id = ?");
-			s2.setInt(1, groupId);
-			ResultSet rs2 = s2.executeQuery();
-			while (rs2.next())
-				group.addAddress(new MsIsdn(rs2.getString(1).trim()));
-			rs2.close();
+			Group group = new Group(g.getName(), g.getDescription());
+			for (GroupRecipientDefinition gr : g.getRecipients())
+				group.addAddress(new MsIsdn(gr.getAddress()));
 			Service.getInstance().getGroupManager().addGroup(group);
 		}
-		rs1.close();
-		s1.close();
-		db.close();
 	}
-*/
 
 	private void loadNumberRoutes() throws Exception
 	{

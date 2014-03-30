@@ -2,6 +2,7 @@
 package org.smslib.smsserver.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Collection;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.smsserver.SMSServer;
 import org.smslib.smsserver.db.data.GatewayDefinition;
+import org.smslib.smsserver.db.data.GroupDefinition;
+import org.smslib.smsserver.db.data.GroupRecipientDefinition;
 import org.smslib.smsserver.db.data.NumberRouteDefinition;
 
 public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDatabaseHandler
@@ -57,5 +60,31 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		s.close();
 		db.close();
 		return routeList;
+	}
+
+	public Collection<GroupDefinition> getGroupDefinitions(String profile) throws Exception
+	{
+		List<GroupDefinition> groups = new LinkedList<GroupDefinition>();
+		Connection db = getDbConnection();
+		Statement s1 = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs1 = s1.executeQuery("select id, group_name, group_description from smslib_groups where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
+		while (rs1.next())
+		{
+			int groupId = rs1.getInt(1);
+			String groupName = rs1.getString(2).trim();
+			String groupDescription = rs1.getString(3).trim();
+			List<GroupRecipientDefinition> recipients = new LinkedList<GroupRecipientDefinition>();
+			PreparedStatement s2 = db.prepareStatement("select address from smslib_group_recipients where group_id = ? and is_enabled = 1");
+			s2.setInt(1, groupId);
+			ResultSet rs2 = s2.executeQuery();
+			while (rs2.next())
+				recipients.add(new GroupRecipientDefinition(rs2.getString(1).trim()));
+			rs2.close();
+			groups.add(new GroupDefinition(groupName, groupDescription, recipients));
+		}
+		rs1.close();
+		s1.close();
+		db.close();
+		return groups;
 	}
 }
