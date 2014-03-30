@@ -5,15 +5,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.smsserver.SMSServer;
+import org.smslib.smsserver.db.data.DeliveryReportDefinition;
 import org.smslib.smsserver.db.data.GatewayDefinition;
 import org.smslib.smsserver.db.data.GroupDefinition;
 import org.smslib.smsserver.db.data.GroupRecipientDefinition;
+import org.smslib.smsserver.db.data.InboundCallDefinition;
 import org.smslib.smsserver.db.data.NumberRouteDefinition;
 
 public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDatabaseHandler
@@ -62,6 +65,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		return routeList;
 	}
 
+	@Override
 	public Collection<GroupDefinition> getGroupDefinitions(String profile) throws Exception
 	{
 		List<GroupDefinition> groups = new LinkedList<GroupDefinition>();
@@ -88,6 +92,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		return groups;
 	}
 
+	@Override
 	public void SetMessage(String messageId, String status) throws Exception
 	{
 		Connection db = null;
@@ -98,6 +103,64 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 			s = db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
 			s.setString(1, status);
 			s.setString(2, messageId);
+			s.executeUpdate();
+			db.commit();
+		}
+		catch (Exception e)
+		{
+			if (db != null) db.rollback();
+			logger.error("Error!", e);
+			throw e;
+		}
+		finally
+		{
+			if (s != null) s.close();
+			if (db != null) db.close();
+		}
+	}
+
+	@Override
+	public void SaveInboundCall(InboundCallDefinition inboundCall) throws Exception
+	{
+		Connection db = null;
+		PreparedStatement s = null;
+		try
+		{
+			db = getDbConnection();
+			s = db.prepareStatement("insert into smslib_calls (date, address, gateway_id) values (?, ?, ?)");
+			s.setTimestamp(1, new Timestamp(inboundCall.getDate().getTime()));
+			s.setString(2, inboundCall.getMsisdn().getAddress());
+			s.setString(3, inboundCall.getGatewayId());
+			s.executeUpdate();
+			db.commit();
+		}
+		catch (Exception e)
+		{
+			if (db != null) db.rollback();
+			logger.error("Error!", e);
+			throw e;
+		}
+		finally
+		{
+			if (s != null) s.close();
+			if (db != null) db.close();
+		}
+	}
+
+	@Override
+	public void SaveDeliveryReport(DeliveryReportDefinition deliveryReport) throws Exception
+	{
+		Connection db = null;
+		PreparedStatement s = null;
+		try
+		{
+			db = getDbConnection();
+			s = db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where address = ? and operator_message_id = ? and gateway_id = ?");
+			s.setString(1, deliveryReport.getDeliveryStatus());
+			s.setTimestamp(2, new Timestamp(deliveryReport.getOriginalReceivedDate().getTime()));
+			s.setString(3, deliveryReport.getRecipientAddress().getAddress());
+			s.setString(4, deliveryReport.getOriginalMessageId());
+			s.setString(5, deliveryReport.getGatewayId());
 			s.executeUpdate();
 			db.commit();
 		}
