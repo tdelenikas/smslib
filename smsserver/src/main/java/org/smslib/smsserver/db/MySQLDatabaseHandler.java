@@ -31,20 +31,8 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		ResultSet rs = s.executeQuery("select class, gateway_id, ifnull(p0, ''), ifnull(p1, ''), ifnull(p2, ''), ifnull(p3, ''), ifnull(p4, ''), ifnull(p5, ''), sender_address, priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
 		while (rs.next())
 		{
-			GatewayDefinition g = new GatewayDefinition();
 			int fIndex = 0;
-			g.className = rs.getString(++fIndex).trim();
-			g.gatewayId = rs.getString(++fIndex).trim();
-			g.p0 = rs.getString(++fIndex).trim();
-			g.p1 = rs.getString(++fIndex).trim();
-			g.p2 = rs.getString(++fIndex).trim();
-			g.p3 = rs.getString(++fIndex).trim();
-			g.p4 = rs.getString(++fIndex).trim();
-			g.p5 = rs.getString(++fIndex).trim();
-			g.senderId = rs.getString(++fIndex).trim();
-			g.priority = rs.getInt(++fIndex);
-			g.maxMessageParts = rs.getInt(++fIndex);
-			g.requestDeliveryReport = (rs.getInt(++fIndex) == 1);
+			GatewayDefinition g = new GatewayDefinition(rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getString(++fIndex).trim(), rs.getInt(++fIndex), rs.getInt(++fIndex), (rs.getInt(++fIndex) == 1));
 			gatewayList.add(g);
 		}
 		rs.close();
@@ -62,9 +50,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		ResultSet rs = s.executeQuery("select address_regex, gateway_id from smslib_number_routes where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
 		while (rs.next())
 		{
-			NumberRouteDefinition r = new NumberRouteDefinition();
-			r.addressRegex = rs.getString(1).trim();
-			r.gatewayId = rs.getString(2).trim();
+			NumberRouteDefinition r = new NumberRouteDefinition(rs.getString(1).trim(), rs.getString(2).trim());
 			routeList.add(r);
 		}
 		rs.close();

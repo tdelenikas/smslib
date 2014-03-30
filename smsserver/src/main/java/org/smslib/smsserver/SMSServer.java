@@ -99,30 +99,30 @@ public class SMSServer
 		Collection<GatewayDefinition> gateways = databaseHandler.getGatewayDefinitions(profile);
 		for (GatewayDefinition gd : gateways)
 		{
-			logger.info("Registering gateway: " + gd.gatewayId);
+			logger.info("Registering gateway: " + gd.getGatewayId());
 			try
 			{
 				String[] parms = new String[6];
-				parms[0] = gd.p0;
-				parms[1] = gd.p1;
-				parms[2] = gd.p2;
-				parms[3] = gd.p3;
-				parms[4] = gd.p4;
-				parms[5] = gd.p5;
-				Object[] args = new Object[] { gd.gatewayId, parms };
+				parms[0] = gd.getP0();
+				parms[1] = gd.getP1();
+				parms[2] = gd.getP2();
+				parms[3] = gd.getP3();
+				parms[4] = gd.getP4();
+				parms[5] = gd.getP5();
+				Object[] args = new Object[] { gd.getGatewayId(), parms };
 				Class<?>[] argsClass = new Class[] { String.class, String[].class };
-				Class<?> c = Class.forName(gd.className);
+				Class<?> c = Class.forName(gd.getClassName());
 				Constructor<?> constructor = c.getConstructor(argsClass);
 				AbstractGateway g = (AbstractGateway) constructor.newInstance(args);
-				if (!Common.isNullOrEmpty(gd.senderId)) g.setSenderAddress(new MsIsdn(gd.senderId));
-				g.setPriority(gd.priority);
-				g.setMaxMessageParts(gd.maxMessageParts);
-				g.setRequestDeliveryReport(gd.requestDeliveryReport);
+				if (!Common.isNullOrEmpty(gd.getSenderId())) g.setSenderAddress(new MsIsdn(gd.getSenderId()));
+				g.setPriority(gd.getPriority());
+				g.setMaxMessageParts(gd.getMaxMessageParts());
+				g.setRequestDeliveryReport(gd.getRequestDeliveryReport());
 				Service.getInstance().registerGateway(g);
 			}
 			catch (Exception e)
 			{
-				logger.error("Gateway " + gd.gatewayId + " did not start properly!", e);
+				logger.error("Gateway " + gd.getGatewayId() + " did not start properly!", e);
 			}
 		}
 	}
@@ -159,9 +159,9 @@ public class SMSServer
 		Collection<NumberRouteDefinition> routes = databaseHandler.getNumberRouteDefinitions(profile);
 		for (NumberRouteDefinition r : routes)
 		{
-			AbstractGateway g = Service.getInstance().getGatewayById(r.gatewayId);
-			if (g == null) logger.error("Unknown gateway in number routes: " + r.gatewayId);
-			else nr.addRule(r.addressRegex, g);
+			AbstractGateway g = Service.getInstance().getGatewayById(r.getGatewayId());
+			if (g == null) logger.error("Unknown gateway in number routes: " + r.getGatewayId());
+			else nr.addRule(r.getAddressRegex(), g);
 		}
 		if (nr.getRules().size() > 0) Service.getInstance().setRouter(nr);
 	}
