@@ -11,4 +11,5 @@ public interface IDatabaseHandler
 	public Collection<GatewayDefinition> getGatewayDefinitions(String profile) throws Exception;
 	public Collection<NumberRouteDefinition> getNumberRouteDefinitions(String profile) throws Exception;
 	public Collection<GroupDefinition> getGroupDefinitions(String profile) throws Exception;
+	public void SetMessage(String messageId, String status) throws Exception;
 }

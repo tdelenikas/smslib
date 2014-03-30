@@ -74,6 +74,11 @@ public class SMSServer
 		return this.outboundService;
 	}
 
+	public IDatabaseHandler getDatabaseHandler()
+	{
+		return databaseHandler;
+	}
+
 	public void startup() throws Exception
 	{
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
@@ -174,13 +179,9 @@ public class SMSServer
 			try
 			{
 				String dbUrl = "";
-
 				String dbDriver = "";
-
 				String dbUsername = "";
-
 				String dbPassword = "";
-
 				int i = 0;
 				while (i < args.length)
 				{

@@ -87,4 +87,30 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		db.close();
 		return groups;
 	}
+
+	public void SetMessage(String messageId, String status) throws Exception
+	{
+		Connection db = null;
+		PreparedStatement s = null;
+		try
+		{
+			db = getDbConnection();
+			s = db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
+			s.setString(1, status);
+			s.setString(2, messageId);
+			s.executeUpdate();
+			db.commit();
+		}
+		catch (Exception e)
+		{
+			if (db != null) db.rollback();
+			logger.error("Error!", e);
+			throw e;
+		}
+		finally
+		{
+			if (s != null) s.close();
+			if (db != null) db.close();
+		}
+	}
 }
