@@ -28,6 +28,8 @@ public abstract class AbstractModemDriver
 
 	public Object _LOCK_ = new Object();
 
+	Properties modemProperties;
+
 	InputStream in = null;
 
 	OutputStream out = null;
@@ -56,6 +58,18 @@ public abstract class AbstractModemDriver
 
 	public AbstractModemDriver(Modem modem)
 	{
+		modemProperties = new Properties();
+		try
+		{
+			InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("modem.properties");
+			modemProperties.load(inputStream);
+			inputStream.close();
+		}
+		catch (Exception e)
+		{
+			logger.error("Error!", e);
+			throw new RuntimeException(e);
+		}
 		this.modem = modem;
 	}
 
@@ -583,23 +597,12 @@ public abstract class AbstractModemDriver
 
 	public String getModemSettings(String key) throws IOException
 	{
-		InputStream inputStream = null;
-		try
-		{
-			String fullSignature = getSignature(true);
-			String shortSignature = getSignature(false);
-			inputStream = this.getClass().getClassLoader().getResourceAsStream("modem.properties");
-			Properties properties = new Properties();
-			properties.load(inputStream);
-			String value = "";
-			if (!Common.isNullOrEmpty(fullSignature)) value = properties.getProperty(fullSignature + "." + key);
-			if ((Common.isNullOrEmpty(value)) && (!Common.isNullOrEmpty(shortSignature))) value = properties.getProperty(shortSignature + "." + key);
-			if (Common.isNullOrEmpty(value)) value = properties.getProperty("default" + "." + key);
-			return (Common.isNullOrEmpty(value) ? "" : value);
-		}
-		finally
-		{
-			if (inputStream != null) inputStream.close();
-		}
+		String fullSignature = getSignature(true);
+		String shortSignature = getSignature(false);
+		String value = "";
+		if (!Common.isNullOrEmpty(fullSignature)) value = modemProperties.getProperty(fullSignature + "." + key);
+		if ((Common.isNullOrEmpty(value)) && (!Common.isNullOrEmpty(shortSignature))) value = modemProperties.getProperty(shortSignature + "." + key);
+		if (Common.isNullOrEmpty(value)) value = modemProperties.getProperty("default" + "." + key);
+		return (Common.isNullOrEmpty(value) ? "" : value);
 	}
 }
