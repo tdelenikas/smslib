@@ -43,7 +43,7 @@ public class Settings
 		if (System.getProperty("smslib.httpserver.acl.status") != null) httpServerACLStatus = System.getProperty("smslib.httpserver.acl.status");
 
 		if (System.getProperty("smslib.keepoutboundmessagesinqueue") != null) keepOutboundMessagesInQueue = Boolean.valueOf(System.getProperty("smslib.keepoutboundmessagesinqueue"));
-		if (System.getProperty("smslib.hourstoretainorphanedmessageparts") != null) hoursToRetainOrphanedMessageParts = Integer.valueOf(System.getProperty("hourstoretainorphanedmessageparts"));
+		if (System.getProperty("smslib.hourstoretainorphanedmessageparts") != null) hoursToRetainOrphanedMessageParts = Integer.valueOf(System.getProperty("smslib.hourstoretainorphanedmessageparts"));
 		if (System.getProperty("smslib.deletemessagesaftercallback") != null) deleteMessagesAfterCallback = Boolean.valueOf(System.getProperty("smslib.deletemessagesaftercallback"));
 	}
 }
