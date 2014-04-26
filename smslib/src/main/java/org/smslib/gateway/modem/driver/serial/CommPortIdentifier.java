@@ -60,7 +60,7 @@ public class CommPortIdentifier
 			}
 			catch (ClassNotFoundException e2)
 			{
-				throw new RuntimeException("CommPortIdentifier class not found");
+				throw new RuntimeException("Neither Java Comm nor RXTX library found. Please check http://smslib.org/doc/installation/#Java_Communications_Library");
 			}
 		}
 		try
@@ -96,7 +96,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -118,7 +118,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -137,7 +137,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -196,7 +196,7 @@ public class CommPortIdentifier
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{

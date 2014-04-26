@@ -150,7 +150,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e) // Catching exception isn't nice, but sufficient here.
 		{
@@ -173,7 +173,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -211,7 +211,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -252,7 +252,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -336,7 +336,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -360,7 +360,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -387,7 +387,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -417,7 +417,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -444,7 +444,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -474,7 +474,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -501,7 +501,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -528,7 +528,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -563,7 +563,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -588,7 +588,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -612,7 +612,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
@@ -657,7 +657,7 @@ public class SerialPort
 		}
 		catch (InvocationTargetException e)
 		{
-			throw new RuntimeException(new RuntimeException(e.getTargetException().toString()));
+			throw new RuntimeException(e.getTargetException());
 		}
 		catch (Exception e)
 		{
