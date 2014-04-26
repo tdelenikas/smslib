@@ -7,7 +7,7 @@
 		<slf4j-api.version>1.7.2</slf4j-api.version>
 		<slf4j-log4j12.version>1.7.2</slf4j-log4j12.version>
 		<log4j.version>1.2.17</log4j.version>
-		<simple.version>5.0.4</simple.version>
+		<simple.version>5.1.6</simple.version>
 		<mysql.version>5.1.29</mysql.version>
 		<mail.version>1.4</mail.version>
 		<ikvm>ikvm-7.2.4630.5</ikvm>
