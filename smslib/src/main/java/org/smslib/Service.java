@@ -22,6 +22,7 @@ package org.smslib;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -94,8 +95,6 @@ public class Service
 
 	HttpServer httpServer = new HttpServer();
 
-	HashMap<String, IHttpRequestHandler> httpRequestHandlers = new HashMap<>();
-
 	Object _LOCK_ = new Object();
 
 	ServiceMessageDispatcher serviceMessageDispatcher = null;
@@ -128,7 +127,7 @@ public class Service
 		try
 		{
 			Settings.loadSettings();
-			this.httpServer.start();
+			this.httpServer.start(new InetSocketAddress(Settings.httpServerPort), Settings.httpServerPoolSize);
 			getCallbackManager().start();
 		}
 		catch (Exception e)
@@ -209,7 +208,7 @@ public class Service
 				if (getStatus() == Status.Stopped)
 				{
 					setStatus(Status.Terminated);
-					this.httpServer.terminate();
+					this.httpServer.stop();
 					DequeueMasterQueue();
 					while (getCallbackManager().getQueueLoad() > 0)
 					{
@@ -341,12 +340,10 @@ public class Service
 		getGroupManager().removeGroup(groupId);
 	}
 
-	public boolean registerHttpRequestHandler(String path, IHttpRequestHandler handler)
+	public void registerHttpRequestHandler(String path, IHttpRequestHandler handler)
 	{
-		if (this.httpRequestHandlers.get(path) != null) return false;
 		logger.info("Registering HTTP Request Handler for '" + path + "'");
-		this.httpRequestHandlers.put(path, handler);
-		return true;
+		this.httpServer.registerHttpRequestHandler(path, handler);
 	}
 
 	public int queue(OutboundMessage message) throws Exception
@@ -640,11 +637,6 @@ public class Service
 		this.status = status;
 		Status newStatus = this.status;
 		getCallbackManager().registerServiceStatusEvent(oldStatus, newStatus);
-	}
-
-	public HashMap<String, IHttpRequestHandler> getHttpRequestHandlers()
-	{
-		return this.httpRequestHandlers;
 	}
 
 	private HashMap<String, AbstractGateway> getGateways()

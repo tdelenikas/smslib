@@ -13,7 +13,7 @@ public class Settings
 
 	public static int httpServerPort = 8001;
 
-	public static String httpServerACLStatus = "127.0.0.1/32";
+	public static int httpServerPoolSize = 10;
 
 	public static int serviceDispatcherQueueTimeout = 1000;
 
@@ -40,7 +40,7 @@ public class Settings
 	public static void loadSettings()
 	{
 		if (System.getProperty("smslib.httpserver.port") != null) httpServerPort = Integer.parseInt(System.getProperty("smslib.httpserver.port"));
-		if (System.getProperty("smslib.httpserver.acl.status") != null) httpServerACLStatus = System.getProperty("smslib.httpserver.acl.status");
+		if (System.getProperty("smslib.httpserver.poolsize") != null) httpServerPoolSize = Integer.parseInt(System.getProperty("smslib.httpserver.poolsize"));
 
 		if (System.getProperty("smslib.keepoutboundmessagesinqueue") != null) keepOutboundMessagesInQueue = Boolean.valueOf(System.getProperty("smslib.keepoutboundmessagesinqueue"));
 		if (System.getProperty("smslib.hourstoretainorphanedmessageparts") != null) hoursToRetainOrphanedMessageParts = Integer.valueOf(System.getProperty("smslib.hourstoretainorphanedmessageparts"));
