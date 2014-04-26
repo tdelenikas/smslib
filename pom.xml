@@ -39,6 +39,13 @@
 				<role>Author</role>
 			</roles>
 		</developer>
+		<developer>
+			<name>Sebastian Just</name>
+			<email></email>
+			<roles>
+				<role>Contributor</role>
+			</roles>
+		</developer>
 	</developers>
 	<scm>
 		<url>https://github.com/smslib/smslib</url>
