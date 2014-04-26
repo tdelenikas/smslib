@@ -1,7 +1,7 @@
 # SMSLib v4 Documentation
 
 SMSLib v4 is a **work in progress** - functionality and/or documentation are not yet finalized.
-For questions and feedback, contact me (admin at smslib.org) or open a [ticket](https://github.com/smslib/smslib/issues).
+For questions and feedback please open a [ticket](https://github.com/smslib/smslib/issues).
 
 ### General information
 
