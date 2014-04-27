@@ -346,6 +346,11 @@ public class Service
 		this.httpServer.registerHttpRequestHandler(path, handler);
 	}
 
+	public void registerHttpRequestACL(String path, String cidr)
+	{
+		this.httpServer.registerHttpRequestACL(path, cidr);
+	}
+
 	public int queue(OutboundMessage message) throws Exception
 	{
 		if ((getPreQueueHook() != null) && !getPreQueueHook().process(message))

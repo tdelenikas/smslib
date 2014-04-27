@@ -40,6 +40,8 @@ public class Test_HttpListeners extends TestCase
 	public void test() throws Exception
 	{
 		Service.getInstance().registerHttpRequestHandler("/test-endpoint/test01", new HttpListener01());
+		Service.getInstance().registerHttpRequestACL("/test-endpoint/test01", "192.168.0.0/16");
+		Service.getInstance().registerHttpRequestACL("/test-endpoint/test01", "127.0.0.1/0");
 		Service.getInstance().start();
 		Thread.sleep(30000);
 		Service.getInstance().stop();

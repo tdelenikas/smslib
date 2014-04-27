@@ -1,11 +1,14 @@
 
 package org.smslib.http;
 
+import java.net.InetAddress;
+import java.util.List;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smslib.helper.Common;
 
 public class HttpTask implements Runnable
 {
@@ -29,22 +32,34 @@ public class HttpTask implements Runnable
 	{
 		try
 		{
-			String visitorIp = request.getClientAddress().getAddress().toString().substring(1);
+			String ip = request.getClientAddress().getAddress().toString().substring(1);
 			String path = request.getPath().toString();
-			logger.debug(String.format("IP: %s, PATH: %s", visitorIp, path));
-			boolean foundHandler = false;
-			for (String p : this.httpServer.getHttpRequestHandlers().keySet())
+			logger.debug(String.format("IP: %s, PATH: %s", ip, path));
+			IHttpRequestHandler h = this.httpServer.getHttpRequestHandlers().get(path);
+			if (h != null)
 			{
-				if (p.equalsIgnoreCase(path))
+				boolean accessOk = false;
+				InetAddress addrIp = InetAddress.getByName(ip);
+				List<String> acl = this.httpServer.getHttpRequestACLs().get(path);
+				if (acl != null && acl.size() != 0)
 				{
-					foundHandler = true;
-					IHttpRequestHandler h = this.httpServer.getHttpRequestHandlers().get(p);
+					for (String cidr : acl)
+					{
+						if (Common.checkIPInCIDR(addrIp, cidr))
+						{
+							accessOk = true;
+							break;
+						}
+					}
+				}
+				if (accessOk)
+				{
 					Status s = h.process(request, response);
 					response.setStatus(s);
-					response.setCode(s.code);
 				}
+				else response.setStatus(Status.FORBIDDEN);
 			}
-			if (!foundHandler) response.setStatus(Status.NOT_FOUND);
+			else response.setStatus(Status.NOT_FOUND);
 			response.close();
 		}
 		catch (Exception e)

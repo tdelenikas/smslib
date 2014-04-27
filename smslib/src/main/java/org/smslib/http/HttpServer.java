@@ -4,7 +4,9 @@ package org.smslib.http;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import org.simpleframework.http.Request;
@@ -23,6 +25,8 @@ public class HttpServer implements Container
 	static Logger logger = LoggerFactory.getLogger(HttpServer.class);
 
 	static HashMap<String, IHttpRequestHandler> httpRequestHandlers = new HashMap<>();
+
+	static HashMap<String, List<String>> httpRequestACLs = new HashMap<>();
 
 	static Executor executor;
 
@@ -71,8 +75,25 @@ public class HttpServer implements Container
 		HttpServer.httpRequestHandlers.put(path, handler);
 	}
 
+	public void registerHttpRequestACL(String path, String cidr)
+	{
+		List<String> acl = HttpServer.httpRequestACLs.get(path);
+		if (acl == null)
+		{
+			acl = new ArrayList<>();
+			acl.add(cidr);
+			HttpServer.httpRequestACLs.put(path, acl);
+		}
+		else acl.add(cidr);
+	}
+
 	HashMap<String, IHttpRequestHandler> getHttpRequestHandlers()
 	{
 		return HttpServer.httpRequestHandlers;
+	}
+
+	HashMap<String, List<String>> getHttpRequestACLs()
+	{
+		return HttpServer.httpRequestACLs;
 	}
 }
