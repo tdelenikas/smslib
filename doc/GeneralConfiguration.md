@@ -1,12 +1,8 @@
 # General Configuration
 
-SMSLib has some configuration parameters which allow you to alter its behavious without modifying code. All configuration parameters are stored in the class `Settings` as static members. To change them, use the following code:
+SMSLib has some configuration parameters which allow you to alter its behaviour without modifying code. All configuration parameters are stored in the class `Settings` as static members.
 
-```
-Settings.httpServerACLStatus = "127.0.0.1/32";
-```
-
-The majority of configuration parameters can be altered at runtime and have immediate effect. Some parameters are also accessible via `-Dxxxx=yyyy` runtime definitions - those which cannot be modified at runtime. For example, the port to which the internal HTTP server listens to.
+Some parameters are also accessible via `-Dxxxx=yyyy` runtime definitions.
 
 ### Parameters
 
