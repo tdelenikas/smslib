@@ -70,6 +70,7 @@ public class OutboundServiceThread extends Thread
 
 	private void queueMessages() throws SQLException
 	{
+/*
 		Connection db = null;
 		try
 		{
@@ -125,10 +126,12 @@ public class OutboundServiceThread extends Thread
 		{
 			if (db != null) db.close();
 		}
+*/
 	}
 
 	private boolean isGroupMessage(OutboundMessage message) throws ClassNotFoundException, SQLException, InterruptedException
 	{
+/*
 		if (Service.getInstance().getGroupManager().exist(message.getRecipientAddress().getAddress()))
 		{
 			Connection db = SMSServer.getInstance().getDbConnection();
@@ -167,6 +170,7 @@ public class OutboundServiceThread extends Thread
 			db.close();
 			return true;
 		}
+*/
 		return false;
 	}
 }

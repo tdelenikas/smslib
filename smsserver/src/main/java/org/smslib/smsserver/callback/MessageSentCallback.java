@@ -19,6 +19,7 @@ public class MessageSentCallback implements IMessageSentCallback
 	@Override
 	public boolean process(MessageSentCallbackEvent event)
 	{
+/*
 		Connection db = null;
 		PreparedStatement s = null;
 		try
@@ -73,5 +74,7 @@ public class MessageSentCallback implements IMessageSentCallback
 				}
 			}
 		}
+*/
+		return false;
 	}
 }

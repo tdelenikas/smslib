@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS `smslib_gateways` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `class` varchar(64) NOT NULL,
   `gateway_id` varchar(32) NOT NULL,
-  `p0` varchar(32) NOT NULL,
-  `p1` varchar(32) NOT NULL,
+  `p0` varchar(32) DEFAULT NULL,
+  `p1` varchar(32) DEFAULT NULL,
   `p2` varchar(32) DEFAULT NULL,
   `p3` varchar(32) DEFAULT NULL,
   `p4` varchar(32) DEFAULT NULL,
@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `smslib_groups` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(32) NOT NULL,
   `group_description` varchar(100) NOT NULL,
+  `is_enabled` int(1) NOT NULL DEFAULT '0',
   `profile` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_name` (`group_name`)
@@ -64,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `smslib_group_recipients` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `group_id` int(10) NOT NULL,
   `address` varchar(16) NOT NULL,
+  `is_enabled` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

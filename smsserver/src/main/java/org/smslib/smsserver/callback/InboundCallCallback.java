@@ -1,15 +1,12 @@
 
 package org.smslib.smsserver.callback;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.callback.IInboundCallCallback;
 import org.smslib.callback.events.InboundCallEvent;
 import org.smslib.smsserver.SMSServer;
+import org.smslib.smsserver.db.data.InboundCallDefinition;
 
 public class InboundCallCallback implements IInboundCallCallback
 {
@@ -18,48 +15,15 @@ public class InboundCallCallback implements IInboundCallCallback
 	@Override
 	public boolean process(InboundCallEvent event)
 	{
-		Connection db = null;
-		PreparedStatement s = null;
 		try
 		{
-			db = SMSServer.getInstance().getDbConnection();
-			s = db.prepareStatement("insert into smslib_calls (date, address, gateway_id) values (?, ?, ?)");
-			s.setTimestamp(1, new Timestamp(event.getDate().getTime()));
-			s.setString(2, event.getMsisdn().getAddress());
-			s.setString(3, event.getGatewayId());
-			s.executeUpdate();
-			db.commit();
+			SMSServer.getInstance().getDatabaseHandler().SaveInboundCall(new InboundCallDefinition(event.getDate(), event.getMsisdn(), event.getGatewayId()));
 			return true;
 		}
 		catch (Exception e)
 		{
 			logger.error("Error!", e);
 			return false;
-		}
-		finally
-		{
-			if (s != null)
-			{
-				try
-				{
-					s.close();
-				}
-				catch (SQLException e)
-				{
-					logger.error("Error!", e);
-				}
-			}
-			if (db != null)
-			{
-				try
-				{
-					db.close();
-				}
-				catch (SQLException e)
-				{
-					logger.error("Error!", e);
-				}
-			}
 		}
 	}
 }
