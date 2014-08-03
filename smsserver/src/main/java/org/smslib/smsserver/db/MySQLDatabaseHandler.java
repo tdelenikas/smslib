@@ -14,8 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.smslib.callback.events.DeliveryReportCallbackEvent;
 import org.smslib.callback.events.InboundCallCallbackEvent;
 import org.smslib.callback.events.InboundMessageCallbackEvent;
+import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.helper.Common;
 import org.smslib.message.OutboundMessage;
+import org.smslib.message.OutboundMessage.SentStatus;
 import org.smslib.smsserver.SMSServer;
 import org.smslib.smsserver.db.data.GatewayDefinition;
 import org.smslib.smsserver.db.data.GroupDefinition;
@@ -207,6 +209,44 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 			s.setTimestamp(5, new Timestamp(event.getMessage().getCreationDate().getTime()));
 			s.setString(6, event.getMessage().getGatewayId());
 			s.executeUpdate();
+			db.commit();
+		}
+		catch (Exception e)
+		{
+			if (db != null) db.rollback();
+			logger.error("Error!", e);
+			throw e;
+		}
+		finally
+		{
+			if (s != null) s.close();
+			if (db != null) db.close();
+		}
+	}
+
+	@Override
+	public void markMessageSent(MessageSentCallbackEvent event) throws Exception
+	{
+		Connection db = null;
+		PreparedStatement s = null;
+		try
+		{
+			db = getDbConnection();
+			if (event.getMessage().getSentStatus() == SentStatus.Sent)
+			{
+				s = db.prepareStatement("update smslib_out set sent_status = ?, sent_date = ?, gateway_id = ?, operator_message_id = ? where message_id = ?");
+				s.setString(1, event.getMessage().getSentStatus().toShortString());
+				s.setTimestamp(2, new Timestamp((event.getMessage().getSentStatus() == SentStatus.Sent ? event.getMessage().getSentDate().getTime() : 0)));
+				s.setString(3, (event.getMessage().getSentStatus() == SentStatus.Sent ? event.getMessage().getGatewayId() : ""));
+				s.setString(4, (event.getMessage().getSentStatus() == SentStatus.Sent ? event.getMessage().getOperatorMessageId() : ""));
+				s.setString(5, event.getMessage().getId());
+			}
+			else
+			{
+				s = db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
+				s.setString(1, event.getMessage().getSentStatus().toShortString());
+				s.setString(2, event.getMessage().getId());
+			}
 			s.executeUpdate();
 			db.commit();
 		}

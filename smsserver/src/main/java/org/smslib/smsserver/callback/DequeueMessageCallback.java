@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.callback.IDequeueMessageCallback;
 import org.smslib.callback.events.DequeueMessageCallbackEvent;
-import org.smslib.message.OutboundMessage;
+import org.smslib.message.OutboundMessage.SentStatus;
 import org.smslib.smsserver.SMSServer;
 
 public class DequeueMessageCallback implements IDequeueMessageCallback
@@ -17,7 +17,7 @@ public class DequeueMessageCallback implements IDequeueMessageCallback
 	{
 		try
 		{
-			SMSServer.getInstance().getDatabaseHandler().setMessageStatus(event.getMessage(), OutboundMessage.SentStatus.Unsent);
+			SMSServer.getInstance().getDatabaseHandler().setMessageStatus(event.getMessage(), SentStatus.Unsent);
 			return true;
 		}
 		catch (Exception e)

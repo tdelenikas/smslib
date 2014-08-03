@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.smslib.callback.events.DeliveryReportCallbackEvent;
 import org.smslib.callback.events.InboundCallCallbackEvent;
 import org.smslib.callback.events.InboundMessageCallbackEvent;
+import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.message.OutboundMessage;
 import org.smslib.smsserver.db.data.GatewayDefinition;
 import org.smslib.smsserver.db.data.GroupDefinition;
@@ -25,4 +26,6 @@ public interface IDatabaseHandler
 	public void saveDeliveryReport(DeliveryReportCallbackEvent event) throws Exception;
 
 	public void saveInboundMessage(InboundMessageCallbackEvent event) throws Exception;
+
+	public void markMessageSent(MessageSentCallbackEvent event) throws Exception;
 }

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.hook.IPreQueueHook;
 import org.smslib.message.OutboundMessage;
+import org.smslib.message.OutboundMessage.SentStatus;
 import org.smslib.smsserver.SMSServer;
 
 public class PreQueueHook implements IPreQueueHook
@@ -16,7 +17,7 @@ public class PreQueueHook implements IPreQueueHook
 	{
 		try
 		{
-			SMSServer.getInstance().getDatabaseHandler().setMessageStatus(message, OutboundMessage.SentStatus.Queued);
+			SMSServer.getInstance().getDatabaseHandler().setMessageStatus(message, SentStatus.Queued);
 			return true;
 		}
 		catch (Exception e)
