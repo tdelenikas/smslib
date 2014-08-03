@@ -104,11 +104,13 @@ public class MockGateway extends AbstractGateway
 						int count = counter.incrementAndGet();
 						if (failOperation()) throw new IOException("Dummy Failure!");
 						InboundMessage message = new InboundMessage("Mock Originator", "Dummy Text! " + count, new Date(), getClass().getName(), count);
+						message.setGatewayId(getGatewayId());
 						Service.getInstance().getCallbackManager().registerInboundMessageEvent(message);
 						break;
 					}
 					catch (Exception e)
 					{
+						logger.warn("Error!", e);
 						//running = false;
 					}
 				}

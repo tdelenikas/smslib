@@ -16,7 +16,7 @@ public class InboundCallCallback implements IInboundCallCallback
 	{
 		try
 		{
-			SMSServer.getInstance().getDatabaseHandler().SaveInboundCall(event);
+			SMSServer.getInstance().getDatabaseHandler().saveInboundCall(event);
 			return true;
 		}
 		catch (Exception e)

@@ -16,7 +16,7 @@ public class PreQueueHook implements IPreQueueHook
 	{
 		try
 		{
-			SMSServer.getInstance().getDatabaseHandler().SetMessageStatus(message, OutboundMessage.SentStatus.Queued);
+			SMSServer.getInstance().getDatabaseHandler().setMessageStatus(message, OutboundMessage.SentStatus.Queued);
 			return true;
 		}
 		catch (Exception e)

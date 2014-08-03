@@ -17,7 +17,7 @@ public class DequeueMessageCallback implements IDequeueMessageCallback
 	{
 		try
 		{
-			SMSServer.getInstance().getDatabaseHandler().SetMessageStatus(event.getMessage(), OutboundMessage.SentStatus.Unsent);
+			SMSServer.getInstance().getDatabaseHandler().setMessageStatus(event.getMessage(), OutboundMessage.SentStatus.Unsent);
 			return true;
 		}
 		catch (Exception e)

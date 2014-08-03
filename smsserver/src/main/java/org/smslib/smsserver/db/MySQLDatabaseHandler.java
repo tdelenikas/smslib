@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.callback.events.DeliveryReportCallbackEvent;
 import org.smslib.callback.events.InboundCallCallbackEvent;
+import org.smslib.callback.events.InboundMessageCallbackEvent;
+import org.smslib.helper.Common;
 import org.smslib.message.OutboundMessage;
 import org.smslib.smsserver.SMSServer;
 import org.smslib.smsserver.db.data.GatewayDefinition;
@@ -94,7 +96,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	}
 
 	@Override
-	public void SetMessageStatus(OutboundMessage message, OutboundMessage.SentStatus status) throws Exception
+	public void setMessageStatus(OutboundMessage message, OutboundMessage.SentStatus status) throws Exception
 	{
 		Connection db = null;
 		PreparedStatement s = null;
@@ -121,7 +123,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	}
 
 	@Override
-	public void SaveInboundCall(InboundCallCallbackEvent event) throws Exception
+	public void saveInboundCall(InboundCallCallbackEvent event) throws Exception
 	{
 		Connection db = null;
 		PreparedStatement s = null;
@@ -149,7 +151,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	}
 
 	@Override
-	public void SaveDeliveryReport(DeliveryReportCallbackEvent event) throws Exception
+	public void saveDeliveryReport(DeliveryReportCallbackEvent event) throws Exception
 	{
 		Connection db = null;
 		PreparedStatement s = null;
@@ -162,6 +164,49 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 			s.setString(3, event.getMessage().getRecipientAddress().getAddress());
 			s.setString(4, event.getMessage().getOriginalOperatorMessageId());
 			s.setString(5, event.getMessage().getGatewayId());
+			s.executeUpdate();
+			db.commit();
+		}
+		catch (Exception e)
+		{
+			if (db != null) db.rollback();
+			logger.error("Error!", e);
+			throw e;
+		}
+		finally
+		{
+			if (s != null) s.close();
+			if (db != null) db.close();
+		}
+	}
+
+	@Override
+	public void saveInboundMessage(InboundMessageCallbackEvent event) throws Exception
+	{
+		Connection db = null;
+		PreparedStatement s = null;
+		try
+		{
+			db = getDbConnection();
+			s = db.prepareStatement("insert into smslib_in (address, encoding, text, message_date, receive_date, gateway_id) values (?, ?, ?, ?, ?, ?)");
+			s.setString(1, event.getMessage().getOriginatorAddress().getAddress());
+			s.setString(2, event.getMessage().getEncoding().toShortString());
+			switch (event.getMessage().getEncoding())
+			{
+				case Enc7:
+				case EncUcs2:
+					s.setString(3, event.getMessage().getPayload().getText());
+					break;
+				case Enc8:
+					s.setString(3, Common.bytesToString(event.getMessage().getPayload().getBytes()));
+					break;
+				case EncCustom:
+					throw new UnsupportedOperationException();
+			}
+			s.setTimestamp(4, new Timestamp(event.getMessage().getSentDate().getTime()));
+			s.setTimestamp(5, new Timestamp(event.getMessage().getCreationDate().getTime()));
+			s.setString(6, event.getMessage().getGatewayId());
+			s.executeUpdate();
 			s.executeUpdate();
 			db.commit();
 		}

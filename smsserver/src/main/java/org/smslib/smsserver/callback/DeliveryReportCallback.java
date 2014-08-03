@@ -16,7 +16,7 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 	{
 		try
 		{
-			SMSServer.getInstance().getDatabaseHandler().SaveDeliveryReport(event);
+			SMSServer.getInstance().getDatabaseHandler().saveDeliveryReport(event);
 			return true;
 		}
 		catch (Exception e)
