@@ -23,7 +23,6 @@ public class SerialModemDriver extends AbstractModemDriver implements SerialPort
 
 	SerialPort serialPort;
 
-
 	public SerialModemDriver(Modem modem, String port, int baudRate)
 	{
 		super(modem);

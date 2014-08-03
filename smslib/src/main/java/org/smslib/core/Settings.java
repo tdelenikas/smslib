@@ -41,7 +41,6 @@ public class Settings
 	{
 		if (System.getProperty("smslib.httpserver.port") != null) httpServerPort = Integer.parseInt(System.getProperty("smslib.httpserver.port"));
 		if (System.getProperty("smslib.httpserver.poolsize") != null) httpServerPoolSize = Integer.parseInt(System.getProperty("smslib.httpserver.poolsize"));
-
 		if (System.getProperty("smslib.keepoutboundmessagesinqueue") != null) keepOutboundMessagesInQueue = Boolean.valueOf(System.getProperty("smslib.keepoutboundmessagesinqueue"));
 		if (System.getProperty("smslib.hourstoretainorphanedmessageparts") != null) hoursToRetainOrphanedMessageParts = Integer.valueOf(System.getProperty("smslib.hourstoretainorphanedmessageparts"));
 		if (System.getProperty("smslib.deletemessagesaftercallback") != null) deleteMessagesAfterCallback = Boolean.valueOf(System.getProperty("smslib.deletemessagesaftercallback"));

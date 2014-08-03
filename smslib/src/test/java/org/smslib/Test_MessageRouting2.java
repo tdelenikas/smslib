@@ -60,7 +60,7 @@ public class Test_MessageRouting2 extends TestCase
 			logger.info("G5 Traffic = " + g5.getStatistics().getTotalSent());
 			logger.info("(SENT)     = " + okCount);
 			logger.info("(FAILED)   = " + failCount);
-			assert((okCount + failCount) == Limits.NO_OF_MESSAGES);
+			assert ((okCount + failCount) == Limits.NO_OF_MESSAGES);
 			Service.getInstance().unregisterGateway(g1);
 			Service.getInstance().unregisterGateway(g2);
 			Service.getInstance().unregisterGateway(g3);

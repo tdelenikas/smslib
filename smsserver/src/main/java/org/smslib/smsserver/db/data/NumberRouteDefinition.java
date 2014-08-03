@@ -1,8 +1,10 @@
+
 package org.smslib.smsserver.db.data;
 
 public class NumberRouteDefinition
 {
 	String addressRegex;
+
 	String gatewayId;
 
 	public NumberRouteDefinition(String addressRegex, String gatewayId)

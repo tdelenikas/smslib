@@ -13,19 +13,7 @@ public class Capabilities
 
 	public enum Caps
 	{
-		CanSendMessage,
-		CanSendBinaryMessage,
-		CanSendUnicodeMessage,
-		CanSendWapMessage,
-		CanSendFlashMessage,
-		CanSendPortInfo,
-		CanSetSenderId,
-		CanSplitMessages,
-		CanRequestDeliveryStatus,
-		CanQueryDeliveryStatus,
-		CanQueryCreditBalance,
-		CanQueryCoverage,
-		CanSetValidityPeriod
+		CanSendMessage, CanSendBinaryMessage, CanSendUnicodeMessage, CanSendWapMessage, CanSendFlashMessage, CanSendPortInfo, CanSetSenderId, CanSplitMessages, CanRequestDeliveryStatus, CanQueryDeliveryStatus, CanQueryCreditBalance, CanQueryCoverage, CanSetValidityPeriod
 	}
 
 	public Capabilities()

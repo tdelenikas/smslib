@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.Service;
 import org.smslib.callback.IInboundMessageCallback;
-import org.smslib.callback.events.InboundMessageEvent;
+import org.smslib.callback.events.InboundMessageCallbackEvent;
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.message.InboundMessage;
 
@@ -30,7 +30,7 @@ public class SMSLibConsumer extends DefaultConsumer {
 		 * @param event The SMSlib event which was received
 		 * @return The created and filled exchange
 		 */
-		private Exchange mapMessage(InboundMessageEvent event) {
+		private Exchange mapMessage(InboundMessageCallbackEvent event) {
 			Exchange exchange = getEndpoint().createExchange();
 
 			InboundMessage inputMessage = event.getMessage();
@@ -79,10 +79,10 @@ public class SMSLibConsumer extends DefaultConsumer {
 		 * Each event is mapped to a Camel exchange and any exception is propagated to Camel
 		 * @param event The SMSlib event to process
 		 * @see Exchange#setException(Throwable)
-		 * @see org.smslib.callback.IInboundMessageCallback#process(org.smslib.callback.events.InboundMessageEvent)
+		 * @see org.smslib.callback.IInboundMessageCallback#process(org.smslib.callback.events.InboundMessageCallbackEvent)
 		 */
 		@Override
-		public boolean process(InboundMessageEvent event) {
+		public boolean process(InboundMessageCallbackEvent event) {
 			Exchange exchange = mapMessage(event);
 	        try {
 	            getProcessor().process(exchange);

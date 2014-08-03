@@ -1,3 +1,4 @@
+
 package org.smslib.gateway;
 
 import java.io.IOException;
@@ -5,7 +6,6 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.smslib.Service;
 import org.smslib.core.Capabilities;
 import org.smslib.core.Capabilities.Caps;
@@ -20,10 +20,13 @@ import org.smslib.message.OutboundMessage.SentStatus;
 public class MockGateway extends AbstractGateway
 {
 	private Thread thread;
+
 	int delay;
+
 	int failureRate;
+
 	protected boolean running = true;
-	
+
 	public MockGateway(String gatewayId, String... parms)
 	{
 		this(gatewayId, 100, 10);
@@ -37,7 +40,7 @@ public class MockGateway extends AbstractGateway
 		this.failureRate = failureRate;
 		this.delay = delay;
 	}
-	
+
 	public MockGateway(String id, String description, Capabilities caps, int failureRate, int delay)
 	{
 		super(1, 1, id, description);
@@ -86,27 +89,31 @@ public class MockGateway extends AbstractGateway
 	@Override
 	protected void _start() throws IOException
 	{
-		thread = new Thread(new Runnable() {
+		thread = new Thread(new Runnable()
+		{
 			private AtomicInteger counter = new AtomicInteger(0);
-			
-			@Override
-			public void run() {
-				while (running) {
-					try {
-						Thread.sleep(delay);
 
+			@Override
+			public void run()
+			{
+				while (running)
+				{
+					try
+					{
+						Thread.sleep(delay);
 						int count = counter.incrementAndGet();
 						if (failOperation()) throw new IOException("Dummy Failure!");
-						InboundMessage message = new InboundMessage("Mock Originator", "Dummy Text! " + count, 
-								new Date(), getClass().getName(), count);
-						Service.getInstance().getCallbackManager().registerInboundMessageEvent(message );
-					
-					} catch (InterruptedException | IOException e) {
-						
-						running = false;
+						InboundMessage message = new InboundMessage("Mock Originator", "Dummy Text! " + count, new Date(), getClass().getName(), count);
+						Service.getInstance().getCallbackManager().registerInboundMessageEvent(message);
+						break;
+					}
+					catch (Exception e)
+					{
+						//running = false;
 					}
 				}
-			}});
+			}
+		});
 		thread.setDaemon(true);
 		thread.setName("MockGateway Thread");
 		thread.start();

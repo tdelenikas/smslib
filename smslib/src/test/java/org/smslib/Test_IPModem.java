@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.smslib.callback.IDeliveryReportCallback;
 import org.smslib.callback.IInboundMessageCallback;
 import org.smslib.callback.events.DeliveryReportCallbackEvent;
-import org.smslib.callback.events.InboundMessageEvent;
+import org.smslib.callback.events.InboundMessageCallbackEvent;
 import org.smslib.crypto.AESKey;
 import org.smslib.gateway.modem.Modem;
 import org.smslib.message.OutboundEncryptedMessage;
@@ -23,7 +23,7 @@ public class Test_IPModem extends TestCase
 	public class InboundMessageCallback implements IInboundMessageCallback
 	{
 		@Override
-		public boolean process(InboundMessageEvent event)
+		public boolean process(InboundMessageCallbackEvent event)
 		{
 			logger.info("[InboundMessageCallback] " + event.getMessage().toShortString());
 			logger.info(event.getMessage().toString());

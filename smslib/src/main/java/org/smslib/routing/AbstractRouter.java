@@ -3,7 +3,6 @@ package org.smslib.routing;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.gateway.AbstractGateway.Status;
 import org.smslib.helper.Common;

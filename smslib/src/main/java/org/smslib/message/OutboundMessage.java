@@ -36,7 +36,6 @@ public class OutboundMessage extends AbstractMessage
 	public enum FailureCause
 	{
 		None("00"), BadNumber("01"), BadFormat("02"), GatewayFailure("03"), AuthFailure("04"), NoCredit("05"), OverQuota("06"), NoRoute("07"), Unavailable("08"), HttpError("09"), UnknownFailure("10"), Cancelled("11"), NoService("12"), MissingParms("13");
-
 		private final String shortString;
 
 		private FailureCause(String shortString)

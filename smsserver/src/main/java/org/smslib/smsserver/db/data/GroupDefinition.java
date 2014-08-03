@@ -1,3 +1,4 @@
+
 package org.smslib.smsserver.db.data;
 
 import java.util.Collection;
@@ -5,7 +6,9 @@ import java.util.Collection;
 public class GroupDefinition
 {
 	String name;
+
 	String description;
+
 	Collection<GroupRecipientDefinition> recipients;
 
 	public GroupDefinition(String name, String description, Collection<GroupRecipientDefinition> recipients)

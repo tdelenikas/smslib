@@ -1,8 +1,10 @@
+
 package org.smslib.gateway.modem;
 
 public class ModemResponse
 {
 	String responseData;
+
 	boolean responseOk;
 
 	public ModemResponse(String responseData, boolean responseOk)

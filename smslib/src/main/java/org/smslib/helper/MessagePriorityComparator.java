@@ -3,7 +3,6 @@ package org.smslib.helper;
 
 import java.io.Serializable;
 import java.util.Comparator;
-
 import org.smslib.message.OutboundMessage;
 
 public class MessagePriorityComparator implements Comparator<OutboundMessage>, Serializable

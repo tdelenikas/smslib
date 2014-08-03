@@ -186,7 +186,6 @@ public class MessageReader extends Thread
 		ArrayList<InboundMessage> messageList = new ArrayList<>();
 		BufferedReader reader;
 		String line;
-
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
 		data = data.replaceAll("\\s+OK\\s+", "\nOK");
@@ -391,7 +390,7 @@ public class MessageReader extends Thread
 		if (!this.modem.getReadMessagesSet().contains(messageSignature))
 		{
 			this.modem.getStatistics().increaseTotalReceived();
-			if (message instanceof DeliveryReportMessage)Service.getInstance().getCallbackManager().registerDeliveryReportEvent((DeliveryReportMessage) message);
+			if (message instanceof DeliveryReportMessage) Service.getInstance().getCallbackManager().registerDeliveryReportEvent((DeliveryReportMessage) message);
 			else Service.getInstance().getCallbackManager().registerInboundMessageEvent(message);
 			this.modem.getReadMessagesSet().add(messageSignature);
 		}

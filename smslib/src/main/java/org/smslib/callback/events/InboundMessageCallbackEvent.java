@@ -3,11 +3,11 @@ package org.smslib.callback.events;
 
 import org.smslib.message.InboundMessage;
 
-public class InboundMessageEvent extends BaseCallbackEvent
+public class InboundMessageCallbackEvent extends BaseCallbackEvent
 {
 	InboundMessage message;
 
-	public InboundMessageEvent(InboundMessage message)
+	public InboundMessageCallbackEvent(InboundMessage message)
 	{
 		this.message = message;
 	}

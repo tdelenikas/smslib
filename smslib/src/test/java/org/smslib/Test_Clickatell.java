@@ -12,7 +12,9 @@ public class Test_Clickatell extends TestCase
 	static Logger logger = LoggerFactory.getLogger(Test_Clickatell.class);
 
 	String API_ID = "api-id";
+
 	String USERNAME = "username";
+
 	String PASSWORD = "password";
 
 	public void test() throws Exception

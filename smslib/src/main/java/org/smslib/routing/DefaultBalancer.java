@@ -4,7 +4,6 @@ package org.smslib.routing;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.helper.GatewayOutboundTrafficComparator;
 import org.smslib.message.OutboundMessage;

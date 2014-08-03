@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.smslib.callback.IDeliveryReportCallback;
 import org.smslib.callback.events.DeliveryReportCallbackEvent;
 import org.smslib.smsserver.SMSServer;
-import org.smslib.smsserver.db.data.DeliveryReportDefinition;
 
 public class DeliveryReportCallback implements IDeliveryReportCallback
 {
@@ -17,7 +16,7 @@ public class DeliveryReportCallback implements IDeliveryReportCallback
 	{
 		try
 		{
-			SMSServer.getInstance().getDatabaseHandler().SaveDeliveryReport(new DeliveryReportDefinition(event.getMessage().getDeliveryStatus().toShortString(), event.getMessage().getOriginalReceivedDate(), event.getMessage().getRecipientAddress(), event.getMessage().getOriginalOperatorMessageId(), event.getMessage().getGatewayId()));
+			SMSServer.getInstance().getDatabaseHandler().SaveDeliveryReport(event);
 			return true;
 		}
 		catch (Exception e)

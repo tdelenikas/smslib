@@ -1,9 +1,9 @@
 
 package org.smslib.callback;
 
-import org.smslib.callback.events.InboundMessageEvent;
+import org.smslib.callback.events.InboundMessageCallbackEvent;
 
 public interface IInboundMessageCallback
 {
-	public boolean process(InboundMessageEvent event);
+	public boolean process(InboundMessageCallbackEvent event);
 }

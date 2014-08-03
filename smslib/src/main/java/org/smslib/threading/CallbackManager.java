@@ -18,8 +18,8 @@ import org.smslib.callback.events.BaseCallbackEvent;
 import org.smslib.callback.events.DeliveryReportCallbackEvent;
 import org.smslib.callback.events.DequeueMessageCallbackEvent;
 import org.smslib.callback.events.GatewayStatusCallbackEvent;
-import org.smslib.callback.events.InboundCallEvent;
-import org.smslib.callback.events.InboundMessageEvent;
+import org.smslib.callback.events.InboundCallCallbackEvent;
+import org.smslib.callback.events.InboundMessageCallbackEvent;
 import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.callback.events.QueueThresholdCallbackEvent;
 import org.smslib.callback.events.ServiceStatusCallbackEvent;
@@ -73,12 +73,12 @@ public class CallbackManager
 
 	public boolean registerInboundMessageEvent(InboundMessage message)
 	{
-		return (this.inboundMessageCallback == null ? false : this.eventQueue.add(new InboundMessageEvent(message)));
+		return (this.inboundMessageCallback == null ? false : this.eventQueue.add(new InboundMessageCallbackEvent(message)));
 	}
 
 	public boolean registerInboundCallEvent(MsIsdn msisdn, String gatewayId)
 	{
-		return (this.inboundCallCallback == null ? false : this.eventQueue.add(new InboundCallEvent(msisdn, gatewayId)));
+		return (this.inboundCallCallback == null ? false : this.eventQueue.add(new InboundCallCallbackEvent(msisdn, gatewayId)));
 	}
 
 	public boolean registerDeliveryReportEvent(DeliveryReportMessage message)
@@ -230,15 +230,15 @@ public class CallbackManager
 								}
 							}
 						}
-						else if (ev instanceof InboundMessageEvent)
+						else if (ev instanceof InboundMessageCallbackEvent)
 						{
 							if (CallbackManager.this.inboundMessageCallback != null)
 							{
 								try
 								{
 									handlerFound = true;
-									consumed = CallbackManager.this.inboundMessageCallback.process((InboundMessageEvent) ev);
-									if (consumed && Settings.deleteMessagesAfterCallback) Service.getInstance().delete(((InboundMessageEvent) ev).getMessage());
+									consumed = CallbackManager.this.inboundMessageCallback.process((InboundMessageCallbackEvent) ev);
+									if (consumed && Settings.deleteMessagesAfterCallback) Service.getInstance().delete(((InboundMessageCallbackEvent) ev).getMessage());
 								}
 								catch (Exception e)
 								{
@@ -246,14 +246,14 @@ public class CallbackManager
 								}
 							}
 						}
-						else if (ev instanceof InboundCallEvent)
+						else if (ev instanceof InboundCallCallbackEvent)
 						{
 							if (CallbackManager.this.inboundCallCallback != null)
 							{
 								try
 								{
 									handlerFound = true;
-									consumed = CallbackManager.this.inboundCallCallback.process((InboundCallEvent) ev);
+									consumed = CallbackManager.this.inboundCallCallback.process((InboundCallCallbackEvent) ev);
 								}
 								catch (Exception e)
 								{

@@ -72,7 +72,7 @@ public class BulkSmsInternational extends AbstractHttpGateway
 				parameters.put("password", this.password);
 				parameters.put("msisdn", message.getRecipientAddress().getAddress());
 				parameters.put("message", translateText(message.getPayload().getText()));
-				if(message.getEncoding() == Encoding.EncUcs2) parameters.put("dca", "16bit");
+				if (message.getEncoding() == Encoding.EncUcs2) parameters.put("dca", "16bit");
 				parameters.put("source_id", message.getId());
 				if (message.isFlashSms()) parameters.put("msg_class", "0");
 				if (message.getRequestDeliveryReport() || getRequestDeliveryReport()) parameters.put("want_report", "1");

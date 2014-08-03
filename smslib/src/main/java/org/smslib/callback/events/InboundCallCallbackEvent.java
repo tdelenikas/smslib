@@ -3,13 +3,13 @@ package org.smslib.callback.events;
 
 import org.smslib.message.MsIsdn;
 
-public class InboundCallEvent extends BaseCallbackEvent
+public class InboundCallCallbackEvent extends BaseCallbackEvent
 {
 	MsIsdn msisdn;
 
 	String gatewayId;
 
-	public InboundCallEvent(MsIsdn msisdn, String gatewayId)
+	public InboundCallCallbackEvent(MsIsdn msisdn, String gatewayId)
 	{
 		this.msisdn = msisdn;
 		this.gatewayId = gatewayId;

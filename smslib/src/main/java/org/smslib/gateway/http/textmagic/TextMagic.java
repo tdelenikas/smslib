@@ -169,7 +169,7 @@ public class TextMagic extends AbstractHttpGateway
 						JSONObject messageIds = responseObject.getJSONObject("message_id");
 						@SuppressWarnings("unchecked")
 						Iterator<String> messageIdIterator = messageIds.keys();
-						while(messageIdIterator.hasNext())
+						while (messageIdIterator.hasNext())
 							message.getOperatorMessageIds().add(messageIdIterator.next());
 					}
 				}
@@ -214,18 +214,9 @@ public class TextMagic extends AbstractHttpGateway
 						String messageId = iter.next();
 						JSONObject statusObject = responseObject.getJSONObject(messageId);
 						String status = statusObject.getString("status");
-						if (
-								(status.equalsIgnoreCase("q")) ||
-								(status.equalsIgnoreCase("r")) ||
-								(status.equalsIgnoreCase("a")) ||
-								(status.equalsIgnoreCase("b"))
-							) message2.setDeliveryStatus(DeliveryStatus.Pending);
+						if ((status.equalsIgnoreCase("q")) || (status.equalsIgnoreCase("r")) || (status.equalsIgnoreCase("a")) || (status.equalsIgnoreCase("b"))) message2.setDeliveryStatus(DeliveryStatus.Pending);
 						if (status.equalsIgnoreCase("d")) message2.setDeliveryStatus(DeliveryStatus.Delivered);
-						if (
-								(status.equalsIgnoreCase("f")) ||
-								(status.equalsIgnoreCase("e")) ||
-								(status.equalsIgnoreCase("j"))
-							) message2.setDeliveryStatus(DeliveryStatus.Failed);
+						if ((status.equalsIgnoreCase("f")) || (status.equalsIgnoreCase("e")) || (status.equalsIgnoreCase("j"))) message2.setDeliveryStatus(DeliveryStatus.Failed);
 						if (status.equalsIgnoreCase("u")) message2.setDeliveryStatus(DeliveryStatus.Unknown);
 						if (statusObject.has("complete_time")) message2.setOriginalReceivedDate(new Date(statusObject.getLong("complete_time") * 1000));
 					}

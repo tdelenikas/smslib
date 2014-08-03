@@ -11,12 +11,13 @@ import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smslib.callback.events.DeliveryReportCallbackEvent;
+import org.smslib.callback.events.InboundCallCallbackEvent;
+import org.smslib.message.OutboundMessage;
 import org.smslib.smsserver.SMSServer;
-import org.smslib.smsserver.db.data.DeliveryReportDefinition;
 import org.smslib.smsserver.db.data.GatewayDefinition;
 import org.smslib.smsserver.db.data.GroupDefinition;
 import org.smslib.smsserver.db.data.GroupRecipientDefinition;
-import org.smslib.smsserver.db.data.InboundCallDefinition;
 import org.smslib.smsserver.db.data.NumberRouteDefinition;
 
 public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDatabaseHandler
@@ -93,7 +94,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	}
 
 	@Override
-	public void SetMessage(String messageId, String status) throws Exception
+	public void SetMessageStatus(OutboundMessage message, OutboundMessage.SentStatus status) throws Exception
 	{
 		Connection db = null;
 		PreparedStatement s = null;
@@ -101,8 +102,8 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		{
 			db = getDbConnection();
 			s = db.prepareStatement("update smslib_out set sent_status = ? where message_id = ?");
-			s.setString(1, status);
-			s.setString(2, messageId);
+			s.setString(1, status.toShortString());
+			s.setString(2, message.getId());
 			s.executeUpdate();
 			db.commit();
 		}
@@ -120,7 +121,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	}
 
 	@Override
-	public void SaveInboundCall(InboundCallDefinition inboundCall) throws Exception
+	public void SaveInboundCall(InboundCallCallbackEvent event) throws Exception
 	{
 		Connection db = null;
 		PreparedStatement s = null;
@@ -128,9 +129,9 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		{
 			db = getDbConnection();
 			s = db.prepareStatement("insert into smslib_calls (date, address, gateway_id) values (?, ?, ?)");
-			s.setTimestamp(1, new Timestamp(inboundCall.getDate().getTime()));
-			s.setString(2, inboundCall.getMsisdn().getAddress());
-			s.setString(3, inboundCall.getGatewayId());
+			s.setTimestamp(1, new Timestamp(event.getDate().getTime()));
+			s.setString(2, event.getMsisdn().getAddress());
+			s.setString(3, event.getGatewayId());
 			s.executeUpdate();
 			db.commit();
 		}
@@ -148,7 +149,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	}
 
 	@Override
-	public void SaveDeliveryReport(DeliveryReportDefinition deliveryReport) throws Exception
+	public void SaveDeliveryReport(DeliveryReportCallbackEvent event) throws Exception
 	{
 		Connection db = null;
 		PreparedStatement s = null;
@@ -156,11 +157,11 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		{
 			db = getDbConnection();
 			s = db.prepareStatement("update smslib_out set delivery_status = ?, delivery_date = ? where address = ? and operator_message_id = ? and gateway_id = ?");
-			s.setString(1, deliveryReport.getDeliveryStatus());
-			s.setTimestamp(2, new Timestamp(deliveryReport.getOriginalReceivedDate().getTime()));
-			s.setString(3, deliveryReport.getRecipientAddress().getAddress());
-			s.setString(4, deliveryReport.getOriginalMessageId());
-			s.setString(5, deliveryReport.getGatewayId());
+			s.setString(1, event.getMessage().getDeliveryStatus().toShortString());
+			s.setTimestamp(2, new Timestamp(event.getMessage().getOriginalReceivedDate().getTime()));
+			s.setString(3, event.getMessage().getRecipientAddress().getAddress());
+			s.setString(4, event.getMessage().getOriginalOperatorMessageId());
+			s.setString(5, event.getMessage().getGatewayId());
 			s.executeUpdate();
 			db.commit();
 		}

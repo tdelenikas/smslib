@@ -13,6 +13,7 @@ public class Test_Nexmo extends TestCase
 	static Logger logger = LoggerFactory.getLogger(Test_Nexmo.class);
 
 	String API_ID = "api-id";
+
 	String SECRET = "secret";
 
 	public void test() throws Exception

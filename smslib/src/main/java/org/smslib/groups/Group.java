@@ -1,14 +1,16 @@
+
 package org.smslib.groups;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.smslib.message.MsIsdn;
 
 public class Group
 {
 	String name = null;
+
 	String description = null;
+
 	List<MsIsdn> addressList = null;
 
 	public Group(String name, String description)

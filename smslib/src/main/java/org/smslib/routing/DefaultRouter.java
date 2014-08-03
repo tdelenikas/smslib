@@ -2,7 +2,6 @@
 package org.smslib.routing;
 
 import java.util.Collection;
-
 import org.smslib.gateway.AbstractGateway;
 import org.smslib.message.OutboundMessage;
 

@@ -3,7 +3,6 @@ package org.smslib.helper;
 
 import java.io.Serializable;
 import java.util.Comparator;
-
 import org.smslib.gateway.AbstractGateway;
 
 public class GatewayPriorityComparator implements Comparator<AbstractGateway>, Serializable

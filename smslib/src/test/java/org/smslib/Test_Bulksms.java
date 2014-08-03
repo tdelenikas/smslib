@@ -12,6 +12,7 @@ public class Test_Bulksms extends TestCase
 	static Logger logger = LoggerFactory.getLogger(Test_Bulksms.class);
 
 	String USERNAME = "username";
+
 	String PASSWORD = "password";
 
 	public void test() throws Exception
