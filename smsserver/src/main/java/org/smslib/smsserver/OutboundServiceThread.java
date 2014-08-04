@@ -57,7 +57,7 @@ public class OutboundServiceThread extends Thread
 					}
 					catch (InterruptedException e)
 					{
-						// Shallow this...
+						// On purpose...
 					}
 				}
 			}

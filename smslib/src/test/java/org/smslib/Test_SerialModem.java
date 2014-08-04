@@ -74,7 +74,7 @@ public class Test_SerialModem extends TestCase
 		}
 		catch (Exception e)
 		{
-			// Normal to get here... Swallow it!
+			// Normal to get here...
 		}
 		Service.getInstance().stop();
 		Service.getInstance().terminate();
