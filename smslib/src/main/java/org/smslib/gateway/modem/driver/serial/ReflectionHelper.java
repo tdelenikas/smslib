@@ -59,7 +59,7 @@ public class ReflectionHelper
 	/**
 	 * Same as
 	 * {@link ReflectionHelper#invokeAndCast(Object, Method, Object, Object...)
-	 * but with a cast to Enumeration<T> }
+	 * but with a cast to Enumeration-of-T }
 	 * 
 	 * @see ReflectionHelper#invokeAndCast(Object, Method, Object, Object...)
 	 */
@@ -79,7 +79,7 @@ public class ReflectionHelper
 	/**
 	 * Same as
 	 * {@link ReflectionHelper#invokeAndCast(Object, Method, Object, Object...)
-	 * but with a cast to Collection<T> }
+	 * but with a cast to Collection-of-T }
 	 * 
 	 * @see ReflectionHelper#invokeAndCast(Object, Method, Object, Object...)
 	 */

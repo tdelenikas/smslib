@@ -129,8 +129,9 @@ public class SerialPort
 	 * @param lsnr
 	 *            The SerialPortEventListener object whose serialEvent method
 	 *            will be called with a SerialEvent describing the event.
-	 * @throws java.util.TooManyListenersException
-	 *             (Wrapped as RuntimeException) If an initial attempt to attach
+	 * @throws RuntimeException
+	 *             A wrapped "java.util.TooManyListenersException"
+	 *             If an initial attempt to attach
 	 *             a listener succeeds, subsequent attempts will throw
 	 *             TooManyListenersException without effecting the first
 	 *             listener.
@@ -198,8 +199,8 @@ public class SerialPort
 	 * @param i
 	 *            when this many bytes are in the input buffer, return
 	 *            immediately from read.
-	 * @throws UnsupportedCommOperationException
-	 *             - (Wrapped as RuntimeException) is thrown if receive
+	 * @throws RuntimeException
+	 *             A wrapped "UnsupportedCommOperationException" is thrown if receive
 	 *             threshold is not supported by the underlying driver.
 	 */
 	public void enableReceiveThreshold(int i)
@@ -268,7 +269,7 @@ public class SerialPort
 	 * The read behaviour of the input stream returned by
 	 * <CODE>getInputStream</CODE> depends on combination of the threshold and
 	 * timeout values. The possible behaviours are described in the table below:
-	 * <P>
+	 * </P>
 	 * <table border="1">
 	 * <tr>
 	 * <th colspan=2>Threshold</th>
@@ -319,11 +320,12 @@ public class SerialPort
 	 * <P>
 	 * Note, however, that framing errors may cause the Timeout and Threshold
 	 * values to complete prematurely without raising an exception.
-	 * <P>
+	 * <BR>
 	 * Enabling the Timeout OR Threshold with a value a zero is a special case.
 	 * This causes the underlying driver to poll for incoming data instead being
 	 * event driven. Otherwise, the behaviour is identical to having both the
 	 * Timeout and Threshold disabled.
+	 * </P>
 	 * 
 	 * @return InputStream object that can be used to read from the port
 	 */
@@ -377,6 +379,7 @@ public class SerialPort
 	 *            <ul>
 	 *            <li>true: enable notification</li>
 	 *            <li>false: disable notification</li>
+	 *            </ul>
 	 */
 	public void notifyOnBreakInterrupt(boolean b)
 	{
@@ -407,6 +410,7 @@ public class SerialPort
 	 *            <ul>
 	 *            <li>true: enable notification</li>
 	 *            <li>false: disable notification</li>
+	 *            </ul>
 	 */
 	public void notifyOnDataAvailable(boolean b)
 	{
@@ -434,6 +438,7 @@ public class SerialPort
 	 *            <ul>
 	 *            <li>true: enable notification</li>
 	 *            <li>false: disable notification</li>
+	 *            </ul>
 	 */
 	public void notifyOnFramingError(boolean b)
 	{
@@ -464,6 +469,7 @@ public class SerialPort
 	 *            <ul>
 	 *            <li>true: enable notification</li>
 	 *            <li>false: disable notification</li>
+	 *            </ul>
 	 */
 	public void notifyOnOutputEmpty(boolean b)
 	{
@@ -491,6 +497,7 @@ public class SerialPort
 	 *            <ul>
 	 *            <li>true: enable notification</li>
 	 *            <li>false: disable notification</li>
+	 *            </ul>
 	 */
 	public void notifyOnOverrunError(boolean b)
 	{
@@ -518,6 +525,7 @@ public class SerialPort
 	 *            <ul>
 	 *            <li>true: enable notification</li>
 	 *            <li>false: disable notification</li>
+	 *            </ul>
 	 */
 	public void notifyOnParityError(boolean b)
 	{

@@ -166,6 +166,8 @@ public class SerialPortEvent
 	 * Gets the new value of the state change that caused the SerialPortEvent to
 	 * be propagated. For example, when the CD bit changes, newValue reflects
 	 * the new value of the CD bit.
+	 * 
+	 * @return
 	 */
 	public boolean getNewValue()
 	{
@@ -190,6 +192,8 @@ public class SerialPortEvent
 	 * Gets the old value of the state change that caused the SerialPortEvent to
 	 * be propagated. For example, when the CD bit changes, oldValue reflects
 	 * the old value of the CD bit.
+	 * 
+	 * @return
 	 */
 	public boolean getOldValue()
 	{

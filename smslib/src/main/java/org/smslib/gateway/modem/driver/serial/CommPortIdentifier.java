@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * <code>gnu.io.CommPortIdentifier</code>). The API definition is taken from
  * Sun. So honor them!
  * </p>
- * <code>CommPortIdentifier</code> is the central class for controlling access
+ * <p><code>CommPortIdentifier</code> is the central class for controlling access
  * to communications ports. It includes methods for: </p>
  * <ul>
  * <li>Determining the communications ports made available by the driver.</li>
