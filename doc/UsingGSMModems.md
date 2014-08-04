@@ -56,6 +56,59 @@ IP modems do not require anything special or any 3rd party libraries. Just make 
 
 The SMSLib for Microsoft .NET Framework sees all modems as IP Modems. If you have a serial modem, you can use the [Comm2IP](https://github.com/smslib/comm2ip) in order to map your serial port to an IP endpoint. From then on, use your modem as an IP modem.
 
+## Modem scan & auto-detection
+
+Assuming that you have succesfully installed the COM library of your choice, you can try and check if SMSLib recognizes your modem. Just run the plain jar:
+
+```
+java -jar smslib-dep-dev-SNAPSHOT-all.jar
+```
+
+You will see information *like* the following:
+
+```
+log4j:WARN No appenders could be found for logger (org.smslib.threading.CallbackManager).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+SMSLib - A universal API for sms messaging
+Copyright (c) 2002-2014, smslib.org
+This software is distributed under the terms of the
+Apache v2.0 License (http://www.apache.org/licenses/LICENSE-2.0.html).
+SMSLib Version: dev-SNAPSHOT
+OS Version: Windows 7 / x86 / 6.1
+JAVA Version: 1.8.0_11
+JAVA Runtime Version: 1.8.0_11-b12
+JAVA Vendor: Oracle Corporation
+JAVA Class Path: smslib-dep-dev-SNAPSHOT-all.jar
+
+Running port autodetection / diagnostics...
+
+====== Found port: COM3
+>> Trying at   9600...  Getting Info... Found: AT+CGMMERROR
+>> Trying at  14400...No device... (Unsupported baud rate)
+>> Trying at  19200...  Getting Info... Found: AT+CGMMERROR
+>> Trying at  28800...No device... (Unsupported baud rate)
+>> Trying at  33600...No device... (Unsupported baud rate)
+>> Trying at  38400...  Getting Info... Found: AT+CGMMERROR
+>> Trying at  56000...No device... (Unsupported baud rate)
+>> Trying at  57600...  Getting Info... Found: AT+CGMMERROR
+>> Trying at 115200...  Getting Info... Found: AT+CGMMERROR
+====== Found port: COM1
+>> Trying at   9600...  Getting Info... Found: AT+CGMMNokia 6310i
+>> Trying at  14400...No device... (Unsupported baud rate)
+>> Trying at  19200...  Getting Info... Found: AT+CGMMNokia 6310i
+>> Trying at  28800...No device... (Unsupported baud rate)
+>> Trying at  33600...No device... (Unsupported baud rate)
+>> Trying at  38400...  Getting Info... Found: AT+CGMMNokia 6310i
+>> Trying at  56000...No device... (Unsupported baud rate)
+>> Trying at  57600...  Getting Info... Found: AT+CGMMNokia 6310i
+>> Trying at 115200...  Getting Info... Found: AT+CGMMNokia 6310i
+
+Test complete.
+```
+
+Here, my old-fashioned Nokia 6310i is discovered on port COM1. This function actually iterates all found ports and checks if something is attached and responding.
+
 ## Modem gateway initialization
 
 A Serial Modem gateway is initialized like this:
