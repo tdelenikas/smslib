@@ -25,7 +25,7 @@ public class ShutdownThread extends Thread
 		}
 		catch (Exception e)
 		{
-			logger.error("Error while terminating the SMSLib service!", e);
+			logger.error("Error while terminating the SMSServer service!", e);
 		}
 	}
 }
