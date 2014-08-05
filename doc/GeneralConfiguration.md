@@ -38,3 +38,23 @@ Some parameters are also accessible via `-Dxxxx=yyyy` runtime definitions.
 	<td>-Dsmslib.hourstoretainorphanedmessageparts=72</td>
 </tr>
 </table>
+
+### Other Configuration
+
+#### HTTP Server
+
+SMSLib runs an embedded HTTP server. By visiting `http://localhost:8001/status`, you will see the SMSLib status page with some useful information about the Gateways running, basic messaging statistics, etc
+
+The URLs supported as well as the ACLs per URL are configurable.
+
+Remember that, if you have defined **no** ACL, access is denied! So you should define the ACLs you want.
+
+For example, with the default configuration the status page (`http://localhost:8001/status`) is inaccessible. You should add a call like the following:
+
+```
+Service.getInstance().registerHttpRequestACL("/status", "0.0.0.0/0");
+```
+
+to make the `/status` visible.
+
+**Note**: When using SMSServer, the `/status` is enabled for everybody.

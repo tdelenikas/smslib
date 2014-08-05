@@ -28,5 +28,4 @@ For questions and feedback please open a [ticket](https://github.com/smslib/smsl
 * [Modem Configuration](https://github.com/smslib/smslib/wiki/ModemConfiguration)
 
 ### Miscelaneous
-* [Monitoring](https://github.com/smslib/smslib/wiki/Monitoring)
 * [GSM Errors](https://github.com/smslib/smslib/wiki/GSMErrors)
