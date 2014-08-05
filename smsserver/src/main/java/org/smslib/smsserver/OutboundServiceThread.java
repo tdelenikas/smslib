@@ -1,17 +1,11 @@
 
 package org.smslib.smsserver;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smslib.Service;
-import org.smslib.helper.Common;
-import org.smslib.message.AbstractMessage.Encoding;
-import org.smslib.message.MsIsdn;
-import org.smslib.message.OutboundBinaryMessage;
 import org.smslib.message.OutboundMessage;
 
 public class OutboundServiceThread extends Thread
@@ -70,63 +64,16 @@ public class OutboundServiceThread extends Thread
 
 	private void queueMessages() throws SQLException
 	{
-		/*
-				Connection db = null;
-				try
-				{
-					db = SMSServer.getInstance().getDbConnection();
-					PreparedStatement s = db.prepareStatement("select message_id, sender_address, address, text, encoding, priority, request_delivery_report, flash_sms from smslib_out where sent_status = ? order by priority desc limit 50");
-					s.setString(1, OutboundMessage.SentStatus.Unsent.toShortString());
-					ResultSet rs = s.executeQuery();
-					while (rs.next())
-					{
-						String messageId = rs.getString(1).trim();
-						if (!Common.isNullOrEmpty(messageId))
-						{
-							OutboundMessage message;
-							String senderId = rs.getString(2).trim();
-							String recipient = rs.getString(3).trim();
-							String text = rs.getString(4).trim();
-							String encoding = rs.getString(5).trim();
-							if (Encoding.getEncodingFromShortString(encoding) == Encoding.Enc7)
-							{
-								message = new OutboundMessage(new MsIsdn(recipient), text);
-							}
-							else if (Encoding.getEncodingFromShortString(encoding) == Encoding.Enc8)
-							{
-								message = new OutboundBinaryMessage(new MsIsdn(recipient), Common.stringToBytes(text));
-							}
-							else if (Encoding.getEncodingFromShortString(encoding) == Encoding.EncUcs2)
-							{
-								message = new OutboundMessage(new MsIsdn(recipient), text);
-								message.setEncoding(Encoding.EncUcs2);
-							}
-							else
-							{
-								//TODO: ENC-CUSTOM
-								message = new OutboundMessage(new MsIsdn(recipient), text);
-							}
-							message.setEncoding(Encoding.getEncodingFromShortString(encoding));
-							message.setId(messageId);
-							if (!Common.isNullOrEmpty(senderId)) message.setOriginatorAddress(new MsIsdn(senderId));
-							message.setPriority(rs.getInt(6));
-							message.setRequestDeliveryReport(rs.getInt(7) == 1);
-							message.setFlashSms(rs.getInt(8) == 1);
-							if (!isGroupMessage(message)) Service.getInstance().queue(message);
-						}
-					}
-					rs.close();
-					s.close();
-				}
-				catch (Exception e)
-				{
-					logger.error("Error!", e);
-				}
-				finally
-				{
-					if (db != null) db.close();
-				}
-		*/
+		try
+		{
+			Collection<OutboundMessage> messages = SMSServer.getInstance().getDatabaseHandler().getMessagesToSend();
+			for (OutboundMessage m : messages)
+				Service.getInstance().queue(m);
+		}
+		catch (Exception e)
+		{
+			logger.error("Error!", e);
+		}
 	}
 
 	private boolean isGroupMessage(OutboundMessage message) throws ClassNotFoundException, SQLException, InterruptedException

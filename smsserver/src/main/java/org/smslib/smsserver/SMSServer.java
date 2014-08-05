@@ -91,6 +91,7 @@ public class SMSServer
 		Service.getInstance().setDeliveryReportCallback(new DeliveryReportCallback());
 		Service.getInstance().setInboundCallCallback(new InboundCallCallback());
 		Service.getInstance().start();
+		Service.getInstance().registerHttpRequestACL("/status", "0.0.0.0/0");
 		loadGatewayDefinitions();
 		loadGroups();
 		loadNumberRoutes();

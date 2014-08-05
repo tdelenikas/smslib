@@ -28,4 +28,6 @@ public interface IDatabaseHandler
 	public void saveInboundMessage(InboundMessageCallbackEvent event) throws Exception;
 
 	public void markMessageSent(MessageSentCallbackEvent event) throws Exception;
+
+	public Collection<OutboundMessage> getMessagesToSend() throws Exception;
 }

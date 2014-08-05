@@ -16,6 +16,9 @@ import org.smslib.callback.events.InboundCallCallbackEvent;
 import org.smslib.callback.events.InboundMessageCallbackEvent;
 import org.smslib.callback.events.MessageSentCallbackEvent;
 import org.smslib.helper.Common;
+import org.smslib.message.AbstractMessage.Encoding;
+import org.smslib.message.MsIsdn;
+import org.smslib.message.OutboundBinaryMessage;
 import org.smslib.message.OutboundMessage;
 import org.smslib.message.OutboundMessage.SentStatus;
 import org.smslib.smsserver.SMSServer;
@@ -36,7 +39,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	@Override
 	public Collection<GatewayDefinition> getGatewayDefinitions(String profile) throws Exception
 	{
-		List<GatewayDefinition> gatewayList = new LinkedList<GatewayDefinition>();
+		Collection<GatewayDefinition> gatewayList = new LinkedList<GatewayDefinition>();
 		Connection db = getDbConnection();
 		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = s.executeQuery("select class, gateway_id, ifnull(p0, ''), ifnull(p1, ''), ifnull(p2, ''), ifnull(p3, ''), ifnull(p4, ''), ifnull(p5, ''), ifnull(sender_address, ''), priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
@@ -55,7 +58,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	@Override
 	public Collection<NumberRouteDefinition> getNumberRouteDefinitions(String profile) throws Exception
 	{
-		List<NumberRouteDefinition> routeList = new LinkedList<NumberRouteDefinition>();
+		Collection<NumberRouteDefinition> routeList = new LinkedList<NumberRouteDefinition>();
 		Connection db = getDbConnection();
 		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = s.executeQuery("select address_regex, gateway_id from smslib_number_routes where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
@@ -73,7 +76,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 	@Override
 	public Collection<GroupDefinition> getGroupDefinitions(String profile) throws Exception
 	{
-		List<GroupDefinition> groups = new LinkedList<GroupDefinition>();
+		Collection<GroupDefinition> groups = new LinkedList<GroupDefinition>();
 		Connection db = getDbConnection();
 		Statement s1 = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs1 = s1.executeQuery("select id, group_name, group_description from smslib_groups where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
@@ -261,5 +264,69 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 			if (s != null) s.close();
 			if (db != null) db.close();
 		}
+	}
+
+	public Collection<OutboundMessage> getMessagesToSend() throws Exception
+	{
+		Collection<OutboundMessage> messages = new LinkedList<OutboundMessage>();
+		Connection db = null;
+		PreparedStatement s = null;
+		ResultSet rs = null;
+		try
+		{
+			db = getDbConnection();
+			s = db.prepareStatement("select message_id, sender_address, address, text, encoding, priority, request_delivery_report, flash_sms from smslib_out where sent_status = ? order by priority desc limit 50");
+			s.setString(1, OutboundMessage.SentStatus.Unsent.toShortString());
+			rs = s.executeQuery();
+			while (rs.next())
+			{
+				String messageId = rs.getString(1).trim();
+				if (!Common.isNullOrEmpty(messageId))
+				{
+					OutboundMessage message;
+					String senderId = rs.getString(2).trim();
+					String recipient = rs.getString(3).trim();
+					String text = rs.getString(4).trim();
+					String encoding = rs.getString(5).trim();
+					if (Encoding.getEncodingFromShortString(encoding) == Encoding.Enc7)
+					{
+						message = new OutboundMessage(new MsIsdn(recipient), text);
+					}
+					else if (Encoding.getEncodingFromShortString(encoding) == Encoding.Enc8)
+					{
+						message = new OutboundBinaryMessage(new MsIsdn(recipient), Common.stringToBytes(text));
+					}
+					else if (Encoding.getEncodingFromShortString(encoding) == Encoding.EncUcs2)
+					{
+						message = new OutboundMessage(new MsIsdn(recipient), text);
+						message.setEncoding(Encoding.EncUcs2);
+					}
+					else
+					{
+						//TODO: ENC-CUSTOM
+						message = new OutboundMessage(new MsIsdn(recipient), text);
+					}
+					message.setEncoding(Encoding.getEncodingFromShortString(encoding));
+					message.setId(messageId);
+					if (!Common.isNullOrEmpty(senderId)) message.setOriginatorAddress(new MsIsdn(senderId));
+					message.setPriority(rs.getInt(6));
+					message.setRequestDeliveryReport(rs.getInt(7) == 1);
+					message.setFlashSms(rs.getInt(8) == 1);
+					//if (!isGroupMessage(message)) Service.getInstance().queue(message);
+					messages.add(message);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error("Error!", e);
+			throw e;
+		}
+		finally
+		{
+			if (s != null) s.close();
+			if (db != null) db.close();
+		}
+		return messages;
 	}
 }
