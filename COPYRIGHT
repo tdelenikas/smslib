@@ -1,17 +1,6 @@
-# About SMSLib v4
-
-SMSLib is an SMS messaging library, available for Java and .NET Framework.
-
-The goal of this library is to provide a universal texting API, which can be used for sending and receiving messages via GSM modems or bulk sms operators.
-
-**SMSLib v4 is under development and should be considered beta software. Code and/or documentation are not finalized yet!**
-
-# License 
-
 All SMSLib components are licensed under the terms of the Apache v2 license.
 
-Copyright (c) 2002-2014, smslib.org
-
+Copyright (c) 2002-2014, smslib.org, Thanasis Delenikas and Contributors.
 Copyright (c) 2008, Ateneo Java Wireless Competency Center/Blueblade Technologies, Philippines.
 
 Licensed under the Apache License, Version 2.0 (the "License");
