@@ -77,7 +77,6 @@
 		<module>smsserver-dotnet</module>
   </modules>
 	<build>
-<!--
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -85,7 +84,6 @@
 				<version>2.4</version>
 			</extension>
 		</extensions>
--->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -149,7 +147,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
+					<additionalparam></additionalparam>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -164,6 +162,10 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
 			</plugin>
 		</plugins>
 	</reporting>

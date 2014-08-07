@@ -1,5 +1,8 @@
 # Project Information
 
+## Web site
+
+The project's public web site is located at [http://smslib.org](http://smslib.org).
 ## Project structure
 
 SMSLib sources are available at [https://github.com/smslib](https://github.com/smslib).
