@@ -413,15 +413,15 @@ public abstract class AbstractGateway
 	public String toString()
 	{
 		StringBuffer b = new StringBuffer(1024);
-		b.append("== GATEWAY ========================================================================\n");
-		b.append(String.format("Gateway ID:  %s\n", getGatewayId()));
-		b.append(String.format("Description: %s\n", getDescription()));
-		b.append(String.format("Sender ID:   %s\n", getSenderAddress()));
-		b.append(String.format("-- Capabilities --\n"));
+		b.append("== GATEWAY ========================================================================%n");
+		b.append(String.format("Gateway ID:  %s%n", getGatewayId()));
+		b.append(String.format("Description: %s%n", getDescription()));
+		b.append(String.format("Sender ID:   %s%n", getSenderAddress()));
+		b.append(String.format("-- Capabilities --%n"));
 		b.append(getCapabilities().toString());
-		b.append(String.format("-- Settings --\n"));
-		b.append(String.format("Request Delivery Reports: %b\n", getRequestDeliveryReport()));
-		b.append("== GATEWAY END ========================================================================\n");
+		b.append(String.format("-- Settings --%n"));
+		b.append(String.format("Request Delivery Reports: %b%n", getRequestDeliveryReport()));
+		b.append("== GATEWAY END ========================================================================%n");
 		return b.toString();
 	}
 }

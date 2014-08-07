@@ -83,7 +83,7 @@ public class DeliveryReportMessage extends InboundMessage
 
 	public Date getOriginalReceivedDate()
 	{
-		return this.originalReceivedDate;
+		return new Date(this.originalReceivedDate.getTime());
 	}
 
 	public void setOriginalReceivedDate(Date originalReceivedDate)

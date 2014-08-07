@@ -17,7 +17,7 @@ public class Payload
 	public Payload(String data)
 	{
 		this.type = Type.Text;
-		this.textData = new String(data);
+		this.textData = data;
 	}
 
 	public Payload(byte[] data)

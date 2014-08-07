@@ -238,37 +238,37 @@ public abstract class AbstractMessage implements Serializable
 	public String toString()
 	{
 		StringBuffer b = new StringBuffer(1024);
-		b.append("\n== MESSAGE START ======================================================================\n");
-		b.append(String.format("CLASS: %s\n", this.getClass().toString()));
-		b.append(String.format("Message ID: %s\n", getId()));
-		b.append(String.format("Message Signature: %s\n", getSignature()));
-		b.append(String.format("Via Gateway: %s\n", getGatewayId() == null ? "N/A" : getGatewayId()));
-		b.append(String.format("Creation Date: %s\n", getCreationDate()));
-		b.append(String.format("Type: %s\n", getType()));
-		b.append(String.format("Encoding: %s\n", getEncoding()));
-		b.append(String.format("DCS Class: %s\n", getDcsClass()));
-		b.append(String.format("Source Port: %s\n", getSourcePort()));
-		b.append(String.format("Destination Port: %s\n", getDestinationPort()));
-		b.append(String.format("Originator Address: %s\n", getOriginatorAddress()));
-		b.append(String.format("Recipient Address: %s\n", getRecipientAddress()));
+		b.append("%n== MESSAGE START ======================================================================%n");
+		b.append(String.format("CLASS: %s%n", this.getClass().toString()));
+		b.append(String.format("Message ID: %s%n", getId()));
+		b.append(String.format("Message Signature: %s%n", getSignature()));
+		b.append(String.format("Via Gateway: %s%n", getGatewayId() == null ? "N/A" : getGatewayId()));
+		b.append(String.format("Creation Date: %s%n", getCreationDate()));
+		b.append(String.format("Type: %s%n", getType()));
+		b.append(String.format("Encoding: %s%n", getEncoding()));
+		b.append(String.format("DCS Class: %s%n", getDcsClass()));
+		b.append(String.format("Source Port: %s%n", getSourcePort()));
+		b.append(String.format("Destination Port: %s%n", getDestinationPort()));
+		b.append(String.format("Originator Address: %s%n", getOriginatorAddress()));
+		b.append(String.format("Recipient Address: %s%n", getRecipientAddress()));
 		if (getPayload() != null)
 		{
-			b.append(String.format("Payload Type: %s\n", getPayload().getType()));
-			b.append(String.format("Text payload: %s\n", (getPayload().getText() == null ? "null" : getPayload().getText())));
-			b.append(String.format("Binary payload: %s\n", (getPayload().getBytes() == null ? "null" : Common.bytesToString(getPayload().getBytes()))));
+			b.append(String.format("Payload Type: %s%n", getPayload().getType()));
+			b.append(String.format("Text payload: %s%n", (getPayload().getText() == null ? "null" : getPayload().getText())));
+			b.append(String.format("Binary payload: %s%n", (getPayload().getBytes() == null ? "null" : Common.bytesToString(getPayload().getBytes()))));
 		}
 		if (this instanceof InboundMessage)
 		{
-			b.append(String.format("Sent Date: %s\n", getSentDate()));
-			b.append(String.format("Memory Storage Location: %s\n", ((InboundMessage) this).getMemLocation()));
-			b.append(String.format("Memory Index: %d\n", ((InboundMessage) this).getMemIndex()));
-			b.append(String.format("Memory MP Index: %s\n", ((InboundMessage) this).getMpMemIndex()));
+			b.append(String.format("Sent Date: %s%n", getSentDate()));
+			b.append(String.format("Memory Storage Location: %s%n", ((InboundMessage) this).getMemLocation()));
+			b.append(String.format("Memory Index: %d%n", ((InboundMessage) this).getMemIndex()));
+			b.append(String.format("Memory MP Index: %s%n", ((InboundMessage) this).getMpMemIndex()));
 		}
 		if (this instanceof InboundEncryptedMessage)
 		{
 			try
 			{
-				b.append(String.format("Decrypted binary payload: %s\n", Common.bytesToString(((InboundEncryptedMessage) this).getDecryptedData())));
+				b.append(String.format("Decrypted binary payload: %s%n", Common.bytesToString(((InboundEncryptedMessage) this).getDecryptedData())));
 			}
 			catch (Exception e)
 			{
@@ -277,26 +277,26 @@ public abstract class AbstractMessage implements Serializable
 		}
 		if (this instanceof OutboundMessage)
 		{
-			b.append(String.format("Sent Date: %s\n", (((OutboundMessage) this).getSentStatus() == SentStatus.Sent ? getSentDate() : "N/A")));
+			b.append(String.format("Sent Date: %s%n", (((OutboundMessage) this).getSentStatus() == SentStatus.Sent ? getSentDate() : "N/A")));
 			String ids = "";
 			for (String opId : ((OutboundMessage) this).getOperatorMessageIds())
 			{
 				ids += (ids.length() == 0 ? opId : "," + opId);
 			}
-			b.append(String.format("Operator Message IDs: %s\n", ids));
-			b.append(String.format("Status: %s\n", ((OutboundMessage) this).getSentStatus().toString()));
-			b.append(String.format("Credits used: %f\n", ((OutboundMessage) this).getCreditsUsed()));
-			b.append(String.format("Failure: %s\n", ((OutboundMessage) this).getFailureCause().toString()));
-			b.append(String.format("Operator Failure Code: %s\n", ((OutboundMessage) this).getOperatorFailureCode()));
-			b.append(String.format("Request Delivery Reports: %b\n", ((OutboundMessage) this).getRequestDeliveryReport()));
+			b.append(String.format("Operator Message IDs: %s%n", ids));
+			b.append(String.format("Status: %s%n", ((OutboundMessage) this).getSentStatus().toString()));
+			b.append(String.format("Credits used: %f%n", ((OutboundMessage) this).getCreditsUsed()));
+			b.append(String.format("Failure: %s%n", ((OutboundMessage) this).getFailureCause().toString()));
+			b.append(String.format("Operator Failure Code: %s%n", ((OutboundMessage) this).getOperatorFailureCode()));
+			b.append(String.format("Request Delivery Reports: %b%n", ((OutboundMessage) this).getRequestDeliveryReport()));
 		}
 		if (this instanceof DeliveryReportMessage)
 		{
-			b.append(String.format("Original Operator Message Id: %s\n", ((DeliveryReportMessage) this).getOriginalOperatorMessageId()));
-			b.append(String.format("Delivery Date: %s\n", ((DeliveryReportMessage) this).getOriginalReceivedDate()));
-			b.append(String.format("Delivery Status: %s\n", ((DeliveryReportMessage) this).getDeliveryStatus()));
+			b.append(String.format("Original Operator Message Id: %s%n", ((DeliveryReportMessage) this).getOriginalOperatorMessageId()));
+			b.append(String.format("Delivery Date: %s%n", ((DeliveryReportMessage) this).getOriginalReceivedDate()));
+			b.append(String.format("Delivery Status: %s%n", ((DeliveryReportMessage) this).getDeliveryStatus()));
 		}
-		b.append("== MESSAGE END ========================================================================\n");
+		b.append("== MESSAGE END ========================================================================%n");
 		return b.toString();
 	}
 }

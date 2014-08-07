@@ -46,11 +46,11 @@ public class Common
 		cidrMask = (-1) << (32 - cidrMask);
 		int lowest = cidrIP & cidrMask;
 		int highest = lowest + (~cidrMask);
-		int targetIp = InetAddressToInt(ip);
+		int targetIp = addressToInt(ip);
 		return ((targetIp >= lowest) && (targetIp <= highest));
 	}
 
-	public static int InetAddressToInt(InetAddress ip)
+	public static int addressToInt(InetAddress ip)
 	{
 		int compacted = 0;
 		byte[] bytes = ip.getAddress();
@@ -63,7 +63,7 @@ public class Common
 
 	public static int InetAddressToInt(String ip) throws UnknownHostException
 	{
-		return InetAddressToInt(InetAddress.getByName(ip));
+		return addressToInt(InetAddress.getByName(ip));
 	}
 
 	public static void countSheeps(int n)

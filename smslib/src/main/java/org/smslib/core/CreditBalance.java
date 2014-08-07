@@ -36,8 +36,8 @@ public class CreditBalance
 	public String toString()
 	{
 		StringBuffer b = new StringBuffer(256);
-		b.append(String.format("Credits: %f\n", getCredits()));
-		b.append(String.format("Last update: %s\n", getLastUpdate().toString()));
+		b.append(String.format("Credits: %f%n", getCredits()));
+		b.append(String.format("Last update: %s%n", getLastUpdate().toString()));
 		return b.toString();
 	}
 }

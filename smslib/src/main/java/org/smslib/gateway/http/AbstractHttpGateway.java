@@ -44,7 +44,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 			if (this == Undefined) return "Undefined";
 			if (this == POST) return "POST";
 			if (this == GET) return "GET";
-			return null;
+			return "";
 		}
 
 		public static HttpMethod mapStringValue(String s)
@@ -283,7 +283,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 				out.write(req.toString());
 				out.flush();
 				out.close();
-				in = new BufferedReader(new InputStreamReader((con.getInputStream())));
+				in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 				while ((line = in.readLine()) != null)
 				{
 					logger.debug("HTTP POST / Response -> " + line);
@@ -297,7 +297,7 @@ public abstract class AbstractHttpGateway extends AbstractGateway
 				con.setConnectTimeout(5000);
 				prepareUrlConnection(con);
 				logger.debug("HTTP GET -> " + url);
-				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 				while ((line = in.readLine()) != null)
 				{
 					logger.debug("HTTP GET / Response -> " + line);

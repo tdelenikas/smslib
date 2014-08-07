@@ -79,7 +79,7 @@ public class TextMagic extends AbstractHttpGateway
 				parameters.put("unicode", (message.getEncoding() == Encoding.EncUcs2 ? "1" : "0"));
 				if (!message.getOriginatorAddress().isVoid()) parameters.put("from", message.getOriginatorAddress().getAddress());
 				else if (!getSenderAddress().isVoid()) parameters.put("from", getSenderAddress().getAddress());
-				parameters.put("max_length", new Integer(getMaxMessageParts()).toString());
+				parameters.put("max_length", String.valueOf(getMaxMessageParts()));
 				break;
 			case QueryBalance:
 				parameters.put("username", this.userId);
@@ -124,7 +124,7 @@ public class TextMagic extends AbstractHttpGateway
 					if (error > 0)
 					{
 						message.setSentStatus(SentStatus.Failed);
-						message.setOperatorFailureCode(new Integer(error).toString());
+						message.setOperatorFailureCode(String.valueOf(error));
 						switch (error)
 						{
 							case 1:

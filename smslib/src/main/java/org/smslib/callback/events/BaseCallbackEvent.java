@@ -9,6 +9,6 @@ public class BaseCallbackEvent
 
 	public Date getDate()
 	{
-		return this.date;
+		return new Date(this.date.getTime());
 	}
 }

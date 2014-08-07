@@ -50,9 +50,9 @@ public class Coverage
 	public String toString()
 	{
 		StringBuffer b = new StringBuffer(1024);
-		b.append(String.format("MSISDN: %s\n", getMsisdn()));
-		b.append(String.format("Is destination covered?: %b\n", getCoverage()));
-		b.append(String.format("Credits used: %f\n", getCreditsUsed()));
+		b.append(String.format("MSISDN: %s%n", getMsisdn()));
+		b.append(String.format("Is destination covered?: %b%n", getCoverage()));
+		b.append(String.format("Credits used: %f%n", getCreditsUsed()));
 		return b.toString();
 	}
 }
