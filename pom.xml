@@ -77,6 +77,7 @@
 		<module>smsserver-dotnet</module>
   </modules>
 	<build>
+<!--
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -84,6 +85,7 @@
 				<version>2.4</version>
 			</extension>
 		</extensions>
+-->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -167,19 +169,25 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>2.7</version>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.2</version>
+<!--
+				<extensions>true</extensions>
+-->
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
 		</plugins>
 	</reporting>
 	<distributionManagement>
-		<repository>
-			<id>smslib-releases</id>
-			<name>SMSLib Release Repository</name>
-			<url>scp://${smslib-repo-url}/releases</url>
-		</repository>
 		<snapshotRepository>
-			<id>smslib-snapshots</id>
-			<name>SMSLib Snapshot Repository</name>
-			<uniqueVersion>false</uniqueVersion>
-			<url>scp://smslib.org/home/web/smslib.org/public_html/maven2/snapshots</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
