@@ -23,7 +23,12 @@
 	<packaging>pom</packaging>
 	<version>dev-SNAPSHOT</version>
 	<name>SMSLib</name>
-	<description>A universal API for sms messaging.</description>
+	<description>A universal API for sms messaging.
+
+Web site: http://smslib.org
+Project: https://github.com/smslib/smslib
+
+Contact: info@smslib.org</description>
 	<url>http://smslib.org</url>
 	<licenses>
 		<license>
@@ -34,7 +39,7 @@
 	<developers>
 		<developer>
 			<name>Thanasis Delenikas</name>
-			<email>t.delenikas@gmail.com</email>
+			<email>thanasis@smslib.org</email>
 			<roles>
 				<role>Author</role>
 			</roles>

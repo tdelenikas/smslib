@@ -3,6 +3,7 @@
 ## Web site
 
 The project's public web site is located at [http://smslib.org](http://smslib.org).
+
 ## Project structure
 
 SMSLib sources are available at [https://github.com/smslib](https://github.com/smslib).
@@ -26,35 +27,15 @@ The `mvn package` cycle also builds the .NET Framework library. If you work on L
 
 ## Maven
 
-If you are using Maven, SMSLib provides a private maven repository.
-
-To access the snapshot builds, add the following dependency to your project:
-
-```
-<dependency>
-   <groupId>org.smslib</groupId>
-   <artifactId>smslib</artifactId>
-   <version>dev-SNAPSHOT</version>
-</dependency>
-```
-
-Don't forget to add the private SMSLib repositories as well!
-
-```
-<repositories>
-   ...
-   <repository>
-      <id>smslib-snapshots</id>
-      <name>SMSLib Repository</name>
-      <url>http://smslib.org/maven2/snapshots/</url>
-   </repository>
-   ...
-</repositories>
-```
+If you are using Maven, SMSLib development snapshots artifacts are published on [Sonatype](https://oss.sonatype.prg). The repository URL is [https://oss.sonatype.org/content/repositories/snapshots/org/smslib/](https://oss.sonatype.org/content/repositories/snapshots/org/smslib/)
 
 Snapshot artifacts are **always** named `dev-SNAPSHOT` and are based on the `dev` branch. They are updated whenever there are changes in the `dev` branch.
 
-## Announcement / Discussion Group
+## News
+
+News are posted on the [SMSLib News](http://smslib.org/news/) page. You can also follow [@smslib](https://twitter.com/smslib).
+
+## Discussion Group
 
 Feel free to join [SMSLib Discussion Group](https://groups.google.com/d/forum/smslib) to ask for help, give feedback or just say hello!
 

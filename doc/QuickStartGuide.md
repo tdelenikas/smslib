@@ -13,31 +13,8 @@ SMSLib is also available as a all-inclusive .jar file, named `smslib-dep-VERSION
 To get the SMSLib binaries, you can:
 
 * Download and build source code yourselves (JDK 7, Maven v2.2 required).
-* Snapshot and release artifacts are frequently published at the [SMSLib private Maven repository](http://smslib.org/maven2/).
+* Use the snapshot repository available at Sonatype. The repository URL is [https://oss.sonatype.org/content/repositories/snapshots/org/smslib/](https://oss.sonatype.org/content/repositories/snapshots/org/smslib/)
 
-If you are using Maven, add the following dependency to your project:
-
-```
-<dependency>
-   <groupId>org.smslib</groupId>
-   <artifactId>smslib</artifactId>
-   <version>dev-SNAPSHOT</version>
-</dependency>
-```
-
-Also add the private snapshot repository:
-
-```
-<repositories>
-   ...
-   <repository>
-      <id>smslib-snapshots</id>
-      <name>SMSLib Repository</name>
-      <url>http://smslib.org/maven2/snapshots/</url>
-   </repository>
-   ...
-</repositories>
-```
 ### .NET Framework Environment
 
 If you work with .NET Framework, you **need** to download and install the [IKVM](http://ikvm.net) package as well.
