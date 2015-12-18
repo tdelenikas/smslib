@@ -46,9 +46,9 @@ public class SerialModemDriver extends AbstractModemDriver implements SerialPort
 		this.serialPort.enableReceiveTimeout(Integer.valueOf(getModemSettings("timeout")));
 		this.serialPort.notifyOnDataAvailable(true);
 		this.serialPort.addEventListener(this);
-		//if (getModemSettings("flowcontrol").equalsIgnoreCase("INOUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | SerialPort.FLOWCONTROL_RTSCTS_OUT);
-		//else if (getModemSettings("flowcontrol").equalsIgnoreCase("IN")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN);
-		//else if (getModemSettings("flowcontrol").equalsIgnoreCase("OUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_OUT);
+		if (getModemSettings("flowcontrol").equalsIgnoreCase("INOUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | SerialPort.FLOWCONTROL_RTSCTS_OUT);
+		else if (getModemSettings("flowcontrol").equalsIgnoreCase("IN")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN);
+		else if (getModemSettings("flowcontrol").equalsIgnoreCase("OUT")) this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_OUT);
 		this.pollReader = new PollReader();
 		this.pollReader.start();
 	}
