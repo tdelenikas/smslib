@@ -7,7 +7,7 @@ public class Settings
 
 	public static final String LIBRARY_LICENSE = "This software is distributed under the terms of the\nApache v2.0 License (http://www.apache.org/licenses/LICENSE-2.0.html).";
 
-	public static final String LIBRARY_COPYRIGHT = "Copyright (c) 2002-2014, smslib.org";
+	public static final String LIBRARY_COPYRIGHT = "Copyright (c) 2002-2015, smslib.org";
 
 	public static final String LIBRARY_VERSION = "dev-SNAPSHOT";
 
