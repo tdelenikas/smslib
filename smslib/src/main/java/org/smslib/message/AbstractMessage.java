@@ -238,7 +238,7 @@ public abstract class AbstractMessage implements Serializable
 	public String toString()
 	{
 		StringBuffer b = new StringBuffer(1024);
-		b.append("%n== MESSAGE START ======================================================================%n");
+		b.append(String.format("%n== MESSAGE START ======================================================================%n"));
 		b.append(String.format("CLASS: %s%n", this.getClass().toString()));
 		b.append(String.format("Message ID: %s%n", getId()));
 		b.append(String.format("Message Signature: %s%n", getSignature()));
@@ -296,7 +296,7 @@ public abstract class AbstractMessage implements Serializable
 			b.append(String.format("Delivery Date: %s%n", ((DeliveryReportMessage) this).getOriginalReceivedDate()));
 			b.append(String.format("Delivery Status: %s%n", ((DeliveryReportMessage) this).getDeliveryStatus()));
 		}
-		b.append("== MESSAGE END ========================================================================%n");
+		b.append(String.format("== MESSAGE END ========================================================================%n"));
 		return b.toString();
 	}
 }
