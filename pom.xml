@@ -76,14 +76,10 @@ Contact: admin@smslib.org</description>
 		<module>smslib</module>
 		<module>smslib-camel</module>
 		<module>smslib-dep</module>
-		<!--
 		<module>smslib-dotnet</module>
-	-->
 		<module>smsserver</module>
 		<module>smsserver-dep</module>
-		<!--
 		<module>smsserver-dotnet</module>
-	-->
   </modules>
 	<build>
 <!--
