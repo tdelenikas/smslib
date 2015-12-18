@@ -47,7 +47,7 @@ public class Test_SerialModem extends TestCase
 		Service.getInstance().setInboundMessageCallback(new InboundMessageCallback());
 		Service.getInstance().setDeliveryReportCallback(new DeliveryReportCallback());
 		Service.getInstance().start();
-		Modem gateway = new Modem("modem", "COM4", "19200", "0000", "0000", "3097100000", "");
+		Modem gateway = new Modem("modem", "COM1", "19200", "0000", "0000", "", "");
 		Service.getInstance().registerGateway(gateway);
 		// Print out some device information.
 		logger.info("Manufacturer       : " + gateway.getDeviceInformation().getManufacturer());
