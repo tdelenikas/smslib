@@ -28,7 +28,7 @@
 Web site: http://smslib.org
 Project: https://github.com/smslib/smslib
 
-Contact: info@smslib.org</description>
+Contact: admin@smslib.org</description>
 	<url>http://smslib.org</url>
 	<licenses>
 		<license>
@@ -39,7 +39,7 @@ Contact: info@smslib.org</description>
 	<developers>
 		<developer>
 			<name>Thanasis Delenikas</name>
-			<email>thanasis@smslib.org</email>
+			<email>admin@smslib.org</email>
 			<roles>
 				<role>Author</role>
 			</roles>
@@ -76,10 +76,14 @@ Contact: info@smslib.org</description>
 		<module>smslib</module>
 		<module>smslib-camel</module>
 		<module>smslib-dep</module>
+		<!--
 		<module>smslib-dotnet</module>
+	-->
 		<module>smsserver</module>
 		<module>smsserver-dep</module>
+		<!--
 		<module>smsserver-dotnet</module>
+	-->
   </modules>
 	<build>
 <!--

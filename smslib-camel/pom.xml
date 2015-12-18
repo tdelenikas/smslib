@@ -16,13 +16,6 @@
 
   <developers>
     <developer>
-      <name>Thanasis Delenikas</name>
-      <email>admin@smslib.org</email>
-      <roles>
-        <role>Author</role>
-      </roles>
-    </developer>
-    <developer>
       <name>derjust</name>
       <email>zeeman@zeeman.de</email>
       <roles>
