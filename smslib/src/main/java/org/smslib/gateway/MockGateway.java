@@ -37,6 +37,7 @@ public class MockGateway extends AbstractGateway
 		super(1, 1, id, "Mock Gateway");
 		Capabilities caps = new Capabilities();
 		caps.set(Caps.CanSendMessage);
+		setCapabilities(caps);
 		this.failureRate = failureRate;
 		this.delay = delay;
 	}
