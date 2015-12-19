@@ -10,4 +10,4 @@ The fields you should fill are:
 * `gateway_id` the id (unique name) that identifies this gateway.
 * `p0` ... `p5` the parameters of the gateway. These are directly mapped to the constructor parameters of each gateway. More information is given further down.
 * `sender_address` the custom originator address that this gateway should use.
-* `is_enabled` **0** means the gateway will **not** be used, **1** means the gateway **will** be used.
+* `enabled` **0** means the gateway **will not** be used, **1** means the gateway **will** be used.
