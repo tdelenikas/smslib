@@ -1,6 +1,9 @@
 # SMSLib v4 Documentation
 
 SMSLib v4 is a **work in progress** - functionality and/or documentation are not yet finalized.
+
+For more information, visit the [SMSLib Web Site](http://smslib.org).
+
 For questions and feedback please open a [ticket](https://github.com/smslib/smslib/issues).
 
 ### General information
@@ -22,6 +25,9 @@ For questions and feedback please open a [ticket](https://github.com/smslib/smsl
 * [Encrypted Messages](https://github.com/smslib/smslib/wiki/EncryptedMessages)
 
 ### Using SMSServer
+
+* [SMSServer Introduction](https://github.com/smslib/smslib/wiki/SMSServer)
+* [SMSServer Configuration](https://github.com/smslib/smslib/wiki/SMSServerConfig)
 
 ### Configuration
 * [General Configuration](https://github.com/smslib/smslib/wiki/GeneralConfiguration)
