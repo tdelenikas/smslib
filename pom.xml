@@ -194,5 +194,13 @@ Contact: admin@smslib.org</description>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
+
+<!--
+		<snapshotRepository>
+			<id>smslib-snapshots</id>
+			<url>file:e:/data/smslib-repository/v4/snapshots</url>
+		</snapshotRepository>
+-->
+
 	</distributionManagement>
 </project>
