@@ -42,7 +42,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		Collection<GatewayDefinition> gatewayList = new LinkedList<GatewayDefinition>();
 		Connection db = getDbConnection();
 		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs = s.executeQuery("select class, gateway_id, ifnull(p0, ''), ifnull(p1, ''), ifnull(p2, ''), ifnull(p3, ''), ifnull(p4, ''), ifnull(p5, ''), ifnull(sender_address, ''), priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
+		ResultSet rs = s.executeQuery("select class, gateway_id, ifnull(p0, ''), ifnull(p1, ''), ifnull(p2, ''), ifnull(p3, ''), ifnull(p4, ''), ifnull(p5, ''), ifnull(sender_address, ''), priority, max_message_parts, delivery_reports from smslib_gateways where (profile = '*' or profile = '" + profile + "') and enabled = 1");
 		while (rs.next())
 		{
 			int fIndex = 0;
@@ -61,7 +61,7 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		Collection<NumberRouteDefinition> routeList = new LinkedList<NumberRouteDefinition>();
 		Connection db = getDbConnection();
 		Statement s = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs = s.executeQuery("select address_regex, gateway_id from smslib_number_routes where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
+		ResultSet rs = s.executeQuery("select address_regex, gateway_id from smslib_number_routes where (profile = '*' or profile = '" + profile + "') and enabled = 1");
 		while (rs.next())
 		{
 			NumberRouteDefinition r = new NumberRouteDefinition(rs.getString(1).trim(), rs.getString(2).trim());
@@ -79,14 +79,14 @@ public class MySQLDatabaseHandler extends JDBCDatabaseHandler implements IDataba
 		Collection<GroupDefinition> groups = new LinkedList<GroupDefinition>();
 		Connection db = getDbConnection();
 		Statement s1 = db.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs1 = s1.executeQuery("select id, group_name, group_description from smslib_groups where (profile = '*' or profile = '" + profile + "') and is_enabled = 1");
+		ResultSet rs1 = s1.executeQuery("select id, group_name, group_description from smslib_groups where (profile = '*' or profile = '" + profile + "') and enabled = 1");
 		while (rs1.next())
 		{
 			int groupId = rs1.getInt(1);
 			String groupName = rs1.getString(2).trim();
 			String groupDescription = rs1.getString(3).trim();
 			List<GroupRecipientDefinition> recipients = new LinkedList<GroupRecipientDefinition>();
-			PreparedStatement s2 = db.prepareStatement("select address from smslib_group_recipients where group_id = ? and is_enabled = 1");
+			PreparedStatement s2 = db.prepareStatement("select address from smslib_group_recipients where group_id = ? and enabled = 1");
 			s2.setInt(1, groupId);
 			ResultSet rs2 = s2.executeQuery();
 			while (rs2.next())
