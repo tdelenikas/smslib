@@ -1,12 +1,12 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.6.16-log - MySQL Community Server (GPL)
+-- Server version:               5.6.24-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
--- HeidiSQL Version:             8.2.0.4675
+-- HeidiSQL Version:             9.3.0.4984
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
@@ -38,9 +38,9 @@ CREATE TABLE IF NOT EXISTS `smslib_gateways` (
   `max_message_parts` int(11) NOT NULL DEFAULT '2',
   `delivery_reports` int(11) NOT NULL DEFAULT '0',
   `profile` varchar(32) NOT NULL DEFAULT '*',
-  `is_enabled` int(1) NOT NULL DEFAULT '0',
+  `enabled` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `gateway_id` (`gateway_id`)
+  UNIQUE KEY `gateway_id` (`gateway_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporting was unselected.
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `smslib_groups` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(32) NOT NULL,
   `group_description` varchar(100) NOT NULL,
-  `is_enabled` int(1) NOT NULL DEFAULT '0',
+  `enabled` int(1) NOT NULL DEFAULT '0',
   `profile` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_name` (`group_name`)
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `smslib_group_recipients` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `group_id` int(10) NOT NULL,
   `address` varchar(16) NOT NULL,
-  `is_enabled` int(1) NOT NULL DEFAULT '0',
+  `enabled` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `smslib_number_routes` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `address_regex` varchar(128) NOT NULL,
   `gateway_id` varchar(32) NOT NULL,
-  `is_enabled` int(1) NOT NULL DEFAULT '0',
+  `enabled` int(1) NOT NULL DEFAULT '0',
   `profile` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
