@@ -67,7 +67,7 @@
 			<version>${mail.version}</version> 
 		</dependency>
 		<dependency>
-			<groupId>com.cloudhopper</groupId> 
+			<groupId>com.fizzed</groupId> 
 			<artifactId>ch-smpp</artifactId> 
 			<version>${cloudhopper-smpp.version}</version> 
 		</dependency>

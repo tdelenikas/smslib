@@ -11,7 +11,7 @@
 		<mysql.version>5.1.38</mysql.version>
 		<mail.version>1.4</mail.version>
 		<ikvm>ikvm-7.2.4630.5</ikvm>
-		<cloudhopper-smpp.version>5.0.1</cloudhopper-smpp.version>
+		<cloudhopper-smpp.version>5.0.9</cloudhopper-smpp.version>
 		<camel.version>2.12.0</camel.version>
 		<nrjavaserial.version>3.11.0</nrjavaserial.version>
 	</properties>
