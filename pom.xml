@@ -4,16 +4,16 @@
  	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<junit.version>4.11</junit.version>
-		<slf4j-api.version>1.7.2</slf4j-api.version>
-		<slf4j-log4j12.version>1.7.2</slf4j-log4j12.version>
+		<slf4j-api.version>1.7.13</slf4j-api.version>
+		<slf4j-log4j12.version>1.7.13</slf4j-log4j12.version>
 		<log4j.version>1.2.17</log4j.version>
 		<simple.version>5.1.6</simple.version>
-		<mysql.version>5.1.29</mysql.version>
+		<mysql.version>5.1.38</mysql.version>
 		<mail.version>1.4</mail.version>
 		<ikvm>ikvm-7.2.4630.5</ikvm>
 		<cloudhopper-smpp.version>5.0.1</cloudhopper-smpp.version>
 		<camel.version>2.12.0</camel.version>
-		<nrjavaserial.version>3.7.5.1</nrjavaserial.version>
+		<nrjavaserial.version>3.11.0</nrjavaserial.version>
 	</properties>
 	<prerequisites>
 		<maven>2.2.1</maven>
