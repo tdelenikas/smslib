@@ -177,7 +177,7 @@ Contact: admin@smslib.org</description>
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.2</version>
+				<version>1.6.3</version>
 <!--
 				<extensions>true</extensions>
 -->
@@ -194,7 +194,6 @@ Contact: admin@smslib.org</description>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
-
 <!--
 		<snapshotRepository>
 			<id>smslib-snapshots</id>
